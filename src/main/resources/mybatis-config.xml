@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+  <settings>
+    <!-- we do use ehcache, but we avoid using org.mybatis.caches.ehcache.EhcacheCache 
+      and use Spring method level caching instead -->
+    <setting name="cacheEnabled" value="false" />
+    <setting name="lazyLoadingEnabled" value="true" />
+    <setting name="aggressiveLazyLoading" value="false" />
+    <setting name="jdbcTypeForNull" value="NULL" />
+  </settings>
+
+  <typeAliases>
+    <package name="org.ownchan.server.persistence.model" />
+  </typeAliases>
+
+  <typeHandlers>
+    <typeHandler javaType="boolean"
+      handler="org.ownchan.server.persistence.typehandler.BooleanTypeHandler" />
+    <typeHandler javaType="_boolean"
+      handler="org.ownchan.server.persistence.typehandler.PrimitiveBooleanTypeHandler" />
+    <typeHandler javaType="java.util.Date"
+      handler="org.ownchan.server.persistence.typehandler.DateTypeHandler" />
+  </typeHandlers>
+
+</configuration>
