@@ -31,6 +31,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.zaxxer.hikari.HikariDataSource;
@@ -50,7 +51,7 @@ public class PersistenceConfig {
 
   @Bean
   @Primary
-  public DataSourceTransactionManager transactionManager() {
+  public PlatformTransactionManager transactionManager() {
     return new DataSourceTransactionManager(dataSource());
   }
 
