@@ -601,16 +601,30 @@ CREATE UNIQUE INDEX `content_label_UNIQUE` ON `ocn_content_to_creator_label` (`c
 CREATE TABLE `ocn_cloud_label` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `text` VARCHAR(48) NOT NULL,
+  `status` VARCHAR(45) NOT NULL COMMENT 'might be used to determine labels that need to be translated from the output language of the cloud service provider to the desired language of the ownchan instance',
+  `initial_text` VARCHAR(48) NOT NULL COMMENT 'the initial label as it has been provided by the cloud service provider',
   `cloud_provider_name` VARCHAR(24) NOT NULL,
   `cloud_provider_label_id` VARCHAR(36) NOT NULL,
   `create_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP(2) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`))
+  `update_user_id` BIGINT(20) UNSIGNED NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `update_user_FOREIGN`
+    FOREIGN KEY (`update_user_id`)
+    REFERENCES `ocn_user` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE)
 DEFAULT CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci
 ENGINE = InnoDB;
 
 CREATE UNIQUE INDEX `provider_name_label_id_UNIQUE` ON `ocn_cloud_label` (`cloud_provider_name` ASC, `cloud_provider_label_id` ASC);
+
+CREATE INDEX `status_INDEX` ON `ocn_cloud_label` (`status` ASC);
+
+CREATE INDEX `text_INDEX` ON `ocn_cloud_label` (`text` ASC);
+
+CREATE INDEX `update_user_FOREIGN_idx` ON `ocn_cloud_label` (`update_user_id` ASC);
 
 
 -- -----------------------------------------------------
@@ -669,7 +683,7 @@ CREATE TABLE `ocn_content_to_cloud_label` (
     ON UPDATE CASCADE,
   CONSTRAINT `cloud_label_FOREIGN`
     FOREIGN KEY (`cloud_label_id`)
-    REFERENCES `ocn_content_comment` (`id`)
+    REFERENCES `ocn_cloud_label` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 DEFAULT CHARACTER SET utf8mb4
@@ -678,9 +692,9 @@ ENGINE = InnoDB;
 
 CREATE INDEX `content_FOREIGN_idx` ON `ocn_content_to_cloud_label` (`content_id` ASC);
 
-CREATE INDEX `cloud_label_FOREIGN_idx` ON `ocn_content_to_cloud_label` (`cloud_label_id` ASC);
-
 CREATE UNIQUE INDEX `content_cloud_label_UNIQUE` ON `ocn_content_to_cloud_label` (`content_id` ASC, `cloud_label_id` ASC);
+
+CREATE INDEX `cloud_label_FOREIGN_idx` ON `ocn_content_to_cloud_label` (`cloud_label_id` ASC);
 
 
 -- -----------------------------------------------------
