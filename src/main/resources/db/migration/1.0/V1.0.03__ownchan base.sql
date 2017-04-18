@@ -1,7 +1,7 @@
 -- -----------------------------------------------------
 -- Table `ocn_content`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocn_content` (
+CREATE TABLE `ocn_content` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `type` VARCHAR(45) NOT NULL,
   `status` VARCHAR(45) NOT NULL,
@@ -48,7 +48,7 @@ CREATE UNIQUE INDEX `uuid_per_day_UNIQUE` ON `ocn_content` (`content_year` ASC, 
 -- -----------------------------------------------------
 -- Table `ocn_user`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocn_user` (
+CREATE TABLE `ocn_user` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `alias` VARCHAR(24) NOT NULL,
   `display_name` VARCHAR(32) NOT NULL,
@@ -81,7 +81,7 @@ CREATE INDEX `avatar_content_FOREIGN_idx` ON `ocn_user` (`avatar_content_id` ASC
 -- -----------------------------------------------------
 -- Table `ocn_msg`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocn_msg` (
+CREATE TABLE `ocn_msg` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(128) NOT NULL,
   `type` VARCHAR(45) NOT NULL COMMENT 'can be used to differentiate between SYSTEM messages and CUSTOM messages',
@@ -103,7 +103,7 @@ CREATE UNIQUE INDEX `name_UNIQUE` ON `ocn_msg` (`name` ASC);
 -- -----------------------------------------------------
 -- Table `ocn_privilege`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocn_privilege` (
+CREATE TABLE `ocn_privilege` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(128) NOT NULL,
   `msg_id_name` BIGINT(20) UNSIGNED NOT NULL,
@@ -135,7 +135,7 @@ CREATE INDEX `msg_description_INDEX` ON `ocn_privilege` (`msg_id_description` AS
 -- -----------------------------------------------------
 -- Table `ocn_role`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocn_role` (
+CREATE TABLE `ocn_role` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(128) NOT NULL,
   `msg_id_name` BIGINT(20) UNSIGNED NOT NULL,
@@ -167,7 +167,7 @@ CREATE INDEX `msg_description_INDEX` ON `ocn_role` (`msg_id_description` ASC);
 -- -----------------------------------------------------
 -- Table `ocn_user_to_role`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocn_user_to_role` (
+CREATE TABLE `ocn_user_to_role` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` BIGINT(20) UNSIGNED NOT NULL,
   `role_id` BIGINT(20) UNSIGNED NOT NULL,
@@ -196,7 +196,7 @@ CREATE UNIQUE INDEX `user_role_UNIQE` ON `ocn_user_to_role` (`user_id` ASC, `rol
 -- -----------------------------------------------------
 -- Table `ocn_user_ban`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocn_user_ban` (
+CREATE TABLE `ocn_user_ban` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` BIGINT(20) UNSIGNED NOT NULL,
   `active` TINYINT(1) UNSIGNED NOT NULL,
@@ -232,7 +232,7 @@ CREATE INDEX `active_and_expiration_INDEX` ON `ocn_user_ban` (`active` ASC, `ban
 -- -----------------------------------------------------
 -- Table `ocn_role_to_privilege`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocn_role_to_privilege` (
+CREATE TABLE `ocn_role_to_privilege` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `role_id` BIGINT(20) UNSIGNED NOT NULL,
   `privilege_id` BIGINT(20) UNSIGNED NOT NULL,
@@ -261,7 +261,7 @@ CREATE UNIQUE INDEX `role_privilege_UNIQUE` ON `ocn_role_to_privilege` (`role_id
 -- -----------------------------------------------------
 -- Table `ocn_setting`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocn_setting` (
+CREATE TABLE `ocn_setting` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(128) NOT NULL,
   `type` VARCHAR(45) NOT NULL COMMENT 'can be used to differentiate between page settings and role-based settings',
@@ -301,7 +301,7 @@ CREATE INDEX `type_INDEX` ON `ocn_setting` (`type` ASC);
 -- -----------------------------------------------------
 -- Table `ocn_setting_choice`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocn_setting_choice` (
+CREATE TABLE `ocn_setting_choice` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `setting_id` BIGINT(20) UNSIGNED NOT NULL,
   `setting_value` VARCHAR(255) NULL,
@@ -337,7 +337,7 @@ CREATE INDEX `msg_description_INDEX` ON `ocn_setting_choice` (`msg_id_descriptio
 -- -----------------------------------------------------
 -- Table `ocn_content_comment`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocn_content_comment` (
+CREATE TABLE `ocn_content_comment` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `parent_id` BIGINT(20) UNSIGNED NULL,
   `text` VARCHAR(4096) NOT NULL,
@@ -383,7 +383,7 @@ CREATE INDEX `embedded_content_FOREIGN_idx` ON `ocn_content_comment` (`embedded_
 -- -----------------------------------------------------
 -- Table `ocn_user_to_setting`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocn_user_to_setting` (
+CREATE TABLE `ocn_user_to_setting` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` BIGINT(20) UNSIGNED NOT NULL,
   `setting_id` BIGINT(20) UNSIGNED NOT NULL,
@@ -423,7 +423,7 @@ CREATE UNIQUE INDEX `user_setting_UNIQUE` ON `ocn_user_to_setting` (`user_id` AS
 -- -----------------------------------------------------
 -- Table `ocn_page_setting`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocn_page_setting` (
+CREATE TABLE `ocn_page_setting` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `setting_id` BIGINT(20) UNSIGNED NOT NULL,
   `choice_id` BIGINT(20) UNSIGNED NULL,
@@ -463,7 +463,7 @@ CREATE UNIQUE INDEX `setting_UNIQUE` ON `ocn_page_setting` (`setting_id` ASC);
 -- -----------------------------------------------------
 -- Table `ocn_role_to_allowed_setting`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocn_role_to_allowed_setting` (
+CREATE TABLE `ocn_role_to_allowed_setting` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `role_id` BIGINT(20) UNSIGNED NOT NULL,
   `setting_id` BIGINT(20) UNSIGNED NOT NULL,
@@ -492,7 +492,7 @@ CREATE UNIQUE INDEX `role_setting_UNIQUE` ON `ocn_role_to_allowed_setting` (`rol
 -- -----------------------------------------------------
 -- Table `ocn_private_label`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocn_private_label` (
+CREATE TABLE `ocn_private_label` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` BIGINT(20) UNSIGNED NOT NULL,
   `text` VARCHAR(32) NOT NULL,
@@ -515,7 +515,7 @@ CREATE INDEX `user_FOREIGN_idx` ON `ocn_private_label` (`user_id` ASC);
 -- -----------------------------------------------------
 -- Table `ocn_content_to_private_label`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocn_content_to_private_label` (
+CREATE TABLE `ocn_content_to_private_label` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `content_id` BIGINT(20) UNSIGNED NOT NULL,
   `private_label_id` BIGINT(20) UNSIGNED NOT NULL,
@@ -545,7 +545,7 @@ CREATE UNIQUE INDEX `content_private_label_UNIQUE` ON `ocn_content_to_private_la
 -- -----------------------------------------------------
 -- Table `ocn_label`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocn_label` (
+CREATE TABLE `ocn_label` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `text` VARCHAR(24) NOT NULL,
   `create_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -568,7 +568,7 @@ CREATE INDEX `creator_FOREIGN_idx` ON `ocn_label` (`creator_id` ASC);
 -- -----------------------------------------------------
 -- Table `ocn_content_to_creator_label`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocn_content_to_creator_label` (
+CREATE TABLE `ocn_content_to_creator_label` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `content_id` BIGINT(20) UNSIGNED NOT NULL,
   `label_id` BIGINT(20) UNSIGNED NOT NULL,
@@ -598,7 +598,7 @@ CREATE UNIQUE INDEX `content_label_UNIQUE` ON `ocn_content_to_creator_label` (`c
 -- -----------------------------------------------------
 -- Table `ocn_cloud_label`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocn_cloud_label` (
+CREATE TABLE `ocn_cloud_label` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `text` VARCHAR(48) NOT NULL,
   `cloud_provider_name` VARCHAR(24) NOT NULL,
@@ -616,7 +616,7 @@ CREATE UNIQUE INDEX `provider_name_label_id_UNIQUE` ON `ocn_cloud_label` (`cloud
 -- -----------------------------------------------------
 -- Table `ocn_content_to_community_label`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocn_content_to_community_label` (
+CREATE TABLE `ocn_content_to_community_label` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `content_id` BIGINT(20) UNSIGNED NOT NULL,
   `label_id` BIGINT(20) UNSIGNED NOT NULL,
@@ -656,7 +656,7 @@ CREATE UNIQUE INDEX `content_user_UNIQUE` ON `ocn_content_to_community_label` (`
 -- -----------------------------------------------------
 -- Table `ocn_content_to_cloud_label`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocn_content_to_cloud_label` (
+CREATE TABLE `ocn_content_to_cloud_label` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `content_id` BIGINT(20) UNSIGNED NOT NULL,
   `cloud_label_id` BIGINT(20) UNSIGNED NOT NULL,
@@ -686,7 +686,7 @@ CREATE UNIQUE INDEX `content_cloud_label_UNIQUE` ON `ocn_content_to_cloud_label`
 -- -----------------------------------------------------
 -- Table `ocn_user_to_follower`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocn_user_to_follower` (
+CREATE TABLE `ocn_user_to_follower` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` BIGINT(20) UNSIGNED NOT NULL,
   `follower_id` BIGINT(20) UNSIGNED NOT NULL,
@@ -714,7 +714,7 @@ CREATE INDEX `follower_FOREIGN_idx` ON `ocn_user_to_follower` (`follower_id` ASC
 -- -----------------------------------------------------
 -- Table `ocn_user_to_favorite_content`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocn_user_to_favorite_content` (
+CREATE TABLE `ocn_user_to_favorite_content` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` BIGINT(20) UNSIGNED NOT NULL,
   `content_id` BIGINT(20) UNSIGNED NOT NULL,
@@ -744,7 +744,7 @@ CREATE UNIQUE INDEX `user_content_UNIQUE` ON `ocn_user_to_favorite_content` (`us
 -- -----------------------------------------------------
 -- Table `ocn_content_abuse`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ocn_content_abuse` (
+CREATE TABLE `ocn_content_abuse` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `content_id` BIGINT(20) UNSIGNED NOT NULL,
   `violation_type` VARCHAR(45) NOT NULL,
@@ -767,6 +767,11 @@ CREATE TABLE IF NOT EXISTS `ocn_content_abuse` (
     FOREIGN KEY (`assignee_id`)
     REFERENCES `ocn_user` (`id`)
     ON DELETE SET NULL
+    ON UPDATE CASCADE,
+  CONSTRAINT `complaining_entity_user_FOREIGN`
+    FOREIGN KEY (`complaining_entity_user_id`)
+    REFERENCES `ocn_user` (`id`)
+    ON DELETE SET NULL
     ON UPDATE CASCADE)
 DEFAULT CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci
@@ -775,3 +780,5 @@ ENGINE = InnoDB;
 CREATE INDEX `content_FOREIGN_idx` ON `ocn_content_abuse` (`content_id` ASC);
 
 CREATE INDEX `assignee_FOREIGN_idx` ON `ocn_content_abuse` (`assignee_id` ASC);
+
+CREATE INDEX `complaining_entity_user_FOREIGN_idx` ON `ocn_content_abuse` (`complaining_entity_user_id` ASC);
