@@ -16,4 +16,33 @@
  * You should have received a copy of the GNU Affero General Public License, version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *******************************************************************************/
-package org.ownchan.server.persistence.model;
+package org.ownchan.server.persistence.mapper.generic;
+
+public class SortingParam {
+
+  private String sortField;
+
+  private SortOrder sortOrder;
+
+  public SortingParam(String sortField, SortOrder sortOrder) {
+    this.sortField = sortField;
+    this.sortOrder = sortOrder;
+  }
+
+  public String getSortField() {
+    return sortField;
+  }
+
+  public void setSortField(String sortField) {
+    this.sortField = sortField;
+  }
+
+  public SortOrder getSortOrder() {
+    return sortOrder;
+  }
+
+  public void setSortOrder(SortOrder sortOrder) {
+    this.sortOrder = sortOrder;
+  }
+
+}

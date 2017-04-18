@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.ownchan.server.persistence.mapper.DbLabelMapper">
+
+  <resultMap type="DbLabel" id="dbLabelResult">
+    <id column="id" property="id"/>
+    <result column="text" property="text"/>
+    <result column="create_time" property="createTime"/>
+  </resultMap>
+  
+  <select id="fetchOrStream">
+    SELECT *
+      FROM ocn_label
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applyGroupedFilterParams"/>
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applySortingParams"/>
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applyLimitParam"/>
+  </select>
+
+  <select id="fetch" resultMap="dbLabelResult">
+    <include refid="fetchOrStream"/>
+  </select>
+  
+  <select id="stream" resultMap="dbLabelResult">
+    <include refid="fetchOrStream"/>
+  </select>
+
+  <select id="get" resultMap="dbLabelResult">
+    SELECT * FROM ocn_label WHERE id = #{id}
+  </select>
+  
+  <delete id="delete">
+    DELETE FROM ocn_label WHERE id = #{id}
+  </delete>
+
+</mapper>

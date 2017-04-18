@@ -16,4 +16,37 @@
  * You should have received a copy of the GNU Affero General Public License, version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *******************************************************************************/
-package org.ownchan.server.persistence.mapper;
+package org.ownchan.server.persistence.mapper.generic;
+
+public class LimitParam {
+
+  private Long limit;
+
+  private Long offset;
+
+  public LimitParam(Long limit) {
+    this(limit, null);
+  }
+
+  public LimitParam(Long limit, Long offset) {
+    this.limit = limit;
+    this.offset = offset;
+  }
+
+  public Long getLimit() {
+    return limit;
+  }
+
+  public void setLimit(Long limit) {
+    this.limit = limit;
+  }
+
+  public Long getOffset() {
+    return offset;
+  }
+
+  public void setOffset(Long offset) {
+    this.offset = offset;
+  }
+
+}

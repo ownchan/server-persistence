@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.ownchan.server.persistence.mapper.GenericMapper">
+
+  <sql id="applySortingParams">
+    <if test="_parameter.containsKey('sortingParams') and sortingParams != null and sortingParams.size() > 0">
+      ORDER BY
+      <foreach item="sortingParam" collection="sortingParams" separator=", "
+        open="" close="">
+        ${sortingParam.sortField} ${sortingParam.sortOrder.toString()}
+      </foreach>
+    </if>
+  </sql>
+
+  <sql id="applyLimitParam">
+    <if test="_parameter.containsKey('limitParam') and limitParam != null">
+      <if test="limitParam.limit != null and limitParam.limit > 0">
+        LIMIT limitParam.limit
+      </if>
+      <if test="limitParam.offset != null and limitParam.offset >= 0">
+        OFFSET limitParam.offset
+      </if>
+    </if>
+  </sql>
+
+  <sql id="applyGroupedFilterParams">
+    <if test="_parameter.containsKey('groupedFilterParams') and groupedFilterParams != null and groupedFilterParams.size() > 0">
+      <where>
+        <foreach item="filterList" collection="groupedFilterParams" separator=" OR " open="(" close=")">
+          <if test="filterList != null and filterList.size() > 0">
+            <foreach item="clause" collection="filterList" separator=" AND " open="(" close=")">
+              <if test="clause.comparisonType.toString().equals('UPPER')"> UPPER(</if>
+              <if test="clause.comparisonType.toString().equals('LOWER')"> LOWER(</if>
+              ${clause.column}
+              <if test="clause.comparisonType.toString().equals('NORMAL') == false">) </if>
+              ${clause.operator}
+              <if test="clause.values.size() > 1">
+                <foreach item="clauseValue" collection="clause.values" separator=", " open="(" close=")">
+                  <if test="clause.comparisonType.toString().equals('UPPER')"> UPPER(</if>
+                  <if test="clause.comparisonType.toString().equals('LOWER')"> LOWER(</if>
+                  <if test="clause.valuePlaceholderType.toString().equals('PRE')">
+                    #{clauseValue}
+                  </if>
+                  <if test="clause.valuePlaceholderType.toString().equals('RAW')">
+                    ${clauseValue}
+                  </if>
+                  <if test="clause.comparisonType.toString().equals('NORMAL') == false">) </if>
+                </foreach>
+              </if>
+              <if test="clause.values.size() == 1">
+                <foreach item="clauseValue" collection="clause.values" separator="" open="" close="">
+                  <if test="clause.comparisonType.toString().equals('UPPER')"> UPPER(</if>
+                  <if test="clause.comparisonType.toString().equals('LOWER')"> LOWER(</if>
+                  <if test="clause.valuePlaceholderType.toString().equals('PRE')">
+                    #{clauseValue}
+                  </if>
+                  <if test="clause.valuePlaceholderType.toString().equals('RAW')">
+                    ${clauseValue}
+                  </if>
+                  <if test="clause.comparisonType.toString().equals('NORMAL') == false">) </if>
+                </foreach>
+              </if>
+            </foreach>
+          </if>
+        </foreach>
+      </where>
+    </if>
+  </sql>
+
+</mapper>
