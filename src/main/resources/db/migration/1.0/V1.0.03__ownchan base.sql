@@ -1,11 +1,40 @@
 -- -----------------------------------------------------
+-- Table `ocn_physical_content`
+-- -----------------------------------------------------
+CREATE TABLE `ocn_physical_content` (
+  `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `type` VARCHAR(45) NOT NULL,
+  `status` VARCHAR(45) NOT NULL,
+  `storage_folder_year` SMALLINT(4) UNSIGNED NOT NULL,
+  `storage_folder_month` TINYINT(2) UNSIGNED NOT NULL,
+  `storage_folder_day` TINYINT(2) UNSIGNED NOT NULL,
+  `storage_folder_uuid` VARCHAR(36) NOT NULL,
+  `content_checksum` VARCHAR(64) NULL COMMENT 'In case of uploads, this field should contain a checksum calculated from the physical file, while for linked contents, like youtube videos, the checksum might be calculated from the linked url.\nIdeally, we would have a UNIQUE constraint on this field, but the checksums will be calculated asynchronously by the worker instances.',
+  `create_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` TIMESTAMP(2) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `physical_content_type` VARCHAR(128) NULL,
+  `external_content_link` VARCHAR(255) NULL,
+  `additional_metadata` VARCHAR(4096) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci
+COMMENT = 'links a logical content to a storage directory with physical files, like preview images or thumbnails, or, in case of uploads, the original file';
+
+CREATE UNIQUE INDEX `uuid_per_day_UNIQUE` ON `ocn_physical_content` (`storage_folder_year` ASC, `storage_folder_month` ASC, `storage_folder_day` ASC, `storage_folder_uuid` ASC);
+
+CREATE INDEX `type_INDEX` ON `ocn_physical_content` (`type` ASC);
+
+CREATE INDEX `status_INDEX` ON `ocn_physical_content` (`status` ASC);
+
+
+-- -----------------------------------------------------
 -- Table `ocn_content`
 -- -----------------------------------------------------
 CREATE TABLE `ocn_content` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `type` VARCHAR(45) NOT NULL,
   `status` VARCHAR(45) NOT NULL,
-  `parent_id` BIGINT(20) UNSIGNED NULL COMMENT 'only uploads with no parents will be visible on general overview pages - the rest will only be availabe in detailed view of the parents they belong to',
+  `parent_id` BIGINT(20) UNSIGNED NULL COMMENT 'only contents with no parents will be visible on general overview pages - the rest will only be availabe in detailed view of the direct parents they belong to',
   `user_id` BIGINT(20) UNSIGNED NOT NULL,
   `caption` VARCHAR(128) NULL,
   `country_code` VARCHAR(2) NULL,
@@ -18,10 +47,7 @@ CREATE TABLE `ocn_content` (
   `content_day` TINYINT(2) UNSIGNED NOT NULL,
   `create_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP(2) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `content_storage_uuid` VARCHAR(36) NOT NULL,
-  `external_content_link` VARCHAR(255) NULL,
-  `physical_content_type` VARCHAR(128) NULL,
-  `additional_metadata` VARCHAR(4096) NULL,
+  `physical_content_id` BIGINT(20) UNSIGNED NOT NULL,
   `user_clicks` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   CONSTRAINT `parent_FOREIGN`
@@ -33,16 +59,23 @@ CREATE TABLE `ocn_content` (
     FOREIGN KEY (`user_id`)
     REFERENCES `ocn_user` (`id`)
     ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `physical_content_FOREIGN`
+    FOREIGN KEY (`physical_content_id`)
+    REFERENCES `ocn_physical_content` (`id`)
+    ON DELETE CASCADE
     ON UPDATE CASCADE)
-DEFAULT CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE INDEX `parent_INDEX` ON `ocn_content` (`parent_id` ASC);
 
 CREATE INDEX `user_INDEX` ON `ocn_content` (`user_id` ASC);
 
-CREATE UNIQUE INDEX `uuid_per_day_UNIQUE` ON `ocn_content` (`content_year` ASC, `content_month` ASC, `content_day` ASC, `content_storage_uuid` ASC);
+CREATE INDEX `physical_content_FOREIGN_idx` ON `ocn_content` (`physical_content_id` ASC);
+
+CREATE INDEX `user_and_status_INDEX` ON `ocn_content` (`user_id` ASC, `status` ASC);
 
 
 -- -----------------------------------------------------
@@ -67,9 +100,9 @@ CREATE TABLE `ocn_user` (
     REFERENCES `ocn_content` (`id`)
     ON DELETE SET NULL
     ON UPDATE CASCADE)
-DEFAULT CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX `alias_UNIQUE` ON `ocn_user` (`alias` ASC);
 
@@ -91,9 +124,9 @@ CREATE TABLE `ocn_msg` (
   `msg_en` LONGTEXT NOT NULL,
   `msg_de` LONGTEXT NULL,
   PRIMARY KEY (`id`))
-DEFAULT CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE INDEX `type_INDEX` ON `ocn_msg` (`type` ASC);
 
@@ -121,9 +154,9 @@ CREATE TABLE `ocn_privilege` (
     REFERENCES `ocn_msg` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-DEFAULT CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX `name_UNIQUE` ON `ocn_privilege` (`name` ASC);
 
@@ -153,9 +186,9 @@ CREATE TABLE `ocn_role` (
     REFERENCES `ocn_privilege` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-DEFAULT CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX `name_UNIQUE` ON `ocn_role` (`name` ASC);
 
@@ -182,9 +215,9 @@ CREATE TABLE `ocn_user_to_role` (
     REFERENCES `ocn_role` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-DEFAULT CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE INDEX `user_INDEX` ON `ocn_user_to_role` (`user_id` ASC);
 
@@ -216,9 +249,9 @@ CREATE TABLE `ocn_user_ban` (
     REFERENCES `ocn_user` (`id`)
     ON DELETE SET NULL
     ON UPDATE CASCADE)
-DEFAULT CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE INDEX `user_INDEX` ON `ocn_user_ban` (`user_id` ASC);
 
@@ -247,9 +280,9 @@ CREATE TABLE `ocn_role_to_privilege` (
     REFERENCES `ocn_privilege` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-DEFAULT CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE INDEX `role_INDEX` ON `ocn_role_to_privilege` (`role_id` ASC);
 
@@ -264,7 +297,7 @@ CREATE UNIQUE INDEX `role_privilege_UNIQUE` ON `ocn_role_to_privilege` (`role_id
 CREATE TABLE `ocn_setting` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(128) NOT NULL,
-  `type` VARCHAR(45) NOT NULL COMMENT 'can be used to differentiate between page settings and role-based settings',
+  `type` VARCHAR(45) NOT NULL COMMENT 'can be used to differentiate page settings and role-based settings',
   `msg_id_name` BIGINT(20) UNSIGNED NOT NULL,
   `msg_id_description` BIGINT(20) UNSIGNED NOT NULL,
   `constrained` TINYINT(1) UNSIGNED NOT NULL,
@@ -285,9 +318,9 @@ CREATE TABLE `ocn_setting` (
     REFERENCES `ocn_msg` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-DEFAULT CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX `name_UNIQUE` ON `ocn_setting` (`name` ASC);
 
@@ -323,9 +356,9 @@ CREATE TABLE `ocn_setting_choice` (
     REFERENCES `ocn_msg` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-DEFAULT CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE INDEX `setting_INDEX` ON `ocn_setting_choice` (`setting_id` ASC);
 
@@ -367,9 +400,9 @@ CREATE TABLE `ocn_content_comment` (
     REFERENCES `ocn_content` (`id`)
     ON DELETE SET NULL
     ON UPDATE CASCADE)
-DEFAULT CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE INDEX `user_INDEX` ON `ocn_content_comment` (`user_id` ASC);
 
@@ -407,9 +440,9 @@ CREATE TABLE `ocn_user_to_setting` (
     REFERENCES `ocn_setting_choice` (`id`)
     ON DELETE SET NULL
     ON UPDATE CASCADE)
-DEFAULT CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE INDEX `user_FOREIGN_idx` ON `ocn_user_to_setting` (`user_id` ASC);
 
@@ -447,9 +480,9 @@ CREATE TABLE `ocn_page_setting` (
     REFERENCES `ocn_user` (`id`)
     ON DELETE SET NULL
     ON UPDATE CASCADE)
-DEFAULT CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE INDEX `setting_FOREIGN_idx` ON `ocn_page_setting` (`setting_id` ASC);
 
@@ -478,9 +511,9 @@ CREATE TABLE `ocn_role_to_allowed_setting` (
     REFERENCES `ocn_setting` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-DEFAULT CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE INDEX `role_FOREIGN_idx` ON `ocn_role_to_allowed_setting` (`role_id` ASC);
 
@@ -503,9 +536,9 @@ CREATE TABLE `ocn_private_label` (
     REFERENCES `ocn_user` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-DEFAULT CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE INDEX `text_INDEX` ON `ocn_private_label` (`text` ASC);
 
@@ -531,9 +564,9 @@ CREATE TABLE `ocn_content_to_private_label` (
     REFERENCES `ocn_private_label` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-DEFAULT CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE INDEX `content_FOREIGN_idx` ON `ocn_content_to_private_label` (`content_id` ASC);
 
@@ -556,9 +589,9 @@ CREATE TABLE `ocn_label` (
     REFERENCES `ocn_user` (`id`)
     ON DELETE SET NULL
     ON UPDATE CASCADE)
-DEFAULT CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX `text_UNIQUE` ON `ocn_label` (`text` ASC);
 
@@ -584,9 +617,9 @@ CREATE TABLE `ocn_content_to_creator_label` (
     REFERENCES `ocn_label` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-DEFAULT CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE INDEX `content_FOREIGN_idx` ON `ocn_content_to_creator_label` (`content_id` ASC);
 
@@ -614,9 +647,9 @@ CREATE TABLE `ocn_cloud_label` (
     REFERENCES `ocn_user` (`id`)
     ON DELETE SET NULL
     ON UPDATE CASCADE)
-DEFAULT CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX `provider_name_label_id_UNIQUE` ON `ocn_cloud_label` (`cloud_provider_name` ASC, `cloud_provider_label_id` ASC);
 
@@ -628,18 +661,18 @@ CREATE INDEX `update_user_FOREIGN_idx` ON `ocn_cloud_label` (`update_user_id` AS
 
 
 -- -----------------------------------------------------
--- Table `ocn_content_to_community_label`
+-- Table `ocn_physical_content_to_community_label`
 -- -----------------------------------------------------
-CREATE TABLE `ocn_content_to_community_label` (
+CREATE TABLE `ocn_physical_content_to_community_label` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `content_id` BIGINT(20) UNSIGNED NOT NULL,
+  `physical_content_id` BIGINT(20) UNSIGNED NOT NULL,
   `label_id` BIGINT(20) UNSIGNED NOT NULL,
   `user_id` BIGINT(20) UNSIGNED NOT NULL,
   `create_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  CONSTRAINT `content_FOREIGN`
-    FOREIGN KEY (`content_id`)
-    REFERENCES `ocn_content` (`id`)
+  CONSTRAINT `physical_content_FOREIGN`
+    FOREIGN KEY (`physical_content_id`)
+    REFERENCES `ocn_physical_content` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `label_FOREIGN`
@@ -652,33 +685,33 @@ CREATE TABLE `ocn_content_to_community_label` (
     REFERENCES `ocn_user` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-DEFAULT CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
-CREATE INDEX `content_FOREIGN_idx` ON `ocn_content_to_community_label` (`content_id` ASC);
+CREATE INDEX `label_FOREIGN_idx` ON `ocn_physical_content_to_community_label` (`label_id` ASC);
 
-CREATE INDEX `label_FOREIGN_idx` ON `ocn_content_to_community_label` (`label_id` ASC);
+CREATE INDEX `user_FOREIGN_idx` ON `ocn_physical_content_to_community_label` (`user_id` ASC);
 
-CREATE INDEX `user_FOREIGN_idx` ON `ocn_content_to_community_label` (`user_id` ASC);
+CREATE UNIQUE INDEX `physical_content_label_UNIQUE` ON `ocn_physical_content_to_community_label` (`physical_content_id` ASC, `label_id` ASC);
 
-CREATE UNIQUE INDEX `content_label_UNIQUE` ON `ocn_content_to_community_label` (`content_id` ASC, `label_id` ASC);
+CREATE UNIQUE INDEX `physical_content_user_UNIQUE` ON `ocn_physical_content_to_community_label` (`physical_content_id` ASC, `user_id` ASC)  COMMENT 'one label per user for a content created by a different user should be enough';
 
-CREATE UNIQUE INDEX `content_user_UNIQUE` ON `ocn_content_to_community_label` (`content_id` ASC, `user_id` ASC)  COMMENT 'one label per user for a content created by a different user should be enough';
+CREATE INDEX `physical_content_FOREIGN_idx` ON `ocn_physical_content_to_community_label` (`physical_content_id` ASC);
 
 
 -- -----------------------------------------------------
--- Table `ocn_content_to_cloud_label`
+-- Table `ocn_physical_content_to_cloud_label`
 -- -----------------------------------------------------
-CREATE TABLE `ocn_content_to_cloud_label` (
+CREATE TABLE `ocn_physical_content_to_cloud_label` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `content_id` BIGINT(20) UNSIGNED NOT NULL,
+  `physical_content_id` BIGINT(20) UNSIGNED NOT NULL,
   `cloud_label_id` BIGINT(20) UNSIGNED NOT NULL,
   `create_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  CONSTRAINT `content_FOREIGN`
-    FOREIGN KEY (`content_id`)
-    REFERENCES `ocn_content` (`id`)
+  CONSTRAINT `physical_content_FOREIGN`
+    FOREIGN KEY (`physical_content_id`)
+    REFERENCES `ocn_physical_content` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `cloud_label_FOREIGN`
@@ -686,15 +719,15 @@ CREATE TABLE `ocn_content_to_cloud_label` (
     REFERENCES `ocn_cloud_label` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-DEFAULT CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
-CREATE INDEX `content_FOREIGN_idx` ON `ocn_content_to_cloud_label` (`content_id` ASC);
+CREATE UNIQUE INDEX `physical_content_cloud_label_UNIQUE` ON `ocn_physical_content_to_cloud_label` (`physical_content_id` ASC, `cloud_label_id` ASC);
 
-CREATE UNIQUE INDEX `content_cloud_label_UNIQUE` ON `ocn_content_to_cloud_label` (`content_id` ASC, `cloud_label_id` ASC);
+CREATE INDEX `cloud_label_FOREIGN_idx` ON `ocn_physical_content_to_cloud_label` (`cloud_label_id` ASC);
 
-CREATE INDEX `cloud_label_FOREIGN_idx` ON `ocn_content_to_cloud_label` (`cloud_label_id` ASC);
+CREATE INDEX `physical_content_FOREIGN_idx` ON `ocn_physical_content_to_cloud_label` (`physical_content_id` ASC);
 
 
 -- -----------------------------------------------------
@@ -716,9 +749,9 @@ CREATE TABLE `ocn_user_to_follower` (
     REFERENCES `ocn_user` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-DEFAULT CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX `user_follower_UNIQUE` ON `ocn_user_to_follower` (`user_id` ASC, `follower_id` ASC);
 
@@ -744,9 +777,9 @@ CREATE TABLE `ocn_user_to_favorite_content` (
     REFERENCES `ocn_content` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-DEFAULT CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE INDEX `user_FOREIGN_idx` ON `ocn_user_to_favorite_content` (`user_id` ASC);
 
@@ -787,9 +820,9 @@ CREATE TABLE `ocn_content_abuse` (
     REFERENCES `ocn_user` (`id`)
     ON DELETE SET NULL
     ON UPDATE CASCADE)
-DEFAULT CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE INDEX `content_FOREIGN_idx` ON `ocn_content_abuse` (`content_id` ASC);
 
