@@ -15,10 +15,10 @@
   <sql id="applyLimitParam">
     <if test="_parameter.containsKey('limitParam') and limitParam != null">
       <if test="limitParam.limit != null and limitParam.limit > 0">
-        LIMIT limitParam.limit
+        LIMIT ${limitParam.limit}
       </if>
       <if test="limitParam.offset != null and limitParam.offset >= 0">
-        OFFSET limitParam.offset
+        OFFSET ${limitParam.offset}
       </if>
     </if>
   </sql>
