@@ -19,8 +19,9 @@
 package org.ownchan.server.persistence.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.ownchan.server.persistence.model.DbLabel;
 
 @Mapper
-public interface DbLabelMapper<T> extends PersistableObjectMapper<T> {
+public interface DbLabelMapper extends PersistableObjectMapper<DbLabel> {
 
 }
