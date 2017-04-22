@@ -36,7 +36,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.zaxxer.hikari.HikariDataSource;
 
-@PropertySource(value = { "classpath:/config/db/config.properties" })
+@PropertySource(value = { "classpath:/config/db/server/config.properties" })
 @EnableTransactionManagement
 @MapperScan("org.ownchan.persistence.mapper")
 @Configuration("ownchan-server-persistence-config")
@@ -71,7 +71,7 @@ public class PersistenceConfig {
 
   private SqlSessionFactoryBean createSqlSessionFactory() throws Exception {
     SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
-    sessionFactory.setConfigLocation(new ClassPathResource("mybatis-config.xml"));
+    sessionFactory.setConfigLocation(new ClassPathResource("mybatis-config-server.xml"));
     sessionFactory.setVfs(SpringBootVFS.class);
     return sessionFactory;
   }
