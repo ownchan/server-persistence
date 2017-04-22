@@ -18,16 +18,57 @@
  *******************************************************************************/
 package org.ownchan.server.persistence.model;
 
-public class DbUser {
+import org.apache.commons.lang3.StringUtils;
+
+public class DbUser extends PersistableObject<DbUser> implements DbStatusAwareContent<DbUserStatus> {
 
   private long id;
 
+  private DbUserStatus status;
+
+  private String statusReason;
+
+  @Override
   public long getId() {
     return id;
   }
 
   public void setId(long id) {
     this.id = id;
+  }
+
+  @Override
+  public DbUserStatus getStatus() {
+    return status;
+  }
+
+  /**
+   * @deprecated Preferably, set both status and reason at once by using {@link #setStatus(DbUserStatus, String)}.
+   */
+  @Deprecated
+  @Override
+  public void setStatus(DbUserStatus status) {
+    this.status = status;
+  }
+
+  @Override
+  public String getStatusReason() {
+    return statusReason;
+  }
+
+  /**
+   * @deprecated Preferably, set both status and reason at once by using {@link #setStatus(DbUserStatus, String)}.
+   */
+  @Deprecated
+  @Override
+  public void setStatusReason(String statusReason) {
+    this.statusReason = statusReason;
+  }
+
+  @Override
+  public void setStatus(DbUserStatus status, String statusReason) {
+    this.status = status;
+    this.statusReason = StringUtils.abbreviate(statusReason, MAX_LENGTH_STATUS_REASON);
   }
 
 }

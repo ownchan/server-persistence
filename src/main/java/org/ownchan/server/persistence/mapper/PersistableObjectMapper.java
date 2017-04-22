@@ -27,8 +27,9 @@ import org.apache.ibatis.session.ResultHandler;
 import org.ownchan.server.persistence.mapper.generic.FilterParam;
 import org.ownchan.server.persistence.mapper.generic.LimitParam;
 import org.ownchan.server.persistence.mapper.generic.SortingParam;
+import org.ownchan.server.persistence.model.PersistableObject;
 
-public interface PersistableObjectMapper<T> {
+public interface PersistableObjectMapper<T extends PersistableObject<T>> {
 
   long insert(T persistableObject);
 

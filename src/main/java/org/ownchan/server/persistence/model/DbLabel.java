@@ -20,7 +20,7 @@ package org.ownchan.server.persistence.model;
 
 import java.util.Date;
 
-public class DbLabel {
+public class DbLabel extends PersistableObject<DbLabel> {
 
   private long id;
 
@@ -30,6 +30,7 @@ public class DbLabel {
 
   private DbUser creator;
 
+  @Override
   public long getId() {
     return id;
   }

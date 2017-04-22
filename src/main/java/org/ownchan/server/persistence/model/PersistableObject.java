@@ -18,21 +18,22 @@
  *******************************************************************************/
 package org.ownchan.server.persistence.model;
 
-public enum DbPhysicalContentStatus implements DbEnum<DbPhysicalContentStatus>, DbStatusEnum<DbPhysicalContentStatus> {
-  PENDING_CHECKSUM((short) 1),
-  PENDING_PROCESS((short) 2),
-  ERROR((short) 3),
-  OK((short) 4);
+public abstract class PersistableObject<T> {
 
-  private short id;
+  public abstract long getId();
 
-  private DbPhysicalContentStatus(short id) {
-    this.id = id;
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null || !this.getClass().isAssignableFrom(obj.getClass())) {
+      return false;
+    }
+
+    return getId() == this.getClass().cast(obj).getId();
   }
 
   @Override
-  public short getId() {
-    return id;
+  public int hashCode() {
+    return Long.hashCode(getId());
   }
 
 }

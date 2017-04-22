@@ -18,21 +18,33 @@
  *******************************************************************************/
 package org.ownchan.server.persistence.model;
 
-public enum DbPhysicalContentStatus implements DbEnum<DbPhysicalContentStatus>, DbStatusEnum<DbPhysicalContentStatus> {
-  PENDING_CHECKSUM((short) 1),
-  PENDING_PROCESS((short) 2),
-  ERROR((short) 3),
-  OK((short) 4);
+public interface DbStatusAwareContent<T extends DbEnum<T> & DbStatusEnum<T>> {
 
-  private short id;
+  short MAX_LENGTH_STATUS_REASON = 255;
 
-  private DbPhysicalContentStatus(short id) {
-    this.id = id;
-  }
+  /**
+   * Update the status of the db object, along with a provided reason that may be null.
+   *
+   * @param status the status to set onto the db object
+   * @param statusReason the reason for the status, or null if none; should not exceed 255 chars
+   * (which per convention is the max length for status reason values in the ownChan database)
+   */
+  void setStatus(T status, String statusReason);
 
-  @Override
-  public short getId() {
-    return id;
-  }
+  T getStatus();
+
+  String getStatusReason();
+
+  /**
+   * @deprecated Preferably, set both status and reason at once by using {@link #setStatus(DbEnum, String)}.
+   */
+  @Deprecated
+  void setStatus(T status);
+
+  /**
+   * @deprecated Preferably, set both status and reason at once by using {@link #setStatus(DbEnum, String)}.
+   */
+  @Deprecated
+  void setStatusReason(String statusReason);
 
 }
