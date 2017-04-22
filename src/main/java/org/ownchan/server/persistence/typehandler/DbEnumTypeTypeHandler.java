@@ -30,10 +30,10 @@ import org.ownchan.server.persistence.model.DbEnum;
 
 public abstract class DbEnumTypeTypeHandler<T extends DbEnum<T>> extends BaseTypeHandler<T> {
 
-  private Class<T> targetClass;
+  protected Class<T> targetClass;
 
   @SuppressWarnings("unchecked")
-  public DbEnumTypeTypeHandler() {
+  protected DbEnumTypeTypeHandler() {
     this.targetClass = (Class<T>) ((ParameterizedType) getClass()
         .getGenericSuperclass()).getActualTypeArguments()[0];
   }
@@ -58,7 +58,7 @@ public abstract class DbEnumTypeTypeHandler<T extends DbEnum<T>> extends BaseTyp
     return getResultOrNull(cs.getShort(columnIndex));
   }
 
-  private T getResultOrNull(Short constantId) {
+  protected T getResultOrNull(Short constantId) {
     if (constantId != null) {
       return DbEnum.valueOf(constantId, targetClass);
     }

@@ -22,4 +22,8 @@ import org.ownchan.server.persistence.model.DbPhysicalContentStatus;
 
 public class DbPhysicalContentStatusTypeHandler extends DbEnumTypeTypeHandler<DbPhysicalContentStatus> {
 
+  public DbPhysicalContentStatusTypeHandler() {
+    super();
+  }
+
 }
