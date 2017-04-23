@@ -455,9 +455,9 @@ CREATE UNIQUE INDEX `user_setting_UNIQUE` ON `ocn_user_to_setting` (`user_id` AS
 
 
 -- -----------------------------------------------------
--- Table `ocn_page_setting`
+-- Table `ocn_system_setting`
 -- -----------------------------------------------------
-CREATE TABLE `ocn_page_setting` (
+CREATE TABLE `ocn_system_setting` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `setting_id` BIGINT(20) UNSIGNED NOT NULL,
   `choice_id` BIGINT(20) UNSIGNED NULL,
@@ -466,17 +466,17 @@ CREATE TABLE `ocn_page_setting` (
   `update_time` TIMESTAMP(2) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `update_user_id` BIGINT(20) UNSIGNED NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_page_setting_setting`
+  CONSTRAINT `fk_system_setting_setting`
     FOREIGN KEY (`setting_id`)
     REFERENCES `ocn_setting` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `fk_page_setting_choice`
+  CONSTRAINT `fk_system_setting_choice`
     FOREIGN KEY (`choice_id`)
     REFERENCES `ocn_setting_choice` (`id`)
     ON DELETE SET NULL
     ON UPDATE CASCADE,
-  CONSTRAINT `fk_page_setting_update_user`
+  CONSTRAINT `fk_system_setting_update_user`
     FOREIGN KEY (`update_user_id`)
     REFERENCES `ocn_user` (`id`)
     ON DELETE SET NULL
@@ -485,11 +485,11 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
-CREATE INDEX `choice_FOREIGN_idx` ON `ocn_page_setting` (`choice_id` ASC);
+CREATE INDEX `choice_FOREIGN_idx` ON `ocn_system_setting` (`choice_id` ASC);
 
-CREATE INDEX `update_user_FOREIGN_idx` ON `ocn_page_setting` (`update_user_id` ASC);
+CREATE INDEX `update_user_FOREIGN_idx` ON `ocn_system_setting` (`update_user_id` ASC);
 
-CREATE UNIQUE INDEX `setting_UNIQUE` ON `ocn_page_setting` (`setting_id` ASC);
+CREATE UNIQUE INDEX `setting_UNIQUE` ON `ocn_system_setting` (`setting_id` ASC);
 
 
 -- -----------------------------------------------------
