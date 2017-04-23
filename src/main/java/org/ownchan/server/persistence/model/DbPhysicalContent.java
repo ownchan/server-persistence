@@ -51,7 +51,7 @@ public class DbPhysicalContent extends PersistableObject<DbPhysicalContent> impl
 
   private String externalContentLink;
 
-  private String additionalMetadata;
+  private DbJsonData additionalMetadata;
 
   @Override
   public long getId() {
@@ -170,11 +170,11 @@ public class DbPhysicalContent extends PersistableObject<DbPhysicalContent> impl
     this.externalContentLink = externalContentLink;
   }
 
-  public String getAdditionalMetadata() {
+  public DbJsonData getAdditionalMetadata() {
     return additionalMetadata;
   }
 
-  public void setAdditionalMetadata(String additionalMetadata) {
+  public void setAdditionalMetadata(DbJsonData additionalMetadata) {
     this.additionalMetadata = additionalMetadata;
   }
 

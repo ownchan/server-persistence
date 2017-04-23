@@ -31,6 +31,8 @@
       handler="org.ownchan.server.persistence.typehandler.DbPhysicalContentTypeTypeHandler" />
     <typeHandler javaType="DbPhysicalContentStatus"
       handler="org.ownchan.server.persistence.typehandler.DbPhysicalContentStatusTypeHandler" />
+    <typeHandler javaType="DbJsonData"
+      handler="org.ownchan.server.persistence.typehandler.DbJsonDataTypeHandler" />
   </typeHandlers>
 
 </configuration>
