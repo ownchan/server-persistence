@@ -52,17 +52,17 @@ CREATE TABLE `ocn_content` (
   `physical_content_id` BIGINT(20) UNSIGNED NOT NULL,
   `user_clicks` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
-  CONSTRAINT `parent_FOREIGN`
+  CONSTRAINT `fk_content_parent`
     FOREIGN KEY (`parent_id`)
     REFERENCES `ocn_content` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `user_FOREIGN`
+  CONSTRAINT `fk_content_user`
     FOREIGN KEY (`user_id`)
     REFERENCES `ocn_user` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `physical_content_FOREIGN`
+  CONSTRAINT `fk_content_physical_content`
     FOREIGN KEY (`physical_content_id`)
     REFERENCES `ocn_physical_content` (`id`)
     ON DELETE CASCADE
@@ -98,7 +98,7 @@ CREATE TABLE `ocn_user` (
   `avatar_content_id` BIGINT(20) UNSIGNED NULL,
   `last_password_change_time` TIMESTAMP(2) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `avatar_content_FOREIGN`
+  CONSTRAINT `fk_user_avatar_content`
     FOREIGN KEY (`avatar_content_id`)
     REFERENCES `ocn_content` (`id`)
     ON DELETE SET NULL
@@ -147,12 +147,12 @@ CREATE TABLE `ocn_privilege` (
   `create_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP(2) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  CONSTRAINT `msg_name_FOREIGN`
+  CONSTRAINT `fk_privilege_msg_name`
     FOREIGN KEY (`msg_id_name`)
     REFERENCES `ocn_msg` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `msg_description_FOREIGN`
+  CONSTRAINT `fk_privilege_msg_description`
     FOREIGN KEY (`msg_id_description`)
     REFERENCES `ocn_msg` (`id`)
     ON DELETE NO ACTION
@@ -179,12 +179,12 @@ CREATE TABLE `ocn_role` (
   `create_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP(2) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  CONSTRAINT `msg_name_FOREIGN`
+  CONSTRAINT `fk_role_msg_name`
     FOREIGN KEY (`msg_id_name`)
     REFERENCES `ocn_msg` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `msg_description_FOREIGN`
+  CONSTRAINT `fk_role_msg_description`
     FOREIGN KEY (`msg_id_description`)
     REFERENCES `ocn_privilege` (`id`)
     ON DELETE NO ACTION
@@ -208,12 +208,12 @@ CREATE TABLE `ocn_user_to_role` (
   `user_id` BIGINT(20) UNSIGNED NOT NULL,
   `role_id` BIGINT(20) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `user_FOREIGN`
+  CONSTRAINT `fk_user_to_role_user`
     FOREIGN KEY (`user_id`)
     REFERENCES `ocn_user` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `role_FOREIGN`
+  CONSTRAINT `fk_user_to_role_role`
     FOREIGN KEY (`role_id`)
     REFERENCES `ocn_role` (`id`)
     ON DELETE CASCADE
@@ -242,12 +242,12 @@ CREATE TABLE `ocn_user_ban` (
   `create_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP(2) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  CONSTRAINT `user_FOREIGN`
+  CONSTRAINT `fk_user_ban_user`
     FOREIGN KEY (`user_id`)
     REFERENCES `ocn_user` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `ban_initiator_FOREIGN`
+  CONSTRAINT `fk_user_ban_ban_initiator`
     FOREIGN KEY (`ban_initiator_id`)
     REFERENCES `ocn_user` (`id`)
     ON DELETE SET NULL
@@ -273,12 +273,12 @@ CREATE TABLE `ocn_role_to_privilege` (
   `role_id` BIGINT(20) UNSIGNED NOT NULL,
   `privilege_id` BIGINT(20) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `role_FOREIGN`
+  CONSTRAINT `fk_role_to_privilege_role`
     FOREIGN KEY (`role_id`)
     REFERENCES `ocn_role` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `privilege_FOREIGN`
+  CONSTRAINT `fk_role_to_privilege_privilege`
     FOREIGN KEY (`privilege_id`)
     REFERENCES `ocn_privilege` (`id`)
     ON DELETE CASCADE
@@ -311,12 +311,12 @@ CREATE TABLE `ocn_setting` (
   `create_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP(2) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  CONSTRAINT `msg_name_FOREIGN`
+  CONSTRAINT `fk_setting_msg_name`
     FOREIGN KEY (`msg_id_name`)
     REFERENCES `ocn_msg` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `msg_description_FOREIGN`
+  CONSTRAINT `fk_setting_msg_description`
     FOREIGN KEY (`msg_id_description`)
     REFERENCES `ocn_msg` (`id`)
     ON DELETE NO ACTION
@@ -344,17 +344,17 @@ CREATE TABLE `ocn_setting_choice` (
   `msg_id_name` BIGINT(20) UNSIGNED NULL,
   `msg_id_description` BIGINT(20) UNSIGNED NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `setting_FOREIGN`
+  CONSTRAINT `fk_setting_choice_setting`
     FOREIGN KEY (`setting_id`)
     REFERENCES `ocn_setting` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `msg_name_FOREIGN`
+  CONSTRAINT `fk_setting_choice_msg_name`
     FOREIGN KEY (`msg_id_name`)
     REFERENCES `ocn_msg` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `msg_description_FOREIGN`
+  CONSTRAINT `fk_setting_choice_msg_description`
     FOREIGN KEY (`msg_id_description`)
     REFERENCES `ocn_msg` (`id`)
     ON DELETE NO ACTION
@@ -383,22 +383,22 @@ CREATE TABLE `ocn_content_comment` (
   `update_time` TIMESTAMP(2) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `embedded_content_id` BIGINT(20) UNSIGNED NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `user_FOREIGN`
+  CONSTRAINT `fk_content_comment_user`
     FOREIGN KEY (`user_id`)
     REFERENCES `ocn_user` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `content_FOREIGN`
+  CONSTRAINT `fk_content_comment_content`
     FOREIGN KEY (`content_id`)
     REFERENCES `ocn_content` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `parent_FOREIGN`
+  CONSTRAINT `fk_content_comment_parent`
     FOREIGN KEY (`parent_id`)
     REFERENCES `ocn_content_comment` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `embedded_content_FOREIGN`
+  CONSTRAINT `fk_content_comment_embedded_content`
     FOREIGN KEY (`embedded_content_id`)
     REFERENCES `ocn_content` (`id`)
     ON DELETE SET NULL
@@ -428,17 +428,17 @@ CREATE TABLE `ocn_user_to_setting` (
   `create_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP(2) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  CONSTRAINT `user_FOREIGN`
+  CONSTRAINT `fk_user_to_setting_user`
     FOREIGN KEY (`user_id`)
     REFERENCES `ocn_user` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `setting_FOREIGN`
+  CONSTRAINT `fk_user_to_setting_setting`
     FOREIGN KEY (`setting_id`)
     REFERENCES `ocn_setting` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `choice_FOREIGN`
+  CONSTRAINT `fk_user_to_setting_choice`
     FOREIGN KEY (`choice_id`)
     REFERENCES `ocn_setting_choice` (`id`)
     ON DELETE SET NULL
@@ -446,8 +446,6 @@ CREATE TABLE `ocn_user_to_setting` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
-
-CREATE INDEX `user_FOREIGN_idx` ON `ocn_user_to_setting` (`user_id` ASC);
 
 CREATE INDEX `setting_FOREIGN_idx` ON `ocn_user_to_setting` (`setting_id` ASC);
 
@@ -468,17 +466,17 @@ CREATE TABLE `ocn_page_setting` (
   `update_time` TIMESTAMP(2) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `update_user_id` BIGINT(20) UNSIGNED NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `setting_FOREIGN`
+  CONSTRAINT `fk_page_setting_setting`
     FOREIGN KEY (`setting_id`)
     REFERENCES `ocn_setting` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `choice_FOREIGN`
+  CONSTRAINT `fk_page_setting_choice`
     FOREIGN KEY (`choice_id`)
     REFERENCES `ocn_setting_choice` (`id`)
     ON DELETE SET NULL
     ON UPDATE CASCADE,
-  CONSTRAINT `update_user_FOREIGN`
+  CONSTRAINT `fk_page_setting_update_user`
     FOREIGN KEY (`update_user_id`)
     REFERENCES `ocn_user` (`id`)
     ON DELETE SET NULL
@@ -486,8 +484,6 @@ CREATE TABLE `ocn_page_setting` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
-
-CREATE INDEX `setting_FOREIGN_idx` ON `ocn_page_setting` (`setting_id` ASC);
 
 CREATE INDEX `choice_FOREIGN_idx` ON `ocn_page_setting` (`choice_id` ASC);
 
@@ -504,12 +500,12 @@ CREATE TABLE `ocn_role_to_allowed_setting` (
   `role_id` BIGINT(20) UNSIGNED NOT NULL,
   `setting_id` BIGINT(20) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `role_FOREIGN`
+  CONSTRAINT `fk_role_to_allowed_setting_role`
     FOREIGN KEY (`role_id`)
     REFERENCES `ocn_role` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `setting_FOREIGN`
+  CONSTRAINT `fk_role_to_allowed_setting_setting`
     FOREIGN KEY (`setting_id`)
     REFERENCES `ocn_setting` (`id`)
     ON DELETE CASCADE
@@ -517,8 +513,6 @@ CREATE TABLE `ocn_role_to_allowed_setting` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
-
-CREATE INDEX `role_FOREIGN_idx` ON `ocn_role_to_allowed_setting` (`role_id` ASC);
 
 CREATE INDEX `setting_FOREIGN_idx` ON `ocn_role_to_allowed_setting` (`setting_id` ASC);
 
@@ -534,7 +528,7 @@ CREATE TABLE `ocn_private_label` (
   `text` VARCHAR(32) NOT NULL,
   `create_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  CONSTRAINT `user_FOREIGN`
+  CONSTRAINT `fk_private_label_user`
     FOREIGN KEY (`user_id`)
     REFERENCES `ocn_user` (`id`)
     ON DELETE CASCADE
@@ -557,12 +551,12 @@ CREATE TABLE `ocn_content_to_private_label` (
   `private_label_id` BIGINT(20) UNSIGNED NOT NULL,
   `create_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  CONSTRAINT `content_FOREIGN`
+  CONSTRAINT `fk_content_to_private_label_content`
     FOREIGN KEY (`content_id`)
     REFERENCES `ocn_content` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `private_label_FOREIGN`
+  CONSTRAINT `fk_content_to_private_label_private_label`
     FOREIGN KEY (`private_label_id`)
     REFERENCES `ocn_private_label` (`id`)
     ON DELETE CASCADE
@@ -570,8 +564,6 @@ CREATE TABLE `ocn_content_to_private_label` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
-
-CREATE INDEX `content_FOREIGN_idx` ON `ocn_content_to_private_label` (`content_id` ASC);
 
 CREATE INDEX `private_label_FOREIGN_idx` ON `ocn_content_to_private_label` (`private_label_id` ASC);
 
@@ -587,7 +579,7 @@ CREATE TABLE `ocn_label` (
   `create_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `creator_id` BIGINT(20) UNSIGNED NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `creator_FOREIGN`
+  CONSTRAINT `fk_label_creator`
     FOREIGN KEY (`creator_id`)
     REFERENCES `ocn_user` (`id`)
     ON DELETE SET NULL
@@ -610,12 +602,12 @@ CREATE TABLE `ocn_content_to_creator_label` (
   `label_id` BIGINT(20) UNSIGNED NOT NULL,
   `create_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  CONSTRAINT `content_FOREIGN`
+  CONSTRAINT `fk_content_to_creator_label_content`
     FOREIGN KEY (`content_id`)
     REFERENCES `ocn_content` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `label_FOREIGN`
+  CONSTRAINT `fk_content_to_creator_label_label`
     FOREIGN KEY (`label_id`)
     REFERENCES `ocn_label` (`id`)
     ON DELETE CASCADE
@@ -623,8 +615,6 @@ CREATE TABLE `ocn_content_to_creator_label` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
-
-CREATE INDEX `content_FOREIGN_idx` ON `ocn_content_to_creator_label` (`content_id` ASC);
 
 CREATE INDEX `label_FOREIGN_idx` ON `ocn_content_to_creator_label` (`label_id` ASC);
 
@@ -646,7 +636,7 @@ CREATE TABLE `ocn_cloud_label` (
   `update_time` TIMESTAMP(2) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `update_user_id` BIGINT(20) UNSIGNED NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `update_user_FOREIGN`
+  CONSTRAINT `fk_cloud_label_update_user`
     FOREIGN KEY (`update_user_id`)
     REFERENCES `ocn_user` (`id`)
     ON DELETE SET NULL
@@ -674,17 +664,17 @@ CREATE TABLE `ocn_physical_content_to_community_label` (
   `user_id` BIGINT(20) UNSIGNED NOT NULL,
   `create_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  CONSTRAINT `physical_content_FOREIGN`
+  CONSTRAINT `fk_phyco_to_cola_physical_content`
     FOREIGN KEY (`physical_content_id`)
     REFERENCES `ocn_physical_content` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `label_FOREIGN`
+  CONSTRAINT `fk_phyco_to_cola_label`
     FOREIGN KEY (`label_id`)
     REFERENCES `ocn_label` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `user_FOREIGN`
+  CONSTRAINT `fk_phyco_to_cola_user`
     FOREIGN KEY (`user_id`)
     REFERENCES `ocn_user` (`id`)
     ON DELETE CASCADE
@@ -701,8 +691,6 @@ CREATE UNIQUE INDEX `physical_content_label_UNIQUE` ON `ocn_physical_content_to_
 
 CREATE UNIQUE INDEX `physical_content_user_UNIQUE` ON `ocn_physical_content_to_community_label` (`physical_content_id` ASC, `user_id` ASC)  COMMENT 'one label per user for a content created by a different user should be enough';
 
-CREATE INDEX `physical_content_FOREIGN_idx` ON `ocn_physical_content_to_community_label` (`physical_content_id` ASC);
-
 
 -- -----------------------------------------------------
 -- Table `ocn_physical_content_to_cloud_label`
@@ -713,12 +701,12 @@ CREATE TABLE `ocn_physical_content_to_cloud_label` (
   `cloud_label_id` BIGINT(20) UNSIGNED NOT NULL,
   `create_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  CONSTRAINT `physical_content_FOREIGN`
+  CONSTRAINT `fk_phyco_to_cloud_label_physical_content`
     FOREIGN KEY (`physical_content_id`)
     REFERENCES `ocn_physical_content` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `cloud_label_FOREIGN`
+  CONSTRAINT `fk_phyco_to_clouad_label_cloud_label`
     FOREIGN KEY (`cloud_label_id`)
     REFERENCES `ocn_cloud_label` (`id`)
     ON DELETE CASCADE
@@ -731,8 +719,6 @@ CREATE UNIQUE INDEX `physical_content_cloud_label_UNIQUE` ON `ocn_physical_conte
 
 CREATE INDEX `cloud_label_FOREIGN_idx` ON `ocn_physical_content_to_cloud_label` (`cloud_label_id` ASC);
 
-CREATE INDEX `physical_content_FOREIGN_idx` ON `ocn_physical_content_to_cloud_label` (`physical_content_id` ASC);
-
 
 -- -----------------------------------------------------
 -- Table `ocn_user_to_follower`
@@ -743,12 +729,12 @@ CREATE TABLE `ocn_user_to_follower` (
   `follower_id` BIGINT(20) UNSIGNED NOT NULL,
   `following_start_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  CONSTRAINT `follower_FOREIGN`
+  CONSTRAINT `fk_user_to_follower_follower`
     FOREIGN KEY (`follower_id`)
     REFERENCES `ocn_user` (`id`)
     ON DELETE CASCADE
     ON UPDATE RESTRICT,
-  CONSTRAINT `user_FOREIGN`
+  CONSTRAINT `fk_user_to_follower_user`
     FOREIGN KEY (`user_id`)
     REFERENCES `ocn_user` (`id`)
     ON DELETE CASCADE
@@ -771,12 +757,12 @@ CREATE TABLE `ocn_user_to_favorite_content` (
   `content_id` BIGINT(20) UNSIGNED NOT NULL,
   `fav_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  CONSTRAINT `user_FOREIGN`
+  CONSTRAINT `fk_user_to_favco_user`
     FOREIGN KEY (`user_id`)
     REFERENCES `ocn_user` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `content_FOREIGN`
+  CONSTRAINT `fk_user_to_favco_content`
     FOREIGN KEY (`content_id`)
     REFERENCES `ocn_content` (`id`)
     ON DELETE CASCADE
@@ -784,8 +770,6 @@ CREATE TABLE `ocn_user_to_favorite_content` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
-
-CREATE INDEX `user_FOREIGN_idx` ON `ocn_user_to_favorite_content` (`user_id` ASC);
 
 CREATE INDEX `content_FOREIGN_idx` ON `ocn_user_to_favorite_content` (`content_id` ASC);
 
@@ -810,17 +794,17 @@ CREATE TABLE `ocn_content_abuse` (
   `create_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP(2) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  CONSTRAINT `content_FOREIGN`
+  CONSTRAINT `fk_content_abuse_content`
     FOREIGN KEY (`content_id`)
     REFERENCES `ocn_content` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `assignee_FOREIGN`
+  CONSTRAINT `fk_content_abuse_assignee`
     FOREIGN KEY (`assignee_id`)
     REFERENCES `ocn_user` (`id`)
     ON DELETE SET NULL
     ON UPDATE CASCADE,
-  CONSTRAINT `complaining_entity_user_FOREIGN`
+  CONSTRAINT `fk_content_abuse_complaining_entity_user`
     FOREIGN KEY (`complaining_entity_user_id`)
     REFERENCES `ocn_user` (`id`)
     ON DELETE SET NULL
@@ -834,3 +818,5 @@ CREATE INDEX `content_FOREIGN_idx` ON `ocn_content_abuse` (`content_id` ASC);
 CREATE INDEX `assignee_FOREIGN_idx` ON `ocn_content_abuse` (`assignee_id` ASC);
 
 CREATE INDEX `complaining_entity_user_FOREIGN_idx` ON `ocn_content_abuse` (`complaining_entity_user_id` ASC);
+
+CREATE INDEX `status_and_create_time_INDEX` ON `ocn_content_abuse` (`status` ASC, `create_time` ASC);
