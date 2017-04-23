@@ -46,9 +46,9 @@ public class DbJsonDataTypeHandler extends BaseTypeHandler<DbJsonData> {
 
   private ObjectReader unspecificReader;
 
-  private Map<Class<? extends DbJsonData>, ObjectReader> readerMap = new ConcurrentHashMap<>();
+  private Map<Class<? extends DbJsonData>, ObjectReader> readerMap;
 
-  private Map<Class<? extends DbJsonData>, ObjectWriter> writerMap = new ConcurrentHashMap<>();
+  private Map<Class<? extends DbJsonData>, ObjectWriter> writerMap;
 
   public DbJsonDataTypeHandler() {
     int targetReaderWriterCacheSize = 2 * KnownImplementingBeanClass.values().length;
