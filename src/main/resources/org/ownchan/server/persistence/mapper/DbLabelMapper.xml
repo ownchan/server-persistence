@@ -2,15 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.ownchan.server.persistence.mapper.DbLabelMapper">
 
-  <resultMap type="DbLabel" id="dbLabelResult">
+  <resultMap id="dbLabelResult" type="DbLabel">
     <id column="id" property="id"/>
     <result column="text" property="text"/>
     <result column="create_time" property="createTime"/>
+    <result column="creator_id" property="creatorId" />
   </resultMap>
   
+  <select id="fetchOrStreamAll">
+    select * from ocn_label
+  </select>
+  
   <select id="fetchOrStream">
-    SELECT *
-      FROM ocn_label
+    <include refid="fetchOrStreamAll"/>
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applyGroupedFilterParams"/>
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applySortingParams"/>
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applyLimitParam"/>
@@ -23,13 +27,46 @@
   <select id="stream" resultMap="dbLabelResult">
     <include refid="fetchOrStream"/>
   </select>
-
-  <select id="get" resultMap="dbLabelResult">
-    SELECT * FROM ocn_label WHERE id = #{id}
+  
+  <select id="fetchAll" resultMap="dbLabelResult">
+    <include refid="fetchOrStream"/>
   </select>
   
+  <select id="streamAll" resultMap="dbLabelResult">
+    <include refid="fetchOrStream"/>
+  </select>
+
   <delete id="delete">
-    DELETE FROM ocn_label WHERE id = #{id}
+    delete from ocn_label
+    where id = #{id}
   </delete>
+  
+  <insert id="insert">
+    <selectKey keyProperty="id" order="AFTER" resultType="long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ocn_label (
+      text, 
+      creator_id
+    )
+    values (
+      #{text}, 
+      #{creatorId}
+    )
+  </insert>
+  
+  <update id="update">
+    update ocn_label
+    set 
+      text = #{text},
+      creator_id = #{creatorId}
+    where id = #{id}
+  </update>
+  
+  <select id="get" resultMap="dbLabelResult">
+    select *
+    from ocn_label
+    where id = #{id}
+  </select>
 
 </mapper>

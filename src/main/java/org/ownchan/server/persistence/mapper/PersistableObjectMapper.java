@@ -39,6 +39,10 @@ public interface PersistableObjectMapper<T extends PersistableObject<T>> {
 
   void delete(long id);
 
+  List<T> fetchAll();
+
+  void streamAll(ResultHandler<T> resultHandler);
+
   List<T> fetch(
       @Param("groupedFilterParams") List<List<FilterParam>> groupedFilterParams,
       @Param("sortingParams") List<SortingParam> sortingParams,
