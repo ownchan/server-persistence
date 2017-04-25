@@ -50,10 +50,7 @@
     where id = #{id}
   </delete>
   
-  <insert id="insert">
-    <selectKey keyProperty="id" order="AFTER" resultType="long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
     insert into ocn_content_abuse (
       content_id, 
       violation_type, 
