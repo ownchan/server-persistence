@@ -20,7 +20,12 @@ package org.ownchan.server.persistence.model;
 
 import java.util.Date;
 
+import org.ownchan.server.persistence.mapper.DbLabelMapper;
+import org.ownchan.server.persistence.util.StaticContextAccessor;
+
 public class DbLabel extends PersistableObject<DbLabel> {
+
+  private static DbLabelMapper mapper;
 
   private long id;
 
@@ -35,7 +40,8 @@ public class DbLabel extends PersistableObject<DbLabel> {
     return id;
   }
 
-  public void setId(long id) {
+  @Override
+  protected void setId(long id) {
     this.id = id;
   }
 
@@ -61,6 +67,15 @@ public class DbLabel extends PersistableObject<DbLabel> {
 
   public void setCreator(DbUser creator) {
     this.creator = creator;
+  }
+
+  @Override
+  public DbLabelMapper getMapper() {
+    if (mapper == null) {
+      mapper = StaticContextAccessor.getBean(DbLabelMapper.class);
+    }
+
+    return mapper;
   }
 
 }

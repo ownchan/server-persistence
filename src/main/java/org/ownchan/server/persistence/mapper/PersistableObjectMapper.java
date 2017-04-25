@@ -31,13 +31,13 @@ import org.ownchan.server.persistence.model.PersistableObject;
 
 public interface PersistableObjectMapper<T extends PersistableObject<T>> {
 
-  long insert(T persistableObject);
+  int insert(T persistableObject);
 
   T get(long id);
 
-  void update(T persistableObject);
+  int update(T persistableObject);
 
-  void delete(long id);
+  int delete(long id);
 
   List<T> fetchAll();
 

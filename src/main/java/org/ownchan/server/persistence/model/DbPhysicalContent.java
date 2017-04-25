@@ -22,8 +22,12 @@ import java.util.Date;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
+import org.ownchan.server.persistence.mapper.DbPhysicalContentMapper;
+import org.ownchan.server.persistence.util.StaticContextAccessor;
 
 public class DbPhysicalContent extends PersistableObject<DbPhysicalContent> implements DbStatusAwareContent<DbPhysicalContentStatus> {
+
+  private static DbPhysicalContentMapper mapper;
 
   private long id;
 
@@ -58,7 +62,8 @@ public class DbPhysicalContent extends PersistableObject<DbPhysicalContent> impl
     return id;
   }
 
-  public void setId(long id) {
+  @Override
+  protected void setId(long id) {
     this.id = id;
   }
 
@@ -182,6 +187,15 @@ public class DbPhysicalContent extends PersistableObject<DbPhysicalContent> impl
   public void setStatus(DbPhysicalContentStatus status, String statusReason) {
     this.status = status;
     this.statusReason = StringUtils.abbreviate(statusReason, MAX_LENGTH_STATUS_REASON);
+  }
+
+  @Override
+  public DbPhysicalContentMapper getMapper() {
+    if (mapper == null) {
+      mapper = StaticContextAccessor.getBean(DbPhysicalContentMapper.class);
+    }
+
+    return mapper;
   }
 
 }

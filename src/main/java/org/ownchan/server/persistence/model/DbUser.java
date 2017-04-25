@@ -19,8 +19,12 @@
 package org.ownchan.server.persistence.model;
 
 import org.apache.commons.lang3.StringUtils;
+import org.ownchan.server.persistence.mapper.DbUserMapper;
+import org.ownchan.server.persistence.util.StaticContextAccessor;
 
 public class DbUser extends PersistableObject<DbUser> implements DbStatusAwareContent<DbUserStatus> {
+
+  private static DbUserMapper mapper;
 
   private long id;
 
@@ -33,7 +37,8 @@ public class DbUser extends PersistableObject<DbUser> implements DbStatusAwareCo
     return id;
   }
 
-  public void setId(long id) {
+  @Override
+  protected void setId(long id) {
     this.id = id;
   }
 
@@ -69,6 +74,15 @@ public class DbUser extends PersistableObject<DbUser> implements DbStatusAwareCo
   public void setStatus(DbUserStatus status, String statusReason) {
     this.status = status;
     this.statusReason = StringUtils.abbreviate(statusReason, MAX_LENGTH_STATUS_REASON);
+  }
+
+  @Override
+  public DbUserMapper getMapper() {
+    if (mapper == null) {
+      mapper = StaticContextAccessor.getBean(DbUserMapper.class);
+    }
+
+    return mapper;
   }
 
 }
