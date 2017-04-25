@@ -26,20 +26,6 @@ public abstract class PersistableObject<T extends PersistableObject<T>> {
 
   protected abstract void setId(long id);
 
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == null || !this.getClass().isAssignableFrom(obj.getClass())) {
-      return false;
-    }
-
-    return getId() == this.getClass().cast(obj).getId();
-  }
-
-  @Override
-  public int hashCode() {
-    return Long.hashCode(getId());
-  }
-
   /**
    * Calling this method will trigger loading
    * all the lazy properties of the persisted object.
@@ -89,5 +75,24 @@ public abstract class PersistableObject<T extends PersistableObject<T>> {
   }
 
   public abstract PersistableObjectMapper<T> getMapper();
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null || !this.getClass().isAssignableFrom(obj.getClass())) {
+      return false;
+    }
+
+    return getId() == this.getClass().cast(obj).getId();
+  }
+
+  @Override
+  public int hashCode() {
+    return Long.hashCode(getId());
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[id=" + getId() + "]";
+  }
 
 }
