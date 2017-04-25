@@ -33,23 +33,16 @@
     </include>
   </select>
 
-  <select id="set">
-    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.updateAll">
+  <update id="set">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.set">
       <property name="targetTable" value="ocn_label"/>
     </include>
-    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applyColumnToValueMappings"/>
-    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applyGroupedFilterParams"/>
-    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applySortingParams"/>
-    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applyLimitParam"/>
-  </select>
+  </update>
 
   <delete id="purge">
-    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.deleteAll">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.purge">
       <property name="targetTable" value="ocn_label"/>
     </include>
-    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applyGroupedFilterParams"/>
-    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applySortingParams"/>
-    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applyLimitParam"/>
   </delete>
 
   <delete id="purgeAll">

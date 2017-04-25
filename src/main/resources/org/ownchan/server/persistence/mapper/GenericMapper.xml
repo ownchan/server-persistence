@@ -111,5 +111,20 @@
     <include refid="applySortingParams"/>
     <include refid="applyLimitParam"/>
   </sql>
+  
+  <sql id="set">
+    <include refid="updateAll"/>
+    <include refid="applyColumnToValueMappings"/>
+    <include refid="applyGroupedFilterParams"/>
+    <include refid="applySortingParams"/>
+    <include refid="applyLimitParam"/>
+  </sql>
+
+  <sql id="purge">
+    <include refid="deleteAll"/>
+    <include refid="applyGroupedFilterParams"/>
+    <include refid="applySortingParams"/>
+    <include refid="applyLimitParam"/>
+  </sql>
 
 </mapper>
