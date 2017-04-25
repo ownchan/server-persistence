@@ -41,22 +41,6 @@ public class FilterParam {
 
   }
 
-  public static enum ValuePlaceholderType {
-    PREPARED_STATEMENT("PRE"), RAW_SQL("RAW");
-
-    private String shortName;
-
-    private ValuePlaceholderType(String shortName) {
-      this.shortName = shortName;
-    }
-
-    @Override
-    public String toString() {
-      return StringUtils.defaultString(shortName, name());
-    }
-
-  }
-
   private String column;
 
   private String operator;

@@ -23,35 +23,66 @@
     <result column="user_clicks" property="userClicks" />
   </resultMap>
   
-  <select id="fetchOrStreamAll">
-    select * from ocn_content
+  <select id="fetch" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStream">
+      <property name="targetTable" value="ocn_content"/>
+    </include>
   </select>
-  
-  <select id="fetchOrStream">
-    <include refid="fetchOrStreamAll"/>
+
+  <select id="stream" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStream">
+      <property name="targetTable" value="ocn_content"/>
+    </include>
+  </select>
+
+  <select id="fetchAll" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStreamAll">
+      <property name="targetTable" value="ocn_content"/>
+    </include>
+  </select>
+
+  <select id="streamAll" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStreamAll">
+      <property name="targetTable" value="ocn_content"/>
+    </include>
+  </select>
+
+  <select id="set">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.updateAll">
+      <property name="targetTable" value="ocn_content"/>
+    </include>
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applyColumnToValueMappings"/>
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applyGroupedFilterParams"/>
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applySortingParams"/>
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applyLimitParam"/>
   </select>
 
-  <select id="fetch" resultMap="defaultResultMap">
-    <include refid="fetchOrStream"/>
-  </select>
-  
-  <select id="stream" resultMap="defaultResultMap">
-    <include refid="fetchOrStream"/>
-  </select>
-  
-  <select id="fetchAll" resultMap="defaultResultMap">
-    <include refid="fetchOrStreamAll"/>
-  </select>
-  
-  <select id="streamAll" resultMap="defaultResultMap">
-    <include refid="fetchOrStreamAll"/>
+  <delete id="purge">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.deleteAll">
+      <property name="targetTable" value="ocn_content"/>
+    </include>
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applyGroupedFilterParams"/>
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applySortingParams"/>
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applyLimitParam"/>
+  </delete>
+
+  <delete id="purgeAll">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.deleteAll">
+      <property name="targetTable" value="ocn_content"/>
+    </include>
+  </delete>
+
+  <select id="get" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStreamAll">
+      <property name="targetTable" value="ocn_content"/>
+    </include>
+    where id = #{id}
   </select>
 
   <delete id="delete">
-    delete from ocn_content
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.deleteAll">
+      <property name="targetTable" value="ocn_content"/>
+    </include>
     where id = #{id}
   </delete>
 
@@ -112,11 +143,5 @@
       user_clicks = #{userClicks}
     where id = #{id}
   </update>
-
-  <select id="get" resultMap="defaultResultMap">
-    select *
-    from ocn_content
-    where id = #{id}
-  </select>
 
 </mapper>

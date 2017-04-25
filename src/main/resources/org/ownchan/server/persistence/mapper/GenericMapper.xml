@@ -38,12 +38,14 @@
                 <foreach item="clauseValue" collection="clause.values" separator=", " open="(" close=")">
                   <if test="clause.comparisonType.toString().equals('UPPER')"> UPPER(</if>
                   <if test="clause.comparisonType.toString().equals('LOWER')"> LOWER(</if>
-                  <if test="clause.valuePlaceholderType.toString().equals('PRE')">
-                    #{clauseValue}
-                  </if>
-                  <if test="clause.valuePlaceholderType.toString().equals('RAW')">
-                    ${clauseValue}
-                  </if>
+                  <choose>
+                    <when test="clause.valuePlaceholderType.toString().equals('PRE')">
+                      #{clauseValue}
+                    </when>
+                    <otherwise>
+                      ${clauseValue}
+                    </otherwise>
+                  </choose>
                   <if test="clause.comparisonType.toString().equals('NORMAL') == false">) </if>
                 </foreach>
               </if>
@@ -51,12 +53,14 @@
                 <foreach item="clauseValue" collection="clause.values" separator="" open="" close="">
                   <if test="clause.comparisonType.toString().equals('UPPER')"> UPPER(</if>
                   <if test="clause.comparisonType.toString().equals('LOWER')"> LOWER(</if>
-                  <if test="clause.valuePlaceholderType.toString().equals('PRE')">
-                    #{clauseValue}
-                  </if>
-                  <if test="clause.valuePlaceholderType.toString().equals('RAW')">
-                    ${clauseValue}
-                  </if>
+                  <choose>
+                    <when test="clause.valuePlaceholderType.toString().equals('PRE')">
+                      #{clauseValue}
+                    </when>
+                    <otherwise>
+                      ${clauseValue}
+                    </otherwise>
+                  </choose>
                   <if test="clause.comparisonType.toString().equals('NORMAL') == false">) </if>
                 </foreach>
               </if>
@@ -65,6 +69,47 @@
         </foreach>
       </where>
     </if>
+  </sql>
+
+  <sql id="applyColumnToValueMappings">
+    set
+    <choose>
+      <when test="_parameter.containsKey('columnToValueMap') and columnToValueMap != null and columnToValueMap.size() > 0">
+        <foreach item="targetValue" index="targetColumn" collection="columnToValueMap.entrySet" open="" separator=", " close="">
+          ${targetColumn} = 
+          <choose>
+            <when test="targetValue.valuePlaceholderType.toString().equals('PRE')">
+              #{targetValue.value}
+            </when>
+            <otherwise>
+              ${targetValue.value}
+            </otherwise>
+          </choose>
+        </foreach>
+      </when>
+      <otherwise>
+        id = id
+      </otherwise>
+    </choose>
+  </sql>
+
+  <sql id="fetchOrStreamAll">
+    select * from ${targetTable}
+  </sql>
+
+  <sql id="deleteAll">
+    delete from ${targetTable}
+  </sql>
+
+  <sql id="updateAll">
+    update ${targetTable}
+  </sql>
+
+  <sql id="fetchOrStream">
+    <include refid="fetchOrStreamAll"/>
+    <include refid="applyGroupedFilterParams"/>
+    <include refid="applySortingParams"/>
+    <include refid="applyLimitParam"/>
   </sql>
 
 </mapper>
