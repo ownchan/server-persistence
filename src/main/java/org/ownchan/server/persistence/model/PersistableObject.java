@@ -73,7 +73,7 @@ public abstract class PersistableObject<T extends PersistableObject<T>> {
    */
   public boolean delete() {
     if (getMapper().delete(getId()) > 0) {
-      this.setId(0);
+      setId(0);
     }
 
     return false;
