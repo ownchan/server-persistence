@@ -1,18 +1,22 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.ownchan.server.persistence.mapper.DbLabelMapper">
+<mapper namespace="org.ownchan.server.persistence.mapper.DbContentCommentMapper">
 
-  <resultMap id="defaultResultMap" type="DbLabel">
-    <id column="id" property="id"/>
-    <result column="text" property="text"/>
-    <result column="create_time" property="createTime"/>
-    <result column="creator_id" property="creatorId" />
+  <resultMap id="defaultResultMap" type="DbContentComment">
+    <id column="id" property="id" />
+    <result column="parent_id" property="parentId" />
+    <result column="text" property="text" />
+    <result column="user_id" property="userId" />
+    <result column="content_id" property="contentId" />
+    <result column="create_time" property="createTime" />
+    <result column="update_time" property="updateTime" />
+    <result column="embedded_content_id" property="embeddedContentId" />
   </resultMap>
-
+  
   <select id="fetchOrStreamAll">
-    select * from ocn_label
+    select * from ocn_content_comment
   </select>
-
+  
   <select id="fetchOrStream">
     <include refid="fetchOrStreamAll"/>
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applyGroupedFilterParams"/>
@@ -27,17 +31,17 @@
   <select id="stream" resultMap="defaultResultMap">
     <include refid="fetchOrStream"/>
   </select>
-
+  
   <select id="fetchAll" resultMap="defaultResultMap">
     <include refid="fetchOrStream"/>
   </select>
-
+  
   <select id="streamAll" resultMap="defaultResultMap">
     <include refid="fetchOrStream"/>
   </select>
 
   <delete id="delete">
-    delete from ocn_label
+    delete from ocn_content_comment
     where id = #{id}
   </delete>
 
@@ -45,27 +49,36 @@
     <selectKey keyProperty="id" order="AFTER" resultType="long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into ocn_label (
+    insert into ocn_content_comment (
+      parent_id, 
       text, 
-      creator_id
+      user_id, 
+      content_id, 
+      embedded_content_id
     )
     values (
+      #{parentId}, 
       #{text}, 
-      #{creatorId}
+      #{userId}, 
+      #{contentId},
+      #{embeddedContentId}
     )
   </insert>
 
   <update id="update">
-    update ocn_label
+    update ocn_content_comment
     set 
+      parent_id = #{parentId},
       text = #{text},
-      creator_id = #{creatorId}
+      user_id = #{userId},
+      content_id = #{contentId},
+      embedded_content_id = #{embeddedContentId}
     where id = #{id}
   </update>
 
   <select id="get" resultMap="defaultResultMap">
     select *
-    from ocn_label
+    from ocn_content_comment
     where id = #{id}
   </select>
 

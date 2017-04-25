@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.ownchan.server.persistence.mapper.DbPhysicalContentMapper">
+
+  <resultMap id="defaultResultMap" type="DbPhysicalContent">
+    <id column="id" property="id" />
+    <result column="type" property="type" />
+    <result column="status" property="status" />
+    <result column="status_reason" property="statusReason" />
+    <result column="storage_folder_year" property="storageFolderYear" />
+    <result column="storage_folder_month" property="storageFolderMonth" />
+    <result column="storage_folder_day" property="storageFolderDay" />
+    <result column="storage_folder_uuid" property="storageFolderUuid" />
+    <result column="content_checksum" property="contentChecksum" />
+    <result column="create_time" property="createTime" />
+    <result column="update_time" property="updateTime" />
+    <result column="physical_content_type" property="physicalContentType" />
+    <result column="external_content_link" property="externalContentLink" />
+    <result column="additional_metadata" property="additionalMetadata" />
+  </resultMap>
+
+  <select id="fetchOrStreamAll">
+    select * from ocn_physical_content
+  </select>
+
+  <select id="fetchOrStream">
+    <include refid="fetchOrStreamAll"/>
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applyGroupedFilterParams"/>
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applySortingParams"/>
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applyLimitParam"/>
+  </select>
+
+  <select id="fetch" resultMap="defaultResultMap">
+    <include refid="fetchOrStream"/>
+  </select>
+  
+  <select id="stream" resultMap="defaultResultMap">
+    <include refid="fetchOrStream"/>
+  </select>
+
+  <select id="fetchAll" resultMap="defaultResultMap">
+    <include refid="fetchOrStream"/>
+  </select>
+
+  <select id="streamAll" resultMap="defaultResultMap">
+    <include refid="fetchOrStream"/>
+  </select>
+
+  <delete id="delete">
+    delete from ocn_physical_content
+    where id = #{id}
+  </delete>
+
+  <insert id="insert">
+    <selectKey keyProperty="id" order="AFTER" resultType="long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ocn_physical_content (
+      type, 
+      status, 
+      status_reason, 
+      storage_folder_year, 
+      storage_folder_month, 
+      storage_folder_day, 
+      storage_folder_uuid, 
+      content_checksum,
+      physical_content_type, 
+      external_content_link, 
+      additional_metadata
+      )
+    values (
+      #{type}, 
+      #{status}, 
+      #{statusReason}, 
+      #{storageFolderYear}, 
+      #{storageFolderMonth}, 
+      #{storageFolderDay}, 
+      #{storageFolderUuid}, 
+      #{contentChecksum}, 
+      #{physicalContentType}, 
+      #{externalContentLink}, 
+      #{additionalMetadata}
+      )
+  </insert>
+
+  <update id="update">
+    update ocn_physical_content
+    set 
+      type = #{type},
+      status = #{status},
+      status_reason = #{statusReason},
+      storage_folder_year = #{storageFolderYear},
+      storage_folder_month = #{storageFolderMonth},
+      storage_folder_day = #{storageFolderDay},
+      storage_folder_uuid = #{storageFolderUuid},
+      content_checksum = #{contentChecksum},
+      physical_content_type = #{physicalContentType},
+      external_content_link = #{externalContentLink},
+      additional_metadata = #{additionalMetadata}
+    where id = #{id}
+  </update>
+
+  <select id="get" resultMap="defaultResultMap">
+    select *
+    from ocn_physical_content
+    where id = #{id}
+  </select>
+
+</mapper>

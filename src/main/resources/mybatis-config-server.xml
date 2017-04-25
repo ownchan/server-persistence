@@ -7,7 +7,7 @@
 
   <settings>
     <!-- we do use ehcache, but we avoid using org.mybatis.caches.ehcache.EhcacheCache
-      and use Spring service method level caching instead -->
+      and use dto service method level caching annotations instead -->
     <setting name="cacheEnabled" value="false" />
     <setting name="lazyLoadingEnabled" value="true" />
     <setting name="aggressiveLazyLoading" value="false" />

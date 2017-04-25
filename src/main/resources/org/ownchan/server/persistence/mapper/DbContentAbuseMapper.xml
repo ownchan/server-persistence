@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.ownchan.server.persistence.mapper.DbContentAbuseMapper">
+
+  <resultMap id="defaultResultMap" type="DbContentAbuse">
+    <id column="id" property="id" />
+    <result column="content_id" property="contentId" />
+    <result column="violation_type" property="violationType" />
+    <result column="explanation" property="explanation" />
+    <result column="complaining_entity_ip" property="complainingEntityIp" />
+    <result column="complaining_entity_contact" property="complainingEntityContact" />
+    <result column="complaining_entity_user_id" property="complainingEntityUserId" />
+    <result column="status" property="status" />
+    <result column="status_reason" property="statusReason" />
+    <result column="assignee_id" property="assigneeId" />
+    <result column="team_notes" property="teamNotes" />
+    <result column="create_time" property="createTime" />
+    <result column="update_time" property="updateTime" />
+  </resultMap>
+  
+  <select id="fetchOrStreamAll">
+    select * from ocn_content_abuse
+  </select>
+  
+  <select id="fetchOrStream">
+    <include refid="fetchOrStreamAll"/>
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applyGroupedFilterParams"/>
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applySortingParams"/>
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applyLimitParam"/>
+  </select>
+
+  <select id="fetch" resultMap="defaultResultMap">
+    <include refid="fetchOrStream"/>
+  </select>
+  
+  <select id="stream" resultMap="defaultResultMap">
+    <include refid="fetchOrStream"/>
+  </select>
+  
+  <select id="fetchAll" resultMap="defaultResultMap">
+    <include refid="fetchOrStream"/>
+  </select>
+  
+  <select id="streamAll" resultMap="defaultResultMap">
+    <include refid="fetchOrStream"/>
+  </select>
+  
+  <delete id="delete">
+    delete from ocn_content_abuse
+    where id = #{id}
+  </delete>
+  
+  <insert id="insert">
+    <selectKey keyProperty="id" order="AFTER" resultType="long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ocn_content_abuse (
+      content_id, 
+      violation_type, 
+      explanation, 
+      complaining_entity_ip, 
+      complaining_entity_contact, 
+      complaining_entity_user_id, 
+      status, status_reason, 
+      assignee_id, 
+      team_notes
+    )
+    values (
+      #{contentId}, 
+      #{violationType}, 
+      #{explanation}, 
+      #{complainingEntityIp}, 
+      #{complainingEntityContact}, 
+      #{complainingEntityUserId}, 
+      #{status}, 
+      #{statusReason}, 
+      #{assigneeId}, 
+      #{teamNotes}
+    )
+  </insert>
+  
+  <update id="update">
+    update ocn_content_abuse
+    set 
+      content_id = #{contentId},
+      violation_type = #{violationType},
+      explanation = #{explanation},
+      complaining_entity_ip = #{complainingEntityIp},
+      complaining_entity_contact = #{complainingEntityContact},
+      complaining_entity_user_id = #{complainingEntityUserId},
+      status = #{status},
+      status_reason = #{statusReason},
+      assignee_id = #{assigneeId},
+      team_notes = #{teamNotes}
+    where id = #{id}
+  </update>
+  
+  <select id="get" resultMap="defaultResultMap">
+    select *
+    from ocn_content_abuse
+    where id = #{id}
+  </select>
+  
+</mapper>

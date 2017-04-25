@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.ownchan.server.persistence.mapper.DbContentMapper">
+
+  <resultMap id="defaultResultMap" type="DbContent">
+    <id column="id" property="id" />
+    <result column="status" property="status" />
+    <result column="status_reason" property="statusReason" />
+    <result column="parent_id" property="parentId" />
+    <result column="user_id" property="userId" />
+    <result column="caption" property="caption" />
+    <result column="country_code" property="countryCode" />
+    <result column="city_name" property="cityName" />
+    <result column="location" property="location" />
+    <result column="content_name" property="contentName" />
+    <result column="content_time" property="contentTime" />
+    <result column="content_year" property="contentYear" />
+    <result column="content_month" property="contentMonth" />
+    <result column="content_day" property="contentDay" />
+    <result column="create_time" property="createTime" />
+    <result column="update_time" property="updateTime" />
+    <result column="physical_content_id" property="physicalContentId" />
+    <result column="user_clicks" property="userClicks" />
+  </resultMap>
+  
+  <select id="fetchOrStreamAll">
+    select * from ocn_content
+  </select>
+  
+  <select id="fetchOrStream">
+    <include refid="fetchOrStreamAll"/>
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applyGroupedFilterParams"/>
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applySortingParams"/>
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.applyLimitParam"/>
+  </select>
+
+  <select id="fetch" resultMap="defaultResultMap">
+    <include refid="fetchOrStream"/>
+  </select>
+  
+  <select id="stream" resultMap="defaultResultMap">
+    <include refid="fetchOrStream"/>
+  </select>
+  
+  <select id="fetchAll" resultMap="defaultResultMap">
+    <include refid="fetchOrStream"/>
+  </select>
+  
+  <select id="streamAll" resultMap="defaultResultMap">
+    <include refid="fetchOrStream"/>
+  </select>
+
+  <delete id="delete">
+    delete from ocn_content
+    where id = #{id}
+  </delete>
+
+  <insert id="insert">
+    <selectKey keyProperty="id" order="AFTER" resultType="long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ocn_content (
+      status, 
+      status_reason, 
+      parent_id, 
+      user_id, 
+      caption, 
+      country_code, 
+      city_name, 
+      location, 
+      content_name, 
+      content_time, 
+      content_year, 
+      content_month, 
+      content_day,
+      physical_content_id, 
+      user_clicks
+    )
+    values (
+      #{status}, 
+      #{statusReason}, 
+      #{parentId}, 
+      #{userId}, 
+      #{caption}, 
+      #{countryCode}, 
+      #{cityName}, 
+      #{location}, 
+      #{contentName}, 
+      #{contentTime}, 
+      #{contentYear}, 
+      #{contentMonth}, 
+      #{contentDay},
+      #{physicalContentId}, 
+      #{userClicks}
+    )
+  </insert>
+
+  <update id="update">
+    update ocn_content
+    set 
+      status = #{status},
+      status_reason = #{statusReason},
+      parent_id = #{parentId},
+      user_id = #{userId},
+      caption = #{caption},
+      country_code = #{countryCode},
+      city_name = #{cityName},
+      location = #{location},
+      content_name = #{contentName},
+      content_time = #{contentTime},
+      content_year = #{contentYear},
+      content_month = #{contentMonth},
+      content_day = #{contentDay},
+      physical_content_id = #{physicalContentId},
+      user_clicks = #{userClicks}
+    where id = #{id}
+  </update>
+
+  <select id="get" resultMap="defaultResultMap">
+    select *
+    from ocn_content
+    where id = #{id}
+  </select>
+
+</mapper>
