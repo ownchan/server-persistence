@@ -33,11 +33,11 @@
   </select>
 
   <select id="fetchAll" resultMap="defaultResultMap">
-    <include refid="fetchOrStream"/>
+    <include refid="fetchOrStreamAll"/>
   </select>
 
   <select id="streamAll" resultMap="defaultResultMap">
-    <include refid="fetchOrStream"/>
+    <include refid="fetchOrStreamAll"/>
   </select>
 
   <delete id="delete">
