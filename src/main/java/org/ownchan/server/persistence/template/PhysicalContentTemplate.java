@@ -16,4 +16,43 @@
  * You should have received a copy of the GNU Affero General Public License, version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *******************************************************************************/
-package org.ownchan.server.persistence.service.dao;
+package org.ownchan.server.persistence.template;
+
+import java.util.Date;
+import java.util.UUID;
+
+import org.ownchan.server.persistence.model.DbJsonData;
+import org.ownchan.server.persistence.model.DbPhysicalContentStatus;
+import org.ownchan.server.persistence.model.DbPhysicalContentType;
+
+public interface PhysicalContentTemplate extends EntityTemplate<PhysicalContentTemplate> {
+
+  long getId();
+
+  DbPhysicalContentType getType();
+
+  DbPhysicalContentStatus getStatus();
+
+  String getStatusReason();
+
+  Short getStorageFolderYear();
+
+  Byte getStorageFolderMonth();
+
+  Byte getStorageFolderDay();
+
+  UUID getStorageFolderUuid();
+
+  String getContentChecksum();
+
+  Date getCreateTime();
+
+  Date getUpdateTime();
+
+  String getPhysicalContentType();
+
+  String getExternalContentLink();
+
+  DbJsonData getAdditionalMetadata();
+
+}

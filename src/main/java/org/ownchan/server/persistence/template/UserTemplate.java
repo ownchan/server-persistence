@@ -16,4 +16,38 @@
  * You should have received a copy of the GNU Affero General Public License, version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *******************************************************************************/
-package org.ownchan.server.persistence.service.dao;
+package org.ownchan.server.persistence.template;
+
+import java.util.Date;
+
+import org.ownchan.server.persistence.model.DbUserStatus;
+
+public interface UserTemplate extends EntityTemplate<UserTemplate> {
+
+  long getId();
+
+  DbUserStatus getStatus();
+
+  String getStatusReason();
+
+  String getAlias();
+
+  String getDisplayName();
+
+  String getPasswordHash();
+
+  Date getCreateTime();
+
+  Date getUpdateTime();
+
+  String getEmail();
+
+  String getMotto();
+
+  String getExternalLink();
+
+  Long getAvatarContentId();
+
+  Date getLastPasswordChangeTime();
+
+}

@@ -23,9 +23,10 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.ownchan.server.persistence.mapper.DbPhysicalContentMapper;
+import org.ownchan.server.persistence.template.PhysicalContentTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbPhysicalContent extends PersistableObject<DbPhysicalContent> implements DbStatusAwareContent<DbPhysicalContentStatus> {
+public class DbPhysicalContent extends PersistableObject<DbPhysicalContent, PhysicalContentTemplate> implements DbStatusAwareContent<DbPhysicalContentStatus>, PhysicalContentTemplate {
 
   private static DbPhysicalContentMapper mapper;
 
@@ -67,6 +68,7 @@ public class DbPhysicalContent extends PersistableObject<DbPhysicalContent> impl
     this.id = id;
   }
 
+  @Override
   public DbPhysicalContentType getType() {
     return type;
   }
@@ -103,6 +105,7 @@ public class DbPhysicalContent extends PersistableObject<DbPhysicalContent> impl
     this.statusReason = statusReason;
   }
 
+  @Override
   public Short getStorageFolderYear() {
     return storageFolderYear;
   }
@@ -111,6 +114,7 @@ public class DbPhysicalContent extends PersistableObject<DbPhysicalContent> impl
     this.storageFolderYear = storageFolderYear;
   }
 
+  @Override
   public Byte getStorageFolderMonth() {
     return storageFolderMonth;
   }
@@ -119,6 +123,7 @@ public class DbPhysicalContent extends PersistableObject<DbPhysicalContent> impl
     this.storageFolderMonth = storageFolderMonth;
   }
 
+  @Override
   public Byte getStorageFolderDay() {
     return storageFolderDay;
   }
@@ -127,6 +132,7 @@ public class DbPhysicalContent extends PersistableObject<DbPhysicalContent> impl
     this.storageFolderDay = storageFolderDay;
   }
 
+  @Override
   public UUID getStorageFolderUuid() {
     return storageFolderUuid;
   }
@@ -135,6 +141,7 @@ public class DbPhysicalContent extends PersistableObject<DbPhysicalContent> impl
     this.storageFolderUuid = storageFolderUuid;
   }
 
+  @Override
   public String getContentChecksum() {
     return contentChecksum;
   }
@@ -143,6 +150,7 @@ public class DbPhysicalContent extends PersistableObject<DbPhysicalContent> impl
     this.contentChecksum = contentChecksum;
   }
 
+  @Override
   public Date getCreateTime() {
     return createTime;
   }
@@ -151,6 +159,7 @@ public class DbPhysicalContent extends PersistableObject<DbPhysicalContent> impl
     this.createTime = createTime;
   }
 
+  @Override
   public Date getUpdateTime() {
     return updateTime;
   }
@@ -159,6 +168,7 @@ public class DbPhysicalContent extends PersistableObject<DbPhysicalContent> impl
     this.updateTime = updateTime;
   }
 
+  @Override
   public String getPhysicalContentType() {
     return physicalContentType;
   }
@@ -167,6 +177,7 @@ public class DbPhysicalContent extends PersistableObject<DbPhysicalContent> impl
     this.physicalContentType = physicalContentType;
   }
 
+  @Override
   public String getExternalContentLink() {
     return externalContentLink;
   }
@@ -175,6 +186,7 @@ public class DbPhysicalContent extends PersistableObject<DbPhysicalContent> impl
     this.externalContentLink = externalContentLink;
   }
 
+  @Override
   public DbJsonData getAdditionalMetadata() {
     return additionalMetadata;
   }

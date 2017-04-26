@@ -18,11 +18,14 @@
  *******************************************************************************/
 package org.ownchan.server.persistence.model;
 
+import java.util.Date;
+
 import org.apache.commons.lang3.StringUtils;
 import org.ownchan.server.persistence.mapper.DbUserMapper;
+import org.ownchan.server.persistence.template.UserTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbUser extends PersistableObject<DbUser> implements DbStatusAwareContent<DbUserStatus> {
+public class DbUser extends PersistableObject<DbUser, UserTemplate> implements DbStatusAwareContent<DbUserStatus>, UserTemplate {
 
   private static DbUserMapper mapper;
 
@@ -31,6 +34,26 @@ public class DbUser extends PersistableObject<DbUser> implements DbStatusAwareCo
   private DbUserStatus status;
 
   private String statusReason;
+
+  private String alias;
+
+  private String displayName;
+
+  private String passwordHash;
+
+  private Date createTime;
+
+  private Date updateTime;
+
+  private String email;
+
+  private String motto;
+
+  private String externalLink;
+
+  private Long avatarContentId;
+
+  private Date lastPasswordChangeTime;
 
   @Override
   public long getId() {
@@ -74,6 +97,96 @@ public class DbUser extends PersistableObject<DbUser> implements DbStatusAwareCo
   public void setStatus(DbUserStatus status, String statusReason) {
     this.status = status;
     this.statusReason = StringUtils.abbreviate(statusReason, MAX_LENGTH_STATUS_REASON);
+  }
+
+  @Override
+  public String getAlias() {
+    return alias;
+  }
+
+  public void setAlias(String alias) {
+    this.alias = alias;
+  }
+
+  @Override
+  public String getDisplayName() {
+    return displayName;
+  }
+
+  public void setDisplayName(String displayName) {
+    this.displayName = displayName;
+  }
+
+  @Override
+  public String getPasswordHash() {
+    return passwordHash;
+  }
+
+  public void setPasswordHash(String passwordHash) {
+    this.passwordHash = passwordHash;
+  }
+
+  @Override
+  public Date getCreateTime() {
+    return createTime;
+  }
+
+  public void setCreateTime(Date createTime) {
+    this.createTime = createTime;
+  }
+
+  @Override
+  public Date getUpdateTime() {
+    return updateTime;
+  }
+
+  public void setUpdateTime(Date updateTime) {
+    this.updateTime = updateTime;
+  }
+
+  @Override
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  @Override
+  public String getMotto() {
+    return motto;
+  }
+
+  public void setMotto(String motto) {
+    this.motto = motto;
+  }
+
+  @Override
+  public String getExternalLink() {
+    return externalLink;
+  }
+
+  public void setExternalLink(String externalLink) {
+    this.externalLink = externalLink;
+  }
+
+  @Override
+  public Long getAvatarContentId() {
+    return avatarContentId;
+  }
+
+  public void setAvatarContentId(Long avatarContentId) {
+    this.avatarContentId = avatarContentId;
+  }
+
+  @Override
+  public Date getLastPasswordChangeTime() {
+    return lastPasswordChangeTime;
+  }
+
+  public void setLastPasswordChangeTime(Date lastPasswordChangeTime) {
+    this.lastPasswordChangeTime = lastPasswordChangeTime;
   }
 
   @Override

@@ -16,4 +16,18 @@
  * You should have received a copy of the GNU Affero General Public License, version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *******************************************************************************/
-package org.ownchan.server.persistence.service.dao;
+package org.ownchan.server.persistence.template;
+
+import java.util.Date;
+
+public interface LabelTemplate extends EntityTemplate<LabelTemplate> {
+
+  long getId();
+
+  String getText();
+
+  Date getCreateTime();
+
+  Long getCreatorId();
+
+}

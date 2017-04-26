@@ -21,9 +21,10 @@ package org.ownchan.server.persistence.model;
 import java.util.Date;
 
 import org.ownchan.server.persistence.mapper.DbLabelMapper;
+import org.ownchan.server.persistence.template.LabelTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbLabel extends PersistableObject<DbLabel> {
+public class DbLabel extends PersistableObject<DbLabel, LabelTemplate> implements LabelTemplate {
 
   private static DbLabelMapper mapper;
 
@@ -33,7 +34,7 @@ public class DbLabel extends PersistableObject<DbLabel> {
 
   private Date createTime;
 
-  private DbUser creator;
+  private Long creatorId;
 
   @Override
   public long getId() {
@@ -45,6 +46,7 @@ public class DbLabel extends PersistableObject<DbLabel> {
     this.id = id;
   }
 
+  @Override
   public String getText() {
     return text;
   }
@@ -53,6 +55,7 @@ public class DbLabel extends PersistableObject<DbLabel> {
     this.text = text;
   }
 
+  @Override
   public Date getCreateTime() {
     return createTime;
   }
@@ -61,12 +64,13 @@ public class DbLabel extends PersistableObject<DbLabel> {
     this.createTime = createTime;
   }
 
-  public DbUser getCreator() {
-    return creator;
+  @Override
+  public Long getCreatorId() {
+    return creatorId;
   }
 
-  public void setCreator(DbUser creator) {
-    this.creator = creator;
+  public void setCreatorId(Long creatorId) {
+    this.creatorId = creatorId;
   }
 
   @Override

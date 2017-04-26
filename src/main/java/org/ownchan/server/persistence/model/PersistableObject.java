@@ -19,8 +19,9 @@
 package org.ownchan.server.persistence.model;
 
 import org.ownchan.server.persistence.mapper.PersistableObjectMapper;
+import org.ownchan.server.persistence.template.EntityTemplate;
 
-public abstract class PersistableObject<T extends PersistableObject<T>> {
+public abstract class PersistableObject<T extends PersistableObject<T, U> & EntityTemplate<U>, U extends EntityTemplate<U>> {
 
   public abstract long getId();
 
