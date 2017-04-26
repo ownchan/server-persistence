@@ -23,57 +23,33 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 import org.ownchan.server.persistence.model.DbJsonData;
-import org.ownchan.server.persistence.model.DbJsonData.KnownImplementingBeanClass;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 public class DbJsonDataTypeHandler extends BaseTypeHandler<DbJsonData> {
 
-  private ObjectMapper objectMapper;
+  private ObjectReader reader;
 
-  private ObjectReader unspecificReader;
-
-  private Map<Class<? extends DbJsonData>, ObjectReader> readerMap;
-
-  private Map<Class<? extends DbJsonData>, ObjectWriter> writerMap;
+  private ObjectWriter writer;
 
   public DbJsonDataTypeHandler() {
-    int targetReaderWriterCacheSize = 2 * KnownImplementingBeanClass.values().length;
-    this.readerMap = new ConcurrentHashMap<>(targetReaderWriterCacheSize);
-    this.writerMap = new ConcurrentHashMap<>(targetReaderWriterCacheSize);
-    this.objectMapper = new ObjectMapper();
-    this.objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    this.objectMapper.setPropertyInclusion(JsonInclude.Value.construct(Include.NON_ABSENT, Include.NON_ABSENT));
-    this.unspecificReader = objectMapper.readerFor(DbJsonData.class);
+    ObjectMapper objectMapper = new ObjectMapper();
+    this.reader = objectMapper.reader();
+    this.writer = objectMapper.writer();
   }
 
   @Override
   public void setNonNullParameter(PreparedStatement ps, int i, DbJsonData parameter, JdbcType jdbcType) throws SQLException {
     try {
-      KnownImplementingBeanClass knownImplementingClass = KnownImplementingBeanClass.fromImplementingBeanClass(parameter.getClass());
-      parameter.setKnownImplementingBeanClass(knownImplementingClass);
-      Class<? extends DbJsonData> targetClass = knownImplementingClass.getImplementingBeanClass();
-
-      ObjectWriter targetWriter = writerMap.get(targetClass);
-      if (targetWriter == null) {
-        targetWriter = objectMapper.writerFor(targetClass);
-        writerMap.put(targetClass, targetWriter);
-      }
-
-      ps.setString(i, targetWriter.writeValueAsString(parameter));
+      ps.setString(i, writer.writeValueAsString(parameter));
     } catch (IllegalArgumentException | JsonProcessingException e) {
       throw new SQLException(e.getMessage(), e);
     }
@@ -97,18 +73,7 @@ public class DbJsonDataTypeHandler extends BaseTypeHandler<DbJsonData> {
   private DbJsonData createDbJsonDataFromString(String jsonString) throws SQLException {
     if (StringUtils.isNotBlank(jsonString)) {
       try {
-        // TODO try to find a way to avoid parsing the string two times
-        DbJsonData jsonContent = unspecificReader.readValue(jsonString);
-        DbJsonData.KnownImplementingBeanClass knownImplementingBeanClass = jsonContent.getKnownImplementingBeanClass();
-        Class<? extends DbJsonData> targetClass = knownImplementingBeanClass.getImplementingBeanClass();
-
-        ObjectReader targetReader = readerMap.get(targetClass);
-        if (targetReader == null) {
-          targetReader = objectMapper.readerFor(targetClass);
-          readerMap.put(targetClass, targetReader);
-        }
-
-        return targetReader.readValue(jsonString);
+        return reader.readValue(jsonString);
       } catch (IOException e) {
         throw new SQLException(e.getMessage(), e);
       }
