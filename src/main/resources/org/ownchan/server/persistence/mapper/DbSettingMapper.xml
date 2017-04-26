@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.ownchan.server.persistence.mapper.DbSettingMapper">
+
+  <resultMap id="defaultResultMap" type="DbSetting">
+    <id column="id" property="id" />
+    <result column="name" property="name" />
+    <result column="type" property="type" />
+    <result column="msg_id_name" property="msgIdName" />
+    <result column="msg_id_description" property="msgIdDescription" />
+    <result column="constrained" property="constrained" />
+    <result column="value_type" property="valueType" />
+    <result column="default_value" property="defaultValue" />
+    <result column="min_value" property="minValue" />
+    <result column="max_value" property="maxValue" />
+    <result column="create_time" property="createTime" />
+    <result column="update_time" property="updateTime" />
+  </resultMap>
+
+  <select id="fetch" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStream">
+      <property name="targetTable" value="ocn_setting"/>
+    </include>
+  </select>
+
+  <select id="stream" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStream">
+      <property name="targetTable" value="ocn_setting"/>
+    </include>
+  </select>
+
+  <select id="fetchAll" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStreamAll">
+      <property name="targetTable" value="ocn_setting"/>
+    </include>
+  </select>
+
+  <select id="streamAll" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStreamAll">
+      <property name="targetTable" value="ocn_setting"/>
+    </include>
+  </select>
+
+  <update id="set">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.set">
+      <property name="targetTable" value="ocn_setting"/>
+    </include>
+  </update>
+
+  <delete id="purge">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.purge">
+      <property name="targetTable" value="ocn_setting"/>
+    </include>
+  </delete>
+
+  <delete id="purgeAll">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.deleteAll">
+      <property name="targetTable" value="ocn_setting"/>
+    </include>
+  </delete>
+
+  <select id="get" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStreamAll">
+      <property name="targetTable" value="ocn_setting"/>
+    </include>
+    where id = #{id}
+  </select>
+
+  <delete id="delete">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.deleteAll">
+      <property name="targetTable" value="ocn_setting"/>
+    </include>
+    where id = #{id}
+  </delete>
+
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    insert into ocn_setting (
+      name, 
+      type, 
+      msg_id_name, 
+      msg_id_description, 
+      constrained, 
+      value_type, 
+      default_value, 
+      min_value, 
+      max_value
+    )
+    values (
+      #{name}, 
+      #{type}, 
+      #{msgIdName}, 
+      #{msgIdDescription}, 
+      #{constrained}, 
+      #{valueType}, 
+      #{defaultValue}, 
+      #{minValue}, 
+      #{maxValue}
+    )
+  </insert>
+
+  <update id="update">
+    update ocn_setting
+    set 
+      name = #{name},
+      type = #{type},
+      msg_id_name = #{msgIdName},
+      msg_id_description = #{msgIdDescription},
+      constrained = #{constrained},
+      value_type = #{valueType},
+      default_value = #{defaultValue},
+      min_value = #{minValue},
+      max_value = #{maxValue}
+    where id = #{id}
+  </update>
+
+</mapper>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.ownchan.server.persistence.mapper.DbUserBanMapper">
+
+  <resultMap id="defaultResultMap" type="DbUserBan">
+    <id column="id" property="id" />
+    <result column="user_id" property="userId" />
+    <result column="active" property="active" />
+    <result column="ban_expiration_time" property="banExpirationTime" />
+    <result column="ban_reason" property="banReason" />
+    <result column="ban_initiator_id" property="banInitiatorId" />
+    <result column="create_time" property="createTime" />
+    <result column="update_time" property="updateTime" />
+  </resultMap>
+
+  <select id="fetch" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStream">
+      <property name="targetTable" value="ocn_user_ban"/>
+    </include>
+  </select>
+
+  <select id="stream" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStream">
+      <property name="targetTable" value="ocn_user_ban"/>
+    </include>
+  </select>
+
+  <select id="fetchAll" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStreamAll">
+      <property name="targetTable" value="ocn_user_ban"/>
+    </include>
+  </select>
+
+  <select id="streamAll" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStreamAll">
+      <property name="targetTable" value="ocn_user_ban"/>
+    </include>
+  </select>
+
+  <update id="set">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.set">
+      <property name="targetTable" value="ocn_user_ban"/>
+    </include>
+  </update>
+
+  <delete id="purge">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.purge">
+      <property name="targetTable" value="ocn_user_ban"/>
+    </include>
+  </delete>
+
+  <delete id="purgeAll">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.deleteAll">
+      <property name="targetTable" value="ocn_user_ban"/>
+    </include>
+  </delete>
+
+  <select id="get" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStreamAll">
+      <property name="targetTable" value="ocn_user_ban"/>
+    </include>
+    where id = #{id}
+  </select>
+
+  <delete id="delete">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.deleteAll">
+      <property name="targetTable" value="ocn_user_ban"/>
+    </include>
+    where id = #{id}
+  </delete>
+
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    insert into ocn_user_ban (
+      user_id, 
+      active, 
+      ban_expiration_time, 
+      ban_reason, 
+      ban_initiator_id
+    )
+    values (
+      #{userId}, 
+      #{active}, 
+      #{banExpirationTime}, 
+      #{banReason}, 
+      #{banInitiatorId}
+    )
+  </insert>
+
+  <update id="update">
+    update ocn_user_ban
+    set 
+      user_id = #{userId},
+      active = #{active},
+      ban_expiration_time = #{banExpirationTime},
+      ban_reason = #{banReason},
+      ban_initiator_id = #{banInitiatorId}
+    where id = #{id}
+  </update>
+
+</mapper>

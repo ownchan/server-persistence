@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.ownchan.server.persistence.mapper.DbSystemSettingMapper">
+
+  <resultMap id="defaultResultMap" type="DbSystemSetting">
+    <id column="id" property="id" />
+    <result column="setting_id" property="settingId" />
+    <result column="choice_id" property="choiceId" />
+    <result column="custom_value" property="customValue" />
+    <result column="create_time" property="createTime" />
+    <result column="update_time" property="updateTime" />
+    <result column="update_user_id" property="updateUserId" />
+  </resultMap>
+
+  <select id="fetch" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStream">
+      <property name="targetTable" value="ocn_system_setting"/>
+    </include>
+  </select>
+
+  <select id="stream" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStream">
+      <property name="targetTable" value="ocn_system_setting"/>
+    </include>
+  </select>
+
+  <select id="fetchAll" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStreamAll">
+      <property name="targetTable" value="ocn_system_setting"/>
+    </include>
+  </select>
+
+  <select id="streamAll" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStreamAll">
+      <property name="targetTable" value="ocn_system_setting"/>
+    </include>
+  </select>
+
+  <update id="set">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.set">
+      <property name="targetTable" value="ocn_system_setting"/>
+    </include>
+  </update>
+
+  <delete id="purge">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.purge">
+      <property name="targetTable" value="ocn_system_setting"/>
+    </include>
+  </delete>
+
+  <delete id="purgeAll">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.deleteAll">
+      <property name="targetTable" value="ocn_system_setting"/>
+    </include>
+  </delete>
+
+  <select id="get" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStreamAll">
+      <property name="targetTable" value="ocn_system_setting"/>
+    </include>
+    where id = #{id}
+  </select>
+
+  <delete id="delete">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.deleteAll">
+      <property name="targetTable" value="ocn_system_setting"/>
+    </include>
+    where id = #{id}
+  </delete>
+
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    insert into ocn_system_setting (
+      setting_id, 
+      choice_id, 
+      custom_value,
+      update_user_id
+    )
+    values (
+      #{settingId}, 
+      #{choiceId}, 
+      #{customValue},
+      #{updateUserId}
+    )
+  </insert>
+
+  <update id="update">
+    update ocn_system_setting
+    set 
+      setting_id = #{settingId},
+      choice_id = #{choiceId},
+      custom_value = #{customValue},
+      update_user_id = #{updateUserId}
+    where id = #{id}
+  </update>
+
+</mapper>

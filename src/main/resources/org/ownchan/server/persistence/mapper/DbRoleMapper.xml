@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.ownchan.server.persistence.mapper.DbRoleMapper">
+
+  <resultMap id="defaultResultMap" type="DbRole">
+    <id column="id" property="id" />
+    <result column="name" property="name" />
+    <result column="msg_id_name" property="msgIdName" />
+    <result column="msg_id_description" property="msgIdDescription" />
+    <result column="create_time" property="createTime" />
+    <result column="update_time" property="updateTime" />
+  </resultMap>
+
+  <select id="fetch" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStream">
+      <property name="targetTable" value="ocn_role"/>
+    </include>
+  </select>
+
+  <select id="stream" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStream">
+      <property name="targetTable" value="ocn_role"/>
+    </include>
+  </select>
+
+  <select id="fetchAll" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStreamAll">
+      <property name="targetTable" value="ocn_role"/>
+    </include>
+  </select>
+
+  <select id="streamAll" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStreamAll">
+      <property name="targetTable" value="ocn_role"/>
+    </include>
+  </select>
+
+  <update id="set">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.set">
+      <property name="targetTable" value="ocn_role"/>
+    </include>
+  </update>
+
+  <delete id="purge">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.purge">
+      <property name="targetTable" value="ocn_role"/>
+    </include>
+  </delete>
+
+  <delete id="purgeAll">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.deleteAll">
+      <property name="targetTable" value="ocn_role"/>
+    </include>
+  </delete>
+
+  <select id="get" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStreamAll">
+      <property name="targetTable" value="ocn_role"/>
+    </include>
+    where id = #{id}
+  </select>
+
+  <delete id="delete">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.deleteAll">
+      <property name="targetTable" value="ocn_role"/>
+    </include>
+    where id = #{id}
+  </delete>
+
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    insert into ocn_role (
+      name, 
+      msg_id_name, 
+      msg_id_description
+    )
+    values (
+      #{name}, 
+      #{msgIdName}, 
+      #{msgIdDescription}
+    )
+  </insert>
+
+  <update id="update">
+    update ocn_role
+    set 
+      name = #{name},
+      msg_id_name = #{msgIdName},
+      msg_id_description = #{msgIdDescription}
+    where id = #{id}
+  </update>
+
+</mapper>

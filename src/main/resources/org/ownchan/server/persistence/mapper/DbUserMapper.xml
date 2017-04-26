@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.ownchan.server.persistence.mapper.DbUserMapper">
+
+  <resultMap id="defaultResultMap" type="DbUser">
+    <id column="id" property="id" />
+    <result column="alias" property="alias" />
+    <result column="display_name" property="displayName" />
+    <result column="password_hash" property="passwordHash" />
+    <result column="status" property="status" />
+    <result column="status_reason" property="statusReason" />
+    <result column="create_time" property="createTime" />
+    <result column="update_time" property="updateTime" />
+    <result column="email" property="email" />
+    <result column="motto" property="motto" />
+    <result column="external_link" property="externalLink" />
+    <result column="avatar_content_id" property="avatarContentId" />
+    <result column="last_password_change_time" property="lastPasswordChangeTime" />
+  </resultMap>
+
+  <select id="fetch" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStream">
+      <property name="targetTable" value="ocn_user"/>
+    </include>
+  </select>
+
+  <select id="stream" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStream">
+      <property name="targetTable" value="ocn_user"/>
+    </include>
+  </select>
+
+  <select id="fetchAll" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStreamAll">
+      <property name="targetTable" value="ocn_user"/>
+    </include>
+  </select>
+
+  <select id="streamAll" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStreamAll">
+      <property name="targetTable" value="ocn_user"/>
+    </include>
+  </select>
+
+  <update id="set">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.set">
+      <property name="targetTable" value="ocn_user"/>
+    </include>
+  </update>
+
+  <delete id="purge">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.purge">
+      <property name="targetTable" value="ocn_user"/>
+    </include>
+  </delete>
+
+  <delete id="purgeAll">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.deleteAll">
+      <property name="targetTable" value="ocn_user"/>
+    </include>
+  </delete>
+
+  <select id="get" resultMap="defaultResultMap">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStreamAll">
+      <property name="targetTable" value="ocn_user"/>
+    </include>
+    where id = #{id}
+  </select>
+
+  <delete id="delete">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.deleteAll">
+      <property name="targetTable" value="ocn_user"/>
+    </include>
+    where id = #{id}
+  </delete>
+
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    insert into ocn_user (
+      alias, 
+      display_name, 
+      password_hash, 
+      status, 
+      status_reason,
+      email, 
+      motto, 
+      external_link, 
+      avatar_content_id, 
+      last_password_change_time
+    )
+    values (
+      #{alias}, 
+      #{displayName}, 
+      #{passwordHash}, 
+      #{status}, 
+      #{statusReason},
+      #{email}, 
+      #{motto}, 
+      #{externalLink}, 
+      #{avatarContentId}, 
+      #{lastPasswordChangeTime}
+    )
+  </insert>
+
+  <update id="update">
+    update ocn_user
+    set 
+      alias = #{alias},
+      display_name = #{displayName},
+      password_hash = #{passwordHash},
+      status = #{status},
+      status_reason = #{statusReason},
+      email = #{email},
+      motto = #{motto},
+      external_link = #{externalLink},
+      avatar_content_id = #{avatarContentId},
+      last_password_change_time = #{lastPasswordChangeTime}
+    where id = #{id}
+  </update>
+
+</mapper>
