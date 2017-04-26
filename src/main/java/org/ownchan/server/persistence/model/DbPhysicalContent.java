@@ -106,6 +106,12 @@ public class DbPhysicalContent extends PersistableObject<DbPhysicalContent, Phys
   }
 
   @Override
+  public void setStatus(DbPhysicalContentStatus status, String statusReason) {
+    this.status = status;
+    this.statusReason = StringUtils.abbreviate(statusReason, MAX_LENGTH_STATUS_REASON);
+  }
+
+  @Override
   public Short getStorageFolderYear() {
     return storageFolderYear;
   }
@@ -193,12 +199,6 @@ public class DbPhysicalContent extends PersistableObject<DbPhysicalContent, Phys
 
   public void setAdditionalMetadata(DbJsonData additionalMetadata) {
     this.additionalMetadata = additionalMetadata;
-  }
-
-  @Override
-  public void setStatus(DbPhysicalContentStatus status, String statusReason) {
-    this.status = status;
-    this.statusReason = StringUtils.abbreviate(statusReason, MAX_LENGTH_STATUS_REASON);
   }
 
   @Override

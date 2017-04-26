@@ -630,7 +630,7 @@ CREATE TABLE `ocn_cloud_label` (
   `status` SMALLINT(5) UNSIGNED NOT NULL COMMENT 'might be used to determine labels that need to be translated from the output language of the cloud service provider to the desired language of the ownchan instance',
   `status_reason` VARCHAR(255) NULL,
   `initial_text` VARCHAR(48) NOT NULL COMMENT 'the initial label as it has been provided by the cloud service provider',
-  `cloud_provider_name` VARCHAR(24) NOT NULL,
+  `cloud_provider` SMALLINT(5) UNSIGNED NOT NULL,
   `cloud_provider_label_id` VARCHAR(36) NOT NULL,
   `create_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP(2) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
@@ -645,7 +645,7 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
-CREATE UNIQUE INDEX `provider_name_label_id_UNIQUE` ON `ocn_cloud_label` (`cloud_provider_name` ASC, `cloud_provider_label_id` ASC);
+CREATE UNIQUE INDEX `provider_label_id_UNIQUE` ON `ocn_cloud_label` (`cloud_provider` ASC, `cloud_provider_label_id` ASC);
 
 CREATE INDEX `status_INDEX` ON `ocn_cloud_label` (`status` ASC);
 

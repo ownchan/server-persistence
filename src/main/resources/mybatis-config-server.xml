@@ -32,6 +32,12 @@
       handler="org.ownchan.server.persistence.typehandler.DbPhysicalContentTypeTypeHandler" />
     <typeHandler javaType="DbPhysicalContentStatus"
       handler="org.ownchan.server.persistence.typehandler.DbPhysicalContentStatusTypeHandler" />
+    <typeHandler javaType="DbUserStatus"
+      handler="org.ownchan.server.persistence.typehandler.DbUserStatusTypeHandler" />
+    <typeHandler javaType="DbCloudLabelStatus"
+      handler="org.ownchan.server.persistence.typehandler.DbCloudLabelStatusTypeHandler" />
+    <typeHandler javaType="DbCloudLabelProvider"
+      handler="org.ownchan.server.persistence.typehandler.DbCloudLabelProviderTypeHandler" />
     <typeHandler javaType="DbJsonData"
       handler="org.ownchan.server.persistence.typehandler.DbJsonDataTypeHandler" />
   </typeHandlers>
