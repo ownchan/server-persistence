@@ -30,25 +30,25 @@ public class BooleanTypeHandler extends BaseTypeHandler<Boolean> {
 
   @Override
   public void setNonNullParameter(PreparedStatement ps, int i, Boolean parameter, JdbcType jdbcType) throws SQLException {
-    ps.setInt(i, parameter ? 1 : 0);
+    ps.setByte(i, (byte) (parameter ? 1 : 0));
   }
 
   @Override
   public Boolean getNullableResult(ResultSet rs, String columnName) throws SQLException {
-    return integerToBoolean(rs.getInt(columnName));
+    return byteToBoolean(rs.wasNull() ? null : rs.getByte(columnName));
   }
 
   @Override
   public Boolean getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
-    return integerToBoolean(rs.getInt(columnIndex));
+    return byteToBoolean(rs.wasNull() ? null : rs.getByte(columnIndex));
   }
 
   @Override
   public Boolean getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
-    return integerToBoolean(cs.getInt(columnIndex));
+    return byteToBoolean(cs.wasNull() ? null : cs.getByte(columnIndex));
   }
 
-  protected static Boolean integerToBoolean(Integer value) {
-    return value == null ? null : value == 1;
+  protected static Boolean byteToBoolean(Byte value) {
+    return value == null ? null : value.compareTo((byte) 1) == 0;
   }
 }

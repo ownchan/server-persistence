@@ -45,17 +45,17 @@ public abstract class DbEnumTypeTypeHandler<T extends DbEnum<T>> extends BaseTyp
 
   @Override
   public T getNullableResult(ResultSet rs, String columnName) throws SQLException {
-    return getResultOrNull(rs.getShort(columnName));
+    return getResultOrNull(rs.wasNull() ? null : rs.getShort(columnName));
   }
 
   @Override
   public T getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
-    return getResultOrNull(rs.getShort(columnIndex));
+    return getResultOrNull(rs.wasNull() ? null : rs.getShort(columnIndex));
   }
 
   @Override
   public T getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
-    return getResultOrNull(cs.getShort(columnIndex));
+    return getResultOrNull(cs.wasNull() ? null : cs.getShort(columnIndex));
   }
 
   protected T getResultOrNull(Short constantId) {
