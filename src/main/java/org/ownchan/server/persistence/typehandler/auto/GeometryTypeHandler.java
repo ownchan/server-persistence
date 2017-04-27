@@ -57,7 +57,7 @@ public class GeometryTypeHandler extends BaseTypeHandler<Geometry> {
 
   @Override
   public void setNonNullParameter(PreparedStatement ps, int i, Geometry parameter, JdbcType jdbcType) throws SQLException {
-    ps.setObject(i, parameter.toText());
+    ps.setString(i, parameter.toText());
   }
 
   @Override
