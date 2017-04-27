@@ -35,17 +35,20 @@ public class BooleanTypeHandler extends BaseTypeHandler<Boolean> {
 
   @Override
   public Boolean getNullableResult(ResultSet rs, String columnName) throws SQLException {
-    return byteToBoolean(rs.wasNull() ? null : rs.getByte(columnName));
+    byte value = rs.getByte(columnName);
+    return byteToBoolean(rs.wasNull() ? null : value);
   }
 
   @Override
   public Boolean getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
-    return byteToBoolean(rs.wasNull() ? null : rs.getByte(columnIndex));
+    byte value = rs.getByte(columnIndex);
+    return byteToBoolean(rs.wasNull() ? null : value);
   }
 
   @Override
   public Boolean getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
-    return byteToBoolean(cs.wasNull() ? null : cs.getByte(columnIndex));
+    byte value = cs.getByte(columnIndex);
+    return byteToBoolean(cs.wasNull() ? null : value);
   }
 
   protected static Boolean byteToBoolean(Byte value) {
