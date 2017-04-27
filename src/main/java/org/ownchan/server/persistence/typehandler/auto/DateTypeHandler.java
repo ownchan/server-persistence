@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Affero General Public License, version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *******************************************************************************/
-package org.ownchan.server.persistence.typehandler;
+package org.ownchan.server.persistence.typehandler.auto;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
@@ -30,7 +30,9 @@ import java.util.TimeZone;
 
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
+import org.apache.ibatis.type.MappedTypes;
 
+@MappedTypes(Date.class)
 public class DateTypeHandler extends BaseTypeHandler<Date> {
 
   private static final ThreadLocal<Calendar> UTC_CALENDAR_INSTANCE = new ThreadLocal<Calendar>() {

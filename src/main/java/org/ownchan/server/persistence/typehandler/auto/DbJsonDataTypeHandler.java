@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Affero General Public License, version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *******************************************************************************/
-package org.ownchan.server.persistence.typehandler;
+package org.ownchan.server.persistence.typehandler.auto;
 
 import java.io.IOException;
 import java.sql.CallableStatement;
@@ -27,13 +27,21 @@ import java.sql.SQLException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
+import org.apache.ibatis.type.MappedTypes;
 import org.ownchan.server.persistence.model.DbJsonData;
+import org.ownchan.server.persistence.model.DbPhysicalContentMetadataLinkYoutube;
+import org.ownchan.server.persistence.model.DbPhysicalContentMetadataUploadImage;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
+@MappedTypes({
+    DbPhysicalContentMetadataLinkYoutube.class,
+    DbPhysicalContentMetadataUploadImage.class,
+    DbJsonData.class
+})
 public class DbJsonDataTypeHandler extends BaseTypeHandler<DbJsonData> {
 
   private ObjectReader reader;
@@ -50,8 +58,8 @@ public class DbJsonDataTypeHandler extends BaseTypeHandler<DbJsonData> {
   public void setNonNullParameter(PreparedStatement ps, int i, DbJsonData parameter, JdbcType jdbcType) throws SQLException {
     try {
       ps.setString(i, writer.writeValueAsString(parameter));
-    } catch (IllegalArgumentException | JsonProcessingException e) {
-      throw new SQLException(e.getMessage(), e);
+    } catch (JsonProcessingException e) {
+      throw new IllegalArgumentException(e.getMessage(), e);
     }
   }
 
@@ -70,12 +78,12 @@ public class DbJsonDataTypeHandler extends BaseTypeHandler<DbJsonData> {
     return createDbJsonDataFromString(cs.getString(columnIndex));
   }
 
-  private DbJsonData createDbJsonDataFromString(String jsonString) throws SQLException {
+  private DbJsonData createDbJsonDataFromString(String jsonString) {
     if (StringUtils.isNotBlank(jsonString)) {
       try {
         return reader.readValue(jsonString);
       } catch (IOException e) {
-        throw new SQLException(e.getMessage(), e);
+        throw new IllegalArgumentException(e.getMessage(), e);
       }
     }
 

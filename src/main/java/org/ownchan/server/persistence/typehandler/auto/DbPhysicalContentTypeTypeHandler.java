@@ -16,13 +16,15 @@
  * You should have received a copy of the GNU Affero General Public License, version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *******************************************************************************/
-package org.ownchan.server.persistence.typehandler;
+package org.ownchan.server.persistence.typehandler.auto;
 
-import org.ownchan.server.persistence.model.DbCloudLabelStatus;
+import org.apache.ibatis.type.MappedTypes;
+import org.ownchan.server.persistence.model.DbPhysicalContentType;
 
-public class DbCloudLabelStatusTypeHandler extends DbEnumTypeTypeHandler<DbCloudLabelStatus> {
+@MappedTypes(DbPhysicalContentType.class)
+public class DbPhysicalContentTypeTypeHandler extends DbEnumTypeTypeHandler<DbPhysicalContentType> {
 
-  public DbCloudLabelStatusTypeHandler() {
+  public DbPhysicalContentTypeTypeHandler() {
     super();
   }
 

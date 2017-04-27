@@ -16,46 +16,54 @@
  * You should have received a copy of the GNU Affero General Public License, version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *******************************************************************************/
-package org.ownchan.server.persistence.typehandler;
+package org.ownchan.server.persistence.typehandler.auto;
 
+import java.lang.reflect.ParameterizedType;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.UUID;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
+import org.ownchan.server.persistence.model.DbEnum;
 
-public class UuidTypeHandler extends BaseTypeHandler<UUID> {
+public abstract class DbEnumTypeTypeHandler<T extends DbEnum<T>> extends BaseTypeHandler<T> {
 
-  @Override
-  public void setNonNullParameter(PreparedStatement ps, int i, UUID parameter, JdbcType jdbcType) throws SQLException {
-    ps.setString(i, parameter.toString());
+  protected Class<T> targetClass;
+
+  @SuppressWarnings("unchecked")
+  protected DbEnumTypeTypeHandler() {
+    this.targetClass = (Class<T>) ((ParameterizedType) getClass()
+        .getGenericSuperclass()).getActualTypeArguments()[0];
   }
 
   @Override
-  public UUID getNullableResult(ResultSet rs, String columnName) throws SQLException {
-    return toUUID(rs.getString(columnName));
+  public void setNonNullParameter(PreparedStatement ps, int i, T parameter, JdbcType jdbcType) throws SQLException {
+    ps.setShort(i, parameter.getId());
   }
 
   @Override
-  public UUID getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
-    return toUUID(rs.getString(columnIndex));
+  public T getNullableResult(ResultSet rs, String columnName) throws SQLException {
+    return getResultOrNull(rs.getShort(columnName));
   }
 
   @Override
-  public UUID getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
-    return toUUID(cs.getString(columnIndex));
+  public T getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
+    return getResultOrNull(rs.getShort(columnIndex));
   }
 
-  private static UUID toUUID(String val) throws SQLException {
-    if (StringUtils.isBlank(val)) {
-      return null;
+  @Override
+  public T getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
+    return getResultOrNull(cs.getShort(columnIndex));
+  }
+
+  protected T getResultOrNull(Short constantId) {
+    if (constantId != null) {
+      return DbEnum.valueOf(constantId, targetClass);
     }
 
-    return UUID.fromString(val);
+    return null;
   }
 
 }

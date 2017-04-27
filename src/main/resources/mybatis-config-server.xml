@@ -24,22 +24,7 @@
       handler="org.ownchan.server.persistence.typehandler.BooleanTypeHandler" />
     <typeHandler javaType="_boolean"
       handler="org.ownchan.server.persistence.typehandler.PrimitiveBooleanTypeHandler" />
-    <typeHandler javaType="java.util.Date"
-      handler="org.ownchan.server.persistence.typehandler.DateTypeHandler" />
-    <typeHandler javaType="java.util.UUID"
-      handler="org.ownchan.server.persistence.typehandler.UuidTypeHandler" />
-    <typeHandler javaType="DbPhysicalContentType"
-      handler="org.ownchan.server.persistence.typehandler.DbPhysicalContentTypeTypeHandler" />
-    <typeHandler javaType="DbPhysicalContentStatus"
-      handler="org.ownchan.server.persistence.typehandler.DbPhysicalContentStatusTypeHandler" />
-    <typeHandler javaType="DbUserStatus"
-      handler="org.ownchan.server.persistence.typehandler.DbUserStatusTypeHandler" />
-    <typeHandler javaType="DbCloudLabelStatus"
-      handler="org.ownchan.server.persistence.typehandler.DbCloudLabelStatusTypeHandler" />
-    <typeHandler javaType="DbCloudLabelProvider"
-      handler="org.ownchan.server.persistence.typehandler.DbCloudLabelProviderTypeHandler" />
-    <typeHandler javaType="DbJsonData"
-      handler="org.ownchan.server.persistence.typehandler.DbJsonDataTypeHandler" />
+    <package name="org.ownchan.server.persistence.typehandler.auto" />
   </typeHandlers>
 
 </configuration>

@@ -79,6 +79,8 @@ CREATE INDEX `physical_content_FOREIGN_idx` ON `ocn_content` (`physical_content_
 
 CREATE INDEX `user_and_status_INDEX` ON `ocn_content` (`user_id` ASC, `status` ASC);
 
+CREATE SPATIAL INDEX `location_INDEX` ON `ocn_content` (`location`);
+
 
 -- -----------------------------------------------------
 -- Table `ocn_user`

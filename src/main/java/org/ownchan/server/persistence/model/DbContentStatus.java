@@ -16,14 +16,21 @@
  * You should have received a copy of the GNU Affero General Public License, version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *******************************************************************************/
-package org.ownchan.server.persistence.typehandler;
+package org.ownchan.server.persistence.model;
 
-import org.ownchan.server.persistence.model.DbPhysicalContentStatus;
+public enum DbContentStatus implements DbEnum<DbContentStatus>, DbStatusEnum<DbContentStatus> {
+  // TODO
+  ;
 
-public class DbPhysicalContentStatusTypeHandler extends DbEnumTypeTypeHandler<DbPhysicalContentStatus> {
+  private short id;
 
-  public DbPhysicalContentStatusTypeHandler() {
-    super();
+  private DbContentStatus(short id) {
+    this.id = id;
+  }
+
+  @Override
+  public short getId() {
+    return id;
   }
 
 }

@@ -16,14 +16,12 @@
  * You should have received a copy of the GNU Affero General Public License, version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *******************************************************************************/
-package org.ownchan.server.persistence.typehandler;
+package org.ownchan.server.persistence.mapper;
 
-import org.ownchan.server.persistence.model.DbPhysicalContentType;
+import org.apache.ibatis.annotations.Mapper;
+import org.ownchan.server.persistence.model.DbContent;
 
-public class DbPhysicalContentTypeTypeHandler extends DbEnumTypeTypeHandler<DbPhysicalContentType> {
-
-  public DbPhysicalContentTypeTypeHandler() {
-    super();
-  }
+@Mapper
+public interface DbContentMapper extends PersistableObjectMapper<DbContent> {
 
 }

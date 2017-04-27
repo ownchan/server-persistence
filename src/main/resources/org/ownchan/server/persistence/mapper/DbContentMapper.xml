@@ -105,7 +105,14 @@
       #{caption}, 
       #{countryCode}, 
       #{cityName}, 
-      #{location}, 
+      <choose>
+        <when test="location != null">
+          GeomFromText(#{location},${location.SRID}),
+        </when>
+        <otherwise>
+          NULL,
+        </otherwise>
+      </choose>
       #{contentName}, 
       #{contentTime}, 
       #{contentYear}, 
@@ -126,7 +133,14 @@
       caption = #{caption},
       country_code = #{countryCode},
       city_name = #{cityName},
-      location = #{location},
+      <choose>
+        <when test="location != null">
+          location = GeomFromText(#{location},${location.SRID}),
+        </when>
+        <otherwise>
+          location = NULL,
+        </otherwise>
+      </choose>
       content_name = #{contentName},
       content_time = #{contentTime},
       content_year = #{contentYear},
