@@ -25,7 +25,9 @@ import java.sql.SQLException;
 
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
+import org.apache.ibatis.type.MappedTypes;
 
+@MappedTypes(Boolean.class)
 public class BooleanTypeHandler extends BaseTypeHandler<Boolean> {
 
   @Override
@@ -54,4 +56,5 @@ public class BooleanTypeHandler extends BaseTypeHandler<Boolean> {
   protected static Boolean byteToBoolean(Byte value) {
     return value == null ? null : value.compareTo((byte) 1) == 0;
   }
+
 }

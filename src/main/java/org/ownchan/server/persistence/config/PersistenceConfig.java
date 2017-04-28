@@ -18,18 +18,29 @@
  *******************************************************************************/
 package org.ownchan.server.persistence.config;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 import javax.sql.DataSource;
 
+import org.apache.ibatis.session.AutoMappingBehavior;
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.type.JdbcType;
+import org.apache.ibatis.type.TypeHandler;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
 import org.mybatis.spring.boot.autoconfigure.SpringBootVFS;
+import org.ownchan.server.persistence.model.PersistableObjectScanBaseMarker;
+import org.ownchan.server.persistence.typehandler.BooleanTypeHandler;
+import org.ownchan.server.persistence.typehandler.PrimitiveBooleanTypeHandler;
+import org.ownchan.server.persistence.typehandler.auto.TypeHandlerScanBaseMarker;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -41,6 +52,9 @@ import com.zaxxer.hikari.HikariDataSource;
 @MapperScan("org.ownchan.persistence.mapper")
 @Configuration("ownchan-server-persistence-config")
 public class PersistenceConfig {
+
+  @Value("${ownchan.server.db.defaultFetchSize:750}")
+  private int defaultFetchSize;
 
   @ConfigurationProperties(prefix = "datasource.ownchan", ignoreUnknownFields = false)
   @Bean
@@ -66,14 +80,44 @@ public class PersistenceConfig {
   @Bean
   @Primary
   public SqlSessionTemplate sqlSessionTemplate() throws Exception {
-    return new SqlSessionTemplate(sqlSessionFactory().getObject());
+    return new SqlSessionTemplate(sqlSessionFactory().getObject(), ExecutorType.BATCH);
   }
 
   private SqlSessionFactoryBean createSqlSessionFactory() throws Exception {
     SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
-    sessionFactory.setConfigLocation(new ClassPathResource("mybatis-config-server.xml"));
+    sessionFactory.setConfiguration(createOwnchanServerMybatisConfiguration(defaultFetchSize));
+    sessionFactory.setTypeAliasesPackage(PersistableObjectScanBaseMarker.class.getPackage().getName());
+    // we want to register the boolean handlers in the correct order ...
+    sessionFactory.setTypeHandlers(new TypeHandler[] {
+        new BooleanTypeHandler(),
+        new PrimitiveBooleanTypeHandler()
+    });
+    sessionFactory.setTypeHandlersPackage(TypeHandlerScanBaseMarker.class.getPackage().getName());
     sessionFactory.setVfs(SpringBootVFS.class);
     return sessionFactory;
+  }
+
+  /**
+   * Create a Mybatis Configuration instance for ownchan-server.
+   * @param defaultFetchSize if not set (null), then the default fetch size of the applicable JDBC driver will be used
+   */
+  public static org.apache.ibatis.session.Configuration createOwnchanServerMybatisConfiguration(Integer defaultFetchSize) {
+    org.apache.ibatis.session.Configuration config = new org.apache.ibatis.session.Configuration();
+    /*
+     * We do use ehcache, but we avoid using org.mybatis.caches.ehcache.EhcacheCache
+     * and use dto service method level caching annotations instead.
+     */
+    config.setCacheEnabled(false);
+    config.setLazyLoadingEnabled(true);
+    config.setAggressiveLazyLoading(false);
+    config.setLazyLoadTriggerMethods(new HashSet<>(Arrays.asList("clone", "detach")));
+    config.setJdbcTypeForNull(JdbcType.NULL);
+    config.setDefaultExecutorType(ExecutorType.BATCH);
+    config.setAutoMappingBehavior(AutoMappingBehavior.NONE);
+    config.setVfsImpl(SpringBootVFS.class);
+    config.setDefaultFetchSize(defaultFetchSize);
+
+    return config;
   }
 
 }
