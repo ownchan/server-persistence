@@ -58,6 +58,14 @@ public class DbPhysicalContent extends PersistableObject<DbPhysicalContent, Phys
 
   private DbJsonData additionalMetadata;
 
+  public DbPhysicalContent() {
+    super();
+  }
+
+  public DbPhysicalContent(PhysicalContentTemplate template) {
+    super(template, PhysicalContentTemplate.class);
+  }
+
   @Override
   public long getId() {
     return id;
@@ -202,7 +210,7 @@ public class DbPhysicalContent extends PersistableObject<DbPhysicalContent, Phys
   }
 
   @Override
-  public DbPhysicalContentMapper getMapper() {
+  protected DbPhysicalContentMapper getMapper() {
     if (mapper == null) {
       mapper = StaticContextAccessor.getBean(DbPhysicalContentMapper.class);
     }

@@ -14,7 +14,7 @@
     <result column="update_time" property="updateTime" />
     <result column="update_user_id" property="updateUserId" />
   </resultMap>
-  
+
   <select id="fetch" resultMap="defaultResultMap">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStream">
       <property name="targetTable" value="ocn_cloud_label"/>
@@ -70,31 +70,31 @@
     </include>
     where id = #{id}
   </delete>
-  
+
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
     insert into ocn_cloud_label (
-      text, 
-      status, 
-      status_reason, 
-      initial_text, 
-      cloud_provider, 
-      cloud_provider_label_id, 
+      text,
+      status,
+      status_reason,
+      initial_text,
+      cloud_provider,
+      cloud_provider_label_id,
       update_user_id
     )
     values (
-      #{text}, 
-      #{status}, 
-      #{statusReason}, 
-      #{initialText}, 
-      #{cloudProvider}, 
-      #{cloudProviderLabelId}, 
+      #{text},
+      #{status},
+      #{statusReason},
+      #{initialText},
+      #{cloudProvider},
+      #{cloudProviderLabelId},
       #{updateUserId}
     )
   </insert>
-  
+
   <update id="update">
     update ocn_cloud_label
-    set 
+    set
       text = #{text},
       status = #{status},
       status_reason = #{statusReason},
@@ -104,5 +104,5 @@
       update_user_id = #{updateUserId}
     where id = #{id}
   </update>
-  
+
 </mapper>

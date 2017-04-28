@@ -67,6 +67,14 @@ public class DbContent extends PersistableObject<DbContent, ContentTemplate> imp
 
   private Long userClicks;
 
+  public DbContent() {
+    super();
+  }
+
+  public DbContent(ContentTemplate template) {
+    super(template, ContentTemplate.class);
+  }
+
   @Override
   public long getId() {
     return id;
@@ -247,7 +255,7 @@ public class DbContent extends PersistableObject<DbContent, ContentTemplate> imp
   }
 
   @Override
-  public DbContentMapper getMapper() {
+  protected DbContentMapper getMapper() {
     if (mapper == null) {
       mapper = StaticContextAccessor.getBean(DbContentMapper.class);
     }

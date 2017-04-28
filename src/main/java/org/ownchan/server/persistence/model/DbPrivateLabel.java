@@ -20,28 +20,28 @@ package org.ownchan.server.persistence.model;
 
 import java.util.Date;
 
-import org.ownchan.server.persistence.mapper.DbLabelMapper;
-import org.ownchan.server.persistence.template.LabelTemplate;
+import org.ownchan.server.persistence.mapper.DbPrivateLabelMapper;
+import org.ownchan.server.persistence.template.PrivateLabelTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbLabel extends PersistableObject<DbLabel, LabelTemplate> implements LabelTemplate {
+public class DbPrivateLabel extends PersistableObject<DbPrivateLabel, PrivateLabelTemplate> implements PrivateLabelTemplate {
 
-  private static DbLabelMapper mapper;
+  private static DbPrivateLabelMapper mapper;
 
   private long id;
+
+  private Long userId;
 
   private String text;
 
   private Date createTime;
 
-  private Long creatorId;
-
-  public DbLabel() {
+  public DbPrivateLabel() {
     super();
   }
 
-  public DbLabel(LabelTemplate template) {
-    super(template, LabelTemplate.class);
+  public DbPrivateLabel(PrivateLabelTemplate template) {
+    super(template, PrivateLabelTemplate.class);
   }
 
   @Override
@@ -52,6 +52,15 @@ public class DbLabel extends PersistableObject<DbLabel, LabelTemplate> implement
   @Override
   protected void setId(long id) {
     this.id = id;
+  }
+
+  @Override
+  public Long getUserId() {
+    return userId;
+  }
+
+  public void setUserId(Long userId) {
+    this.userId = userId;
   }
 
   @Override
@@ -73,18 +82,9 @@ public class DbLabel extends PersistableObject<DbLabel, LabelTemplate> implement
   }
 
   @Override
-  public Long getCreatorId() {
-    return creatorId;
-  }
-
-  public void setCreatorId(Long creatorId) {
-    this.creatorId = creatorId;
-  }
-
-  @Override
-  protected DbLabelMapper getMapper() {
+  protected DbPrivateLabelMapper getMapper() {
     if (mapper == null) {
-      mapper = StaticContextAccessor.getBean(DbLabelMapper.class);
+      mapper = StaticContextAccessor.getBean(DbPrivateLabelMapper.class);
     }
 
     return mapper;

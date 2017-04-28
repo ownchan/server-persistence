@@ -20,8 +20,22 @@ package org.ownchan.server.persistence.model;
 
 import org.ownchan.server.persistence.mapper.PersistableObjectMapper;
 import org.ownchan.server.persistence.template.EntityTemplate;
+import org.springframework.beans.BeanUtils;
 
 public abstract class PersistableObject<T extends PersistableObject<T, U> & EntityTemplate<U>, U extends EntityTemplate<U>> {
+
+  public PersistableObject() {
+
+  }
+
+  public PersistableObject(EntityTemplate<U> template, Class<U> editable) {
+    if (template != null) {
+      if (editable == null) {
+        throw new RuntimeException("parameter \"editable\" must not be null");
+      }
+      BeanUtils.copyProperties(template, this, editable);
+    }
+  }
 
   public abstract long getId();
 
@@ -75,7 +89,7 @@ public abstract class PersistableObject<T extends PersistableObject<T, U> & Enti
     return getMapper().get(getId());
   }
 
-  public abstract PersistableObjectMapper<T> getMapper();
+  protected abstract PersistableObjectMapper<T> getMapper();
 
   @Override
   public boolean equals(Object obj) {

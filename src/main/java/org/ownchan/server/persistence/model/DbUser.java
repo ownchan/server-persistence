@@ -55,6 +55,14 @@ public class DbUser extends PersistableObject<DbUser, UserTemplate> implements D
 
   private Date lastPasswordChangeTime;
 
+  public DbUser() {
+    super();
+  }
+
+  public DbUser(UserTemplate template) {
+    super(template, UserTemplate.class);
+  }
+
   @Override
   public long getId() {
     return id;
@@ -190,7 +198,7 @@ public class DbUser extends PersistableObject<DbUser, UserTemplate> implements D
   }
 
   @Override
-  public DbUserMapper getMapper() {
+  protected DbUserMapper getMapper() {
     if (mapper == null) {
       mapper = StaticContextAccessor.getBean(DbUserMapper.class);
     }

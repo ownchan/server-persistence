@@ -20,28 +20,36 @@ package org.ownchan.server.persistence.model;
 
 import java.util.Date;
 
-import org.ownchan.server.persistence.mapper.DbLabelMapper;
-import org.ownchan.server.persistence.template.LabelTemplate;
+import org.ownchan.server.persistence.mapper.DbMessageMapper;
+import org.ownchan.server.persistence.template.MessageTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbLabel extends PersistableObject<DbLabel, LabelTemplate> implements LabelTemplate {
+public class DbMessage extends PersistableObject<DbMessage, MessageTemplate> implements MessageTemplate {
 
-  private static DbLabelMapper mapper;
+  private static DbMessageMapper mapper;
 
   private long id;
 
-  private String text;
+  private String name;
+
+  private DbMessageType type;
+
+  private boolean showHtmlEditor;
 
   private Date createTime;
 
-  private Long creatorId;
+  private Date updateTime;
 
-  public DbLabel() {
+  private String msgEn;
+
+  private String msgDe;
+
+  public DbMessage() {
     super();
   }
 
-  public DbLabel(LabelTemplate template) {
-    super(template, LabelTemplate.class);
+  public DbMessage(MessageTemplate template) {
+    super(template, MessageTemplate.class);
   }
 
   @Override
@@ -55,12 +63,30 @@ public class DbLabel extends PersistableObject<DbLabel, LabelTemplate> implement
   }
 
   @Override
-  public String getText() {
-    return text;
+  public String getName() {
+    return name;
   }
 
-  public void setText(String text) {
-    this.text = text;
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  @Override
+  public DbMessageType getType() {
+    return type;
+  }
+
+  public void setType(DbMessageType type) {
+    this.type = type;
+  }
+
+  @Override
+  public boolean isShowHtmlEditor() {
+    return showHtmlEditor;
+  }
+
+  public void setShowHtmlEditor(boolean showHtmlEditor) {
+    this.showHtmlEditor = showHtmlEditor;
   }
 
   @Override
@@ -73,18 +99,36 @@ public class DbLabel extends PersistableObject<DbLabel, LabelTemplate> implement
   }
 
   @Override
-  public Long getCreatorId() {
-    return creatorId;
+  public Date getUpdateTime() {
+    return updateTime;
   }
 
-  public void setCreatorId(Long creatorId) {
-    this.creatorId = creatorId;
+  public void setUpdateTime(Date updateTime) {
+    this.updateTime = updateTime;
   }
 
   @Override
-  protected DbLabelMapper getMapper() {
+  public String getMsgEn() {
+    return msgEn;
+  }
+
+  public void setMsgEn(String msgEn) {
+    this.msgEn = msgEn;
+  }
+
+  @Override
+  public String getMsgDe() {
+    return msgDe;
+  }
+
+  public void setMsgDe(String msgDe) {
+    this.msgDe = msgDe;
+  }
+
+  @Override
+  protected DbMessageMapper getMapper() {
     if (mapper == null) {
-      mapper = StaticContextAccessor.getBean(DbLabelMapper.class);
+      mapper = StaticContextAccessor.getBean(DbMessageMapper.class);
     }
 
     return mapper;

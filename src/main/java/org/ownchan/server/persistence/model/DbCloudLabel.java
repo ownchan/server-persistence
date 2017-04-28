@@ -49,6 +49,14 @@ public class DbCloudLabel extends PersistableObject<DbCloudLabel, CloudLabelTemp
 
   private Long updateUserId;
 
+  public DbCloudLabel() {
+    super();
+  }
+
+  public DbCloudLabel(CloudLabelTemplate template) {
+    super(template, CloudLabelTemplate.class);
+  }
+
   @Override
   public long getId() {
     return id;
@@ -157,7 +165,7 @@ public class DbCloudLabel extends PersistableObject<DbCloudLabel, CloudLabelTemp
   }
 
   @Override
-  public DbCloudLabelMapper getMapper() {
+  protected DbCloudLabelMapper getMapper() {
     if (mapper == null) {
       mapper = StaticContextAccessor.getBean(DbCloudLabelMapper.class);
     }

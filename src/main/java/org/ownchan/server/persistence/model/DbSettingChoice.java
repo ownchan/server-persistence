@@ -18,30 +18,30 @@
  *******************************************************************************/
 package org.ownchan.server.persistence.model;
 
-import java.util.Date;
-
-import org.ownchan.server.persistence.mapper.DbLabelMapper;
-import org.ownchan.server.persistence.template.LabelTemplate;
+import org.ownchan.server.persistence.mapper.DbSettingChoiceMapper;
+import org.ownchan.server.persistence.template.SettingChoiceTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbLabel extends PersistableObject<DbLabel, LabelTemplate> implements LabelTemplate {
+public class DbSettingChoice extends PersistableObject<DbSettingChoice, SettingChoiceTemplate> implements SettingChoiceTemplate {
 
-  private static DbLabelMapper mapper;
+  private static DbSettingChoiceMapper mapper;
 
   private long id;
 
-  private String text;
+  private Long settingId;
 
-  private Date createTime;
+  private String settingValue;
 
-  private Long creatorId;
+  private Long msgIdName;
 
-  public DbLabel() {
+  private Long msgIdDescription;
+
+  public DbSettingChoice() {
     super();
   }
 
-  public DbLabel(LabelTemplate template) {
-    super(template, LabelTemplate.class);
+  public DbSettingChoice(SettingChoiceTemplate template) {
+    super(template, SettingChoiceTemplate.class);
   }
 
   @Override
@@ -55,36 +55,45 @@ public class DbLabel extends PersistableObject<DbLabel, LabelTemplate> implement
   }
 
   @Override
-  public String getText() {
-    return text;
+  public Long getSettingId() {
+    return settingId;
   }
 
-  public void setText(String text) {
-    this.text = text;
-  }
-
-  @Override
-  public Date getCreateTime() {
-    return createTime;
-  }
-
-  public void setCreateTime(Date createTime) {
-    this.createTime = createTime;
+  public void setSettingId(Long settingId) {
+    this.settingId = settingId;
   }
 
   @Override
-  public Long getCreatorId() {
-    return creatorId;
+  public String getSettingValue() {
+    return settingValue;
   }
 
-  public void setCreatorId(Long creatorId) {
-    this.creatorId = creatorId;
+  public void setSettingValue(String settingValue) {
+    this.settingValue = settingValue;
   }
 
   @Override
-  protected DbLabelMapper getMapper() {
+  public Long getMsgIdName() {
+    return msgIdName;
+  }
+
+  public void setMsgIdName(Long msgIdName) {
+    this.msgIdName = msgIdName;
+  }
+
+  @Override
+  public Long getMsgIdDescription() {
+    return msgIdDescription;
+  }
+
+  public void setMsgIdDescription(Long msgIdDescription) {
+    this.msgIdDescription = msgIdDescription;
+  }
+
+  @Override
+  protected DbSettingChoiceMapper getMapper() {
     if (mapper == null) {
-      mapper = StaticContextAccessor.getBean(DbLabelMapper.class);
+      mapper = StaticContextAccessor.getBean(DbSettingChoiceMapper.class);
     }
 
     return mapper;

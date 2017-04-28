@@ -71,6 +71,6 @@ public interface PersistableObjectMapper<T extends PersistableObject<T, ?> & Ent
   long purgeAll();
 
   @Flush
-  List<BatchResult> flush();
+  List<BatchResult> flushStatements();
 
 }
