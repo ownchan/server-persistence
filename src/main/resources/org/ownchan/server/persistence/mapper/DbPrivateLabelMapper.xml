@@ -67,18 +67,18 @@
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
     insert into ocn_private_label (
-      user_id, 
+      user_id,
       text
     )
     values (
-      #{userId}, 
+      #{userId},
       #{text}
     )
   </insert>
 
   <update id="update">
     update ocn_private_label
-    set 
+    set
       user_id = #{userId},
       text = #{text}
     where id = #{id}

@@ -22,7 +22,7 @@
     <result column="physical_content_id" property="physicalContentId" />
     <result column="user_clicks" property="userClicks" />
   </resultMap>
-  
+
   <select id="fetch" resultMap="defaultResultMap">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStream">
       <property name="targetTable" value="ocn_content"/>
@@ -81,30 +81,30 @@
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
     insert into ocn_content (
-      status, 
-      status_reason, 
-      parent_id, 
-      user_id, 
-      caption, 
-      country_code, 
-      city_name, 
-      location, 
-      content_name, 
-      content_time, 
-      content_year, 
-      content_month, 
+      status,
+      status_reason,
+      parent_id,
+      user_id,
+      caption,
+      country_code,
+      city_name,
+      location,
+      content_name,
+      content_time,
+      content_year,
+      content_month,
       content_day,
-      physical_content_id, 
+      physical_content_id,
       user_clicks
     )
     values (
-      #{status}, 
-      #{statusReason}, 
-      #{parentId}, 
-      #{userId}, 
-      #{caption}, 
-      #{countryCode}, 
-      #{cityName}, 
+      #{status},
+      #{statusReason},
+      #{parentId},
+      #{userId},
+      #{caption},
+      #{countryCode},
+      #{cityName},
       <choose>
         <when test="location != null">
           GeomFromText(#{location},${location.SRID}),
@@ -113,19 +113,19 @@
           NULL,
         </otherwise>
       </choose>
-      #{contentName}, 
-      #{contentTime}, 
-      #{contentYear}, 
-      #{contentMonth}, 
+      #{contentName},
+      #{contentTime},
+      #{contentYear},
+      #{contentMonth},
       #{contentDay},
-      #{physicalContentId}, 
+      #{physicalContentId},
       #{userClicks}
     )
   </insert>
 
   <update id="update">
     update ocn_content
-    set 
+    set
       status = #{status},
       status_reason = #{statusReason},
       parent_id = #{parentId},

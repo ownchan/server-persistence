@@ -76,34 +76,34 @@
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
     insert into ocn_user (
-      alias, 
-      display_name, 
-      password_hash, 
-      status, 
+      alias,
+      display_name,
+      password_hash,
+      status,
       status_reason,
-      email, 
-      motto, 
-      external_link, 
-      avatar_content_id, 
+      email,
+      motto,
+      external_link,
+      avatar_content_id,
       last_password_change_time
     )
     values (
-      #{alias}, 
-      #{displayName}, 
-      #{passwordHash}, 
-      #{status}, 
+      #{alias},
+      #{displayName},
+      #{passwordHash},
+      #{status},
       #{statusReason},
-      #{email}, 
-      #{motto}, 
-      #{externalLink}, 
-      #{avatarContentId}, 
+      #{email},
+      #{motto},
+      #{externalLink},
+      #{avatarContentId},
       #{lastPasswordChangeTime}
     )
   </insert>
 
   <update id="update">
     update ocn_user
-    set 
+    set
       alias = #{alias},
       display_name = #{displayName},
       password_hash = #{passwordHash},

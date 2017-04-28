@@ -77,36 +77,36 @@
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
     insert into ocn_physical_content (
-      type, 
-      status, 
-      status_reason, 
-      storage_folder_year, 
-      storage_folder_month, 
-      storage_folder_day, 
-      storage_folder_uuid, 
+      type,
+      status,
+      status_reason,
+      storage_folder_year,
+      storage_folder_month,
+      storage_folder_day,
+      storage_folder_uuid,
       content_checksum,
-      physical_content_type, 
-      external_content_link, 
+      physical_content_type,
+      external_content_link,
       additional_metadata
       )
     values (
-      #{type}, 
-      #{status}, 
-      #{statusReason}, 
-      #{storageFolderYear}, 
-      #{storageFolderMonth}, 
-      #{storageFolderDay}, 
-      #{storageFolderUuid}, 
-      #{contentChecksum}, 
-      #{physicalContentType}, 
-      #{externalContentLink}, 
+      #{type},
+      #{status},
+      #{statusReason},
+      #{storageFolderYear},
+      #{storageFolderMonth},
+      #{storageFolderDay},
+      #{storageFolderUuid},
+      #{contentChecksum},
+      #{physicalContentType},
+      #{externalContentLink},
       #{additionalMetadata}
       )
   </insert>
 
   <update id="update">
     update ocn_physical_content
-    set 
+    set
       type = #{type},
       status = #{status},
       status_reason = #{statusReason},

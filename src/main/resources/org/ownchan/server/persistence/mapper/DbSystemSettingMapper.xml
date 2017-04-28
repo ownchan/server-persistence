@@ -70,14 +70,14 @@
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
     insert into ocn_system_setting (
-      setting_id, 
-      choice_id, 
+      setting_id,
+      choice_id,
       custom_value,
       update_user_id
     )
     values (
-      #{settingId}, 
-      #{choiceId}, 
+      #{settingId},
+      #{choiceId},
       #{customValue},
       #{updateUserId}
     )
@@ -85,7 +85,7 @@
 
   <update id="update">
     update ocn_system_setting
-    set 
+    set
       setting_id = #{settingId},
       choice_id = #{choiceId},
       custom_value = #{customValue},

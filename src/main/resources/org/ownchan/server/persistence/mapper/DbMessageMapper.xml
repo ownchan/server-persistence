@@ -12,7 +12,7 @@
     <result column="msg_en" property="msgEn" />
     <result column="msg_de" property="msgDe" />
   </resultMap>
-  
+
   <select id="fetch" resultMap="defaultResultMap">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStream">
       <property name="targetTable" value="ocn_msg"/>
@@ -71,24 +71,24 @@
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
     insert into ocn_msg (
-      name, 
-      type, 
-      show_html_editor, 
-      msg_en, 
+      name,
+      type,
+      show_html_editor,
+      msg_en,
       msg_de
     )
     values (
-      #{name}, 
-      #{type}, 
+      #{name},
+      #{type},
       #{showHtmlEditor},
-      #{msgEn}, 
+      #{msgEn},
       #{msgDe}
     )
   </insert>
 
   <update id="update">
     update ocn_msg
-    set 
+    set
       name = #{name},
       type = #{type},
       show_html_editor = #{showHtmlEditor},

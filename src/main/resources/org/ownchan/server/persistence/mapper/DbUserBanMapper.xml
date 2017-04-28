@@ -71,24 +71,24 @@
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
     insert into ocn_user_ban (
-      user_id, 
-      active, 
-      ban_expiration_time, 
-      ban_reason, 
+      user_id,
+      active,
+      ban_expiration_time,
+      ban_reason,
       ban_initiator_id
     )
     values (
-      #{userId}, 
-      #{active}, 
-      #{banExpirationTime}, 
-      #{banReason}, 
+      #{userId},
+      #{active},
+      #{banExpirationTime},
+      #{banReason},
       #{banInitiatorId}
     )
   </insert>
 
   <update id="update">
     update ocn_user_ban
-    set 
+    set
       user_id = #{userId},
       active = #{active},
       ban_expiration_time = #{banExpirationTime},

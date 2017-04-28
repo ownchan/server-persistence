@@ -68,22 +68,22 @@
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
     insert into ocn_setting_choice (
-      setting_id, 
-      setting_value, 
-      msg_id_name, 
+      setting_id,
+      setting_value,
+      msg_id_name,
       msg_id_description
     )
     values (
-      #{settingId}, 
-      #{settingValue}, 
-      #{msgIdName}, 
+      #{settingId},
+      #{settingValue},
+      #{msgIdName},
       #{msgIdDescription}
     )
   </insert>
 
   <update id="update">
     update ocn_setting_choice
-    set 
+    set
       setting_id = #{settingId},
       setting_value = #{settingValue},
       msg_id_name = #{msgIdName},

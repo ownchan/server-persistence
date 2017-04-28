@@ -75,32 +75,32 @@
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
     insert into ocn_setting (
-      name, 
-      type, 
-      msg_id_name, 
-      msg_id_description, 
-      constrained, 
-      value_type, 
-      default_value, 
-      min_value, 
+      name,
+      type,
+      msg_id_name,
+      msg_id_description,
+      constrained,
+      value_type,
+      default_value,
+      min_value,
       max_value
     )
     values (
-      #{name}, 
-      #{type}, 
-      #{msgIdName}, 
-      #{msgIdDescription}, 
-      #{constrained}, 
-      #{valueType}, 
-      #{defaultValue}, 
-      #{minValue}, 
+      #{name},
+      #{type},
+      #{msgIdName},
+      #{msgIdDescription},
+      #{constrained},
+      #{valueType},
+      #{defaultValue},
+      #{minValue},
       #{maxValue}
     )
   </insert>
 
   <update id="update">
     update ocn_setting
-    set 
+    set
       name = #{name},
       type = #{type},
       msg_id_name = #{msgIdName},

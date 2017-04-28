@@ -69,20 +69,20 @@
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
     insert into ocn_role (
-      name, 
-      msg_id_name, 
+      name,
+      msg_id_name,
       msg_id_description
     )
     values (
-      #{name}, 
-      #{msgIdName}, 
+      #{name},
+      #{msgIdName},
       #{msgIdDescription}
     )
   </insert>
 
   <update id="update">
     update ocn_role
-    set 
+    set
       name = #{name},
       msg_id_name = #{msgIdName},
       msg_id_description = #{msgIdDescription}

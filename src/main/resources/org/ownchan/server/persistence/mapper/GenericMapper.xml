@@ -76,7 +76,7 @@
     <choose>
       <when test="_parameter.containsKey('columnToValueMap') and columnToValueMap != null and columnToValueMap.size() > 0">
         <foreach item="targetValue" index="targetColumn" collection="columnToValueMap.entrySet" open="" separator=", " close="">
-          ${targetColumn} = 
+          ${targetColumn} =
           <choose>
             <when test="targetValue.valuePlaceholderType.toString().equals('PRE')">
               #{targetValue.value}
@@ -111,7 +111,7 @@
     <include refid="applySortingParams"/>
     <include refid="applyLimitParam"/>
   </sql>
-  
+
   <sql id="set">
     <include refid="updateAll"/>
     <include refid="applyColumnToValueMappings"/>

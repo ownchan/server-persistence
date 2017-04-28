@@ -17,7 +17,7 @@
     <result column="create_time" property="createTime" />
     <result column="update_time" property="updateTime" />
   </resultMap>
-  
+
   <select id="fetch" resultMap="defaultResultMap">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStream">
       <property name="targetTable" value="ocn_content_abuse"/>
@@ -73,36 +73,36 @@
     </include>
     where id = #{id}
   </delete>
-  
+
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
     insert into ocn_content_abuse (
-      content_id, 
-      violation_type, 
-      explanation, 
-      complaining_entity_ip, 
-      complaining_entity_contact, 
-      complaining_entity_user_id, 
-      status, status_reason, 
-      assignee_id, 
+      content_id,
+      violation_type,
+      explanation,
+      complaining_entity_ip,
+      complaining_entity_contact,
+      complaining_entity_user_id,
+      status, status_reason,
+      assignee_id,
       team_notes
     )
     values (
-      #{contentId}, 
-      #{violationType}, 
-      #{explanation}, 
-      #{complainingEntityIp}, 
-      #{complainingEntityContact}, 
-      #{complainingEntityUserId}, 
-      #{status}, 
-      #{statusReason}, 
-      #{assigneeId}, 
+      #{contentId},
+      #{violationType},
+      #{explanation},
+      #{complainingEntityIp},
+      #{complainingEntityContact},
+      #{complainingEntityUserId},
+      #{status},
+      #{statusReason},
+      #{assigneeId},
       #{teamNotes}
     )
   </insert>
-  
+
   <update id="update">
     update ocn_content_abuse
-    set 
+    set
       content_id = #{contentId},
       violation_type = #{violationType},
       explanation = #{explanation},
@@ -115,5 +115,5 @@
       team_notes = #{teamNotes}
     where id = #{id}
   </update>
-  
+
 </mapper>

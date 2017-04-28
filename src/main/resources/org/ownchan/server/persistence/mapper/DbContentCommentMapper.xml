@@ -12,7 +12,7 @@
     <result column="update_time" property="updateTime" />
     <result column="embedded_content_id" property="embeddedContentId" />
   </resultMap>
-  
+
   <select id="fetch" resultMap="defaultResultMap">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStream">
       <property name="targetTable" value="ocn_content_comment"/>
@@ -71,16 +71,16 @@
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
     insert into ocn_content_comment (
-      parent_id, 
-      text, 
-      user_id, 
-      content_id, 
+      parent_id,
+      text,
+      user_id,
+      content_id,
       embedded_content_id
     )
     values (
-      #{parentId}, 
-      #{text}, 
-      #{userId}, 
+      #{parentId},
+      #{text},
+      #{userId},
       #{contentId},
       #{embeddedContentId}
     )
@@ -88,7 +88,7 @@
 
   <update id="update">
     update ocn_content_comment
-    set 
+    set
       parent_id = #{parentId},
       text = #{text},
       user_id = #{userId},
