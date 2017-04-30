@@ -62,4 +62,8 @@ public interface ContentTemplate extends EntityTemplate<ContentTemplate> {
 
   Long getUserClicks();
 
+  Long getPlusCount();
+
+  Long getMinusCount();
+
 }

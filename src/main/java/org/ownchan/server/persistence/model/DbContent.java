@@ -67,6 +67,10 @@ public class DbContent extends PersistableObject<DbContent, ContentTemplate> imp
 
   private Long userClicks;
 
+  private Long plusCount;
+
+  private Long minusCount;
+
   public DbContent() {
     super();
   }
@@ -252,6 +256,24 @@ public class DbContent extends PersistableObject<DbContent, ContentTemplate> imp
 
   public void setUserClicks(Long userClicks) {
     this.userClicks = userClicks;
+  }
+
+  @Override
+  public Long getPlusCount() {
+    return plusCount;
+  }
+
+  public void setPlusCount(Long plusCount) {
+    this.plusCount = plusCount;
+  }
+
+  @Override
+  public Long getMinusCount() {
+    return minusCount;
+  }
+
+  public void setMinusCount(Long minusCount) {
+    this.minusCount = minusCount;
   }
 
   @Override

@@ -41,7 +41,7 @@ CREATE TABLE `ocn_content` (
   `caption` VARCHAR(128) NULL,
   `country_code` VARCHAR(2) NULL,
   `city_name` VARCHAR(128) NULL,
-  `location` POINT NULL,
+  `location` POINT NOT NULL COMMENT 'Unfortunately, spatially indexed columns in Mysql cannot be NULL, else this column would be nullable.\nAs a workaround, when we actually want to store NULL, we will store a pre-defined point with an unusual dummy-location like POINT(90, 0) (lat/lon - WGS84)  instead.',
   `content_name` VARCHAR(255) NOT NULL COMMENT 'in case of image files this will be the filename, while for example in case of youtube videos it will be the youtube id (or the video title, if available)',
   `content_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `content_year` SMALLINT(4) UNSIGNED NOT NULL,
@@ -51,6 +51,8 @@ CREATE TABLE `ocn_content` (
   `update_time` TIMESTAMP(2) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `physical_content_id` BIGINT(20) UNSIGNED NOT NULL,
   `user_clicks` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
+  `plus_count` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
+  `minus_count` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_content_parent`
     FOREIGN KEY (`parent_id`)
@@ -822,3 +824,57 @@ CREATE INDEX `assignee_FOREIGN_idx` ON `ocn_content_abuse` (`assignee_id` ASC);
 CREATE INDEX `complaining_entity_user_FOREIGN_idx` ON `ocn_content_abuse` (`complaining_entity_user_id` ASC);
 
 CREATE INDEX `status_and_create_time_INDEX` ON `ocn_content_abuse` (`status` ASC, `create_time` ASC);
+
+
+-- -----------------------------------------------------
+-- Table `ocn_user_to_content_voting_cache`
+-- -----------------------------------------------------
+CREATE TABLE `ocn_user_to_content_voting_cache` (
+  `user_id` BIGINT(20) UNSIGNED NOT NULL,
+  `content_id` BIGINT(20) UNSIGNED NOT NULL,
+  `voting_time` TIMESTAMP(2) NOT NULL,
+  CONSTRAINT `fk_us_co_voting_cache_user`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `ocn_user` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_us_co_voting_cache_content`
+    FOREIGN KEY (`content_id`)
+    REFERENCES `ocn_content` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+COMMENT = 'This table can be used to remember, for only a couple of hours, which contents have voted for by which users.\nIt is not intended for permanent storage of voting data, but rather as a means to  improve the accuracy of a content\'s voting count.\nA cronjob needs to delete all stored voting-data after X hours, which means after X hours a user\'s repeated voting for a content will be counted again.';
+
+CREATE UNIQUE INDEX `user_content_UNIQUE` ON `ocn_user_to_content_voting_cache` (`user_id` ASC, `content_id` ASC);
+
+CREATE INDEX `fk_us_co_voting_cache_content_idx` ON `ocn_user_to_content_voting_cache` (`content_id` ASC);
+
+CREATE INDEX `voting_time_INDEX` ON `ocn_user_to_content_voting_cache` (`voting_time` ASC);
+
+
+-- -----------------------------------------------------
+-- Table `ocn_user_to_content_click_cache`
+-- -----------------------------------------------------
+CREATE TABLE `ocn_user_to_content_click_cache` (
+  `user_id` BIGINT(20) UNSIGNED NOT NULL,
+  `content_id` BIGINT(20) UNSIGNED NOT NULL,
+  `click_time` TIMESTAMP(2) NOT NULL,
+  CONSTRAINT `fk_us_co_click_cache_user`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `ocn_user` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_us_co_click_cache_content`
+    FOREIGN KEY (`content_id`)
+    REFERENCES `ocn_content` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+COMMENT = 'This table can be used to remember, for only a couple of hours, which contents have been click by which users.\nIt is not intended for permanent storage of click data, but rather as a means to  improve the accuracy of a content\'s click count.\nA cronjob needs to delete all stored click-data after X hours, which means after X hours a user\'s repeated click on a content will be counted again.';
+
+CREATE UNIQUE INDEX `user_content_UNIQUE` ON `ocn_user_to_content_click_cache` (`user_id` ASC, `content_id` ASC);
+
+CREATE INDEX `click_time_INDEX` ON `ocn_user_to_content_click_cache` (`click_time` ASC);
+
+CREATE INDEX `fk_us_co_click_cache_content_idx` ON `ocn_user_to_content_click_cache` (`content_id` ASC);

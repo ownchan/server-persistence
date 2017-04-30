@@ -21,6 +21,8 @@
     <result column="update_time" property="updateTime" />
     <result column="physical_content_id" property="physicalContentId" />
     <result column="user_clicks" property="userClicks" />
+    <result column="plus_count" property="plusCount" />
+    <result column="minus_count" property="minusCount" />
   </resultMap>
 
   <select id="fetch" resultMap="defaultResultMap">
@@ -95,7 +97,9 @@
       content_month,
       content_day,
       physical_content_id,
-      user_clicks
+      user_clicks,
+      plus_count,
+      minus_count
     )
     values (
       #{status},
@@ -119,7 +123,9 @@
       #{contentMonth},
       #{contentDay},
       #{physicalContentId},
-      #{userClicks}
+      #{userClicks},
+      #{plusCount},
+      #{minusCount}
     )
   </insert>
 
@@ -147,7 +153,9 @@
       content_month = #{contentMonth},
       content_day = #{contentDay},
       physical_content_id = #{physicalContentId},
-      user_clicks = #{userClicks}
+      user_clicks = #{userClicks},
+      plus_count = #{plusCount},
+      minus_count = #{minusCount}
     where id = #{id}
   </update>
 
