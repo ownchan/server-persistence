@@ -22,9 +22,10 @@ import java.util.Date;
 
 import org.ownchan.server.persistence.mapper.DbRoleMapper;
 import org.ownchan.server.persistence.template.RoleTemplate;
+import org.ownchan.server.persistence.template.link.RoleLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbRole extends PersistableObject<DbRole, RoleTemplate> implements RoleTemplate {
+public class DbRole extends PersistableObject<DbRole, RoleTemplate, RoleLinkTemplate> implements RoleTemplate, RoleLinkTemplate {
 
   private static DbRoleMapper mapper;
 

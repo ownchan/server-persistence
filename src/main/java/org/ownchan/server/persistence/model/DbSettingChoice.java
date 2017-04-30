@@ -20,9 +20,10 @@ package org.ownchan.server.persistence.model;
 
 import org.ownchan.server.persistence.mapper.DbSettingChoiceMapper;
 import org.ownchan.server.persistence.template.SettingChoiceTemplate;
+import org.ownchan.server.persistence.template.link.SettingChoiceLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbSettingChoice extends PersistableObject<DbSettingChoice, SettingChoiceTemplate> implements SettingChoiceTemplate {
+public class DbSettingChoice extends PersistableObject<DbSettingChoice, SettingChoiceTemplate, SettingChoiceLinkTemplate> implements SettingChoiceTemplate, SettingChoiceLinkTemplate {
 
   private static DbSettingChoiceMapper mapper;
 

@@ -22,9 +22,10 @@ import java.util.Date;
 
 import org.ownchan.server.persistence.mapper.DbPrivilegeMapper;
 import org.ownchan.server.persistence.template.PrivilegeTemplate;
+import org.ownchan.server.persistence.template.link.PrivilegeLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbPrivilege extends PersistableObject<DbPrivilege, PrivilegeTemplate> implements PrivilegeTemplate {
+public class DbPrivilege extends PersistableObject<DbPrivilege, PrivilegeTemplate, PrivilegeLinkTemplate> implements PrivilegeTemplate, PrivilegeLinkTemplate {
 
   private static DbPrivilegeMapper mapper;
 

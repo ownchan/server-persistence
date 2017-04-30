@@ -26,7 +26,7 @@ public class NullablePointTypeHandler extends BaseGeometryTypeHandler<Point> {
   private static final String DUMMY_POINT_WKT = "POINT (0 90)";
 
   /*
-   * Unfortunately, MySql (at the time of writing this comments) doesn't allow spatially indexed columns to be null-able.
+   * Unfortunately, MySql (at the time of writing this comment) doesn't allow spatially indexed columns to be null-able.
    * This is why we will use an uncommon dummy-point for storing locations that should actually be null (not set).
    * When a point, that is null in Java-context, is stored in the database, it will be stored using the location of the dummy point.
    * When it is retrieved again from the database, this class will make sure, that it is transformed to Java-null again

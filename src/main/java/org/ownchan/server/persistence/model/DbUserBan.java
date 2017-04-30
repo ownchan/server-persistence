@@ -22,9 +22,10 @@ import java.util.Date;
 
 import org.ownchan.server.persistence.mapper.DbUserBanMapper;
 import org.ownchan.server.persistence.template.UserBanTemplate;
+import org.ownchan.server.persistence.template.link.UserBanLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbUserBan extends PersistableObject<DbUserBan, UserBanTemplate> implements UserBanTemplate {
+public class DbUserBan extends PersistableObject<DbUserBan, UserBanTemplate, UserBanLinkTemplate> implements UserBanTemplate, UserBanLinkTemplate {
 
   private static DbUserBanMapper mapper;
 

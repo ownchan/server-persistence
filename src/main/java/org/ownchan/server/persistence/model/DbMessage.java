@@ -22,9 +22,10 @@ import java.util.Date;
 
 import org.ownchan.server.persistence.mapper.DbMessageMapper;
 import org.ownchan.server.persistence.template.MessageTemplate;
+import org.ownchan.server.persistence.template.link.MessageLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbMessage extends PersistableObject<DbMessage, MessageTemplate> implements MessageTemplate {
+public class DbMessage extends PersistableObject<DbMessage, MessageTemplate, MessageLinkTemplate> implements MessageTemplate, MessageLinkTemplate {
 
   private static DbMessageMapper mapper;
 

@@ -24,9 +24,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.ownchan.server.persistence.geom.NullablePoint;
 import org.ownchan.server.persistence.mapper.DbContentMapper;
 import org.ownchan.server.persistence.template.ContentTemplate;
+import org.ownchan.server.persistence.template.link.ContentLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbContent extends PersistableObject<DbContent, ContentTemplate> implements DbStatusAwareContent<DbContentStatus>, ContentTemplate {
+public class DbContent extends PersistableObject<DbContent, ContentTemplate, ContentLinkTemplate> implements DbStatusAwareContent<DbContentStatus>, ContentTemplate, ContentLinkTemplate {
 
   private static DbContentMapper mapper;
 

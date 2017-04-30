@@ -23,9 +23,10 @@ import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 import org.ownchan.server.persistence.mapper.DbCloudLabelMapper;
 import org.ownchan.server.persistence.template.CloudLabelTemplate;
+import org.ownchan.server.persistence.template.link.CloudLabelLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbCloudLabel extends PersistableObject<DbCloudLabel, CloudLabelTemplate> implements DbStatusAwareContent<DbCloudLabelStatus>, CloudLabelTemplate {
+public class DbCloudLabel extends PersistableObject<DbCloudLabel, CloudLabelTemplate, CloudLabelLinkTemplate> implements DbStatusAwareContent<DbCloudLabelStatus>, CloudLabelTemplate, CloudLabelLinkTemplate {
 
   private static DbCloudLabelMapper mapper;
 

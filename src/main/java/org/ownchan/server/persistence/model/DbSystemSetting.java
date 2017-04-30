@@ -22,9 +22,10 @@ import java.util.Date;
 
 import org.ownchan.server.persistence.mapper.DbSystemSettingMapper;
 import org.ownchan.server.persistence.template.SystemSettingTemplate;
+import org.ownchan.server.persistence.template.link.SystemSettingLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbSystemSetting extends PersistableObject<DbSystemSetting, SystemSettingTemplate> implements SystemSettingTemplate {
+public class DbSystemSetting extends PersistableObject<DbSystemSetting, SystemSettingTemplate, SystemSettingLinkTemplate> implements SystemSettingTemplate, SystemSettingLinkTemplate {
 
   private static DbSystemSettingMapper mapper;
 

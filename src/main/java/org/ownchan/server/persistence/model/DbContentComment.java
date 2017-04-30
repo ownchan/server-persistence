@@ -22,9 +22,10 @@ import java.util.Date;
 
 import org.ownchan.server.persistence.mapper.DbContentCommentMapper;
 import org.ownchan.server.persistence.template.ContentCommentTemplate;
+import org.ownchan.server.persistence.template.link.ContentCommentLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbContentComment extends PersistableObject<DbContentComment, ContentCommentTemplate> implements ContentCommentTemplate {
+public class DbContentComment extends PersistableObject<DbContentComment, ContentCommentTemplate, ContentCommentLinkTemplate> implements ContentCommentTemplate, ContentCommentLinkTemplate {
 
   private static DbContentCommentMapper mapper;
 

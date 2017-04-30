@@ -23,9 +23,10 @@ import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 import org.ownchan.server.persistence.mapper.DbUserMapper;
 import org.ownchan.server.persistence.template.UserTemplate;
+import org.ownchan.server.persistence.template.link.UserLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbUser extends PersistableObject<DbUser, UserTemplate> implements DbStatusAwareContent<DbUserStatus>, UserTemplate {
+public class DbUser extends PersistableObject<DbUser, UserTemplate, UserLinkTemplate> implements DbStatusAwareContent<DbUserStatus>, UserTemplate, UserLinkTemplate {
 
   private static DbUserMapper mapper;
 

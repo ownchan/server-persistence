@@ -20,9 +20,10 @@ package org.ownchan.server.persistence.model;
 
 import org.ownchan.server.persistence.mapper.PersistableObjectMapper;
 import org.ownchan.server.persistence.template.EntityTemplate;
+import org.ownchan.server.persistence.template.link.EntityLinkTemplate;
 import org.springframework.beans.BeanUtils;
 
-public abstract class PersistableObject<T extends PersistableObject<T, U> & EntityTemplate<U>, U extends EntityTemplate<U>> {
+public abstract class PersistableObject<T extends PersistableObject<T, U, V> & EntityTemplate<U> & EntityLinkTemplate<V>, U extends EntityTemplate<U>, V extends EntityLinkTemplate<V>> {
 
   public PersistableObject() {
 

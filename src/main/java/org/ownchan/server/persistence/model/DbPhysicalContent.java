@@ -24,9 +24,10 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.ownchan.server.persistence.mapper.DbPhysicalContentMapper;
 import org.ownchan.server.persistence.template.PhysicalContentTemplate;
+import org.ownchan.server.persistence.template.link.PhysicalContentLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbPhysicalContent extends PersistableObject<DbPhysicalContent, PhysicalContentTemplate> implements DbStatusAwareContent<DbPhysicalContentStatus>, PhysicalContentTemplate {
+public class DbPhysicalContent extends PersistableObject<DbPhysicalContent, PhysicalContentTemplate, PhysicalContentLinkTemplate> implements DbStatusAwareContent<DbPhysicalContentStatus>, PhysicalContentTemplate, PhysicalContentLinkTemplate {
 
   private static DbPhysicalContentMapper mapper;
 

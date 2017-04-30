@@ -26,18 +26,9 @@ import java.sql.SQLException;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
-import org.apache.ibatis.type.MappedJdbcTypes;
-import org.apache.ibatis.type.MappedTypes;
 
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.MultiLineString;
-import com.vividsolutions.jts.geom.MultiPoint;
-import com.vividsolutions.jts.geom.MultiPolygon;
-import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.geom.Polygon;
 import com.vividsolutions.jts.geom.PrecisionModel;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKBReader;
@@ -88,7 +79,7 @@ public abstract class BaseGeometryTypeHandler<T extends Geometry> extends BaseTy
       /**
        * First four bytes of the geometry are the SRID, followed by the actual WKB.
        *
-       * Example for a "POINT (lon lat)":
+       * Example for a point, built from a WKT like "POINT (lon lat)" an arbitrary SRID:
        *    The value length is 25 bytes, made up of these components (as can be seen from the hexadecimal value):
        *        - 4 bytes for integer SRID (0)
        *        - 1 byte for integer byte order (1 = little-endian)
@@ -113,7 +104,7 @@ public abstract class BaseGeometryTypeHandler<T extends Geometry> extends BaseTy
         }
       }
 
-      //copy the byte array, removing the first four SRID bytes
+      // copy the byte array, removing the first four SRID bytes
       byte[] wkb = new byte[binaryGeometry.length - 4];
       System.arraycopy(binaryGeometry, 4, wkb, 0, wkb.length);
 

@@ -22,9 +22,10 @@ import java.util.Date;
 
 import org.ownchan.server.persistence.mapper.DbLabelMapper;
 import org.ownchan.server.persistence.template.LabelTemplate;
+import org.ownchan.server.persistence.template.link.LabelLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbLabel extends PersistableObject<DbLabel, LabelTemplate> implements LabelTemplate {
+public class DbLabel extends PersistableObject<DbLabel, LabelTemplate, LabelLinkTemplate> implements LabelTemplate, LabelLinkTemplate {
 
   private static DbLabelMapper mapper;
 

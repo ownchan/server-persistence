@@ -23,9 +23,10 @@ import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 import org.ownchan.server.persistence.mapper.DbContentAbuseMapper;
 import org.ownchan.server.persistence.template.ContentAbuseTemplate;
+import org.ownchan.server.persistence.template.link.ContentAbuseLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbContentAbuse extends PersistableObject<DbContentAbuse, ContentAbuseTemplate> implements DbStatusAwareContent<DbContentAbuseStatus>, ContentAbuseTemplate {
+public class DbContentAbuse extends PersistableObject<DbContentAbuse, ContentAbuseTemplate, ContentAbuseLinkTemplate> implements DbStatusAwareContent<DbContentAbuseStatus>, ContentAbuseTemplate, ContentAbuseLinkTemplate {
 
   private static DbContentAbuseMapper mapper;
 
