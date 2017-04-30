@@ -33,6 +33,15 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.mybatis.spring.boot.autoconfigure.SpringBootVFS;
 import org.ownchan.server.persistence.model.PersistableObjectScanBaseMarker;
 import org.ownchan.server.persistence.typehandler.BooleanTypeHandler;
+import org.ownchan.server.persistence.typehandler.GeometryCollectionTypeHandler;
+import org.ownchan.server.persistence.typehandler.GeometryTypeHandler;
+import org.ownchan.server.persistence.typehandler.LineStringTypeHandler;
+import org.ownchan.server.persistence.typehandler.MultiLineStringTypeHandler;
+import org.ownchan.server.persistence.typehandler.MultiPointTypeHandler;
+import org.ownchan.server.persistence.typehandler.MultiPolygonTypeHandler;
+import org.ownchan.server.persistence.typehandler.NullablePointTypeHandler;
+import org.ownchan.server.persistence.typehandler.PointTypeHandler;
+import org.ownchan.server.persistence.typehandler.PolygonTypeHandler;
 import org.ownchan.server.persistence.typehandler.PrimitiveBooleanTypeHandler;
 import org.ownchan.server.persistence.typehandler.auto.TypeHandlerScanBaseMarker;
 import org.springframework.beans.factory.annotation.Value;
@@ -87,10 +96,19 @@ public class PersistenceConfig {
     SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
     sessionFactory.setConfiguration(createOwnchanServerMybatisConfiguration(defaultFetchSize));
     sessionFactory.setTypeAliasesPackage(PersistableObjectScanBaseMarker.class.getPackage().getName());
-    // we want to register the boolean handlers in the correct order ...
+    // we want to register some handlers in the correct order ...
     sessionFactory.setTypeHandlers(new TypeHandler[] {
         new BooleanTypeHandler(),
-        new PrimitiveBooleanTypeHandler()
+        new PrimitiveBooleanTypeHandler(),
+        new NullablePointTypeHandler(),
+        new PointTypeHandler(),
+        new LineStringTypeHandler(),
+        new PolygonTypeHandler(),
+        new MultiPointTypeHandler(),
+        new MultiLineStringTypeHandler(),
+        new MultiPolygonTypeHandler(),
+        new GeometryCollectionTypeHandler(),
+        new GeometryTypeHandler()
     });
     sessionFactory.setTypeHandlersPackage(TypeHandlerScanBaseMarker.class.getPackage().getName());
     sessionFactory.setVfs(SpringBootVFS.class);

@@ -21,11 +21,10 @@ package org.ownchan.server.persistence.model;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
+import org.ownchan.server.persistence.geom.NullablePoint;
 import org.ownchan.server.persistence.mapper.DbContentMapper;
 import org.ownchan.server.persistence.template.ContentTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
-
-import com.vividsolutions.jts.geom.Point;
 
 public class DbContent extends PersistableObject<DbContent, ContentTemplate> implements DbStatusAwareContent<DbContentStatus>, ContentTemplate {
 
@@ -47,7 +46,7 @@ public class DbContent extends PersistableObject<DbContent, ContentTemplate> imp
 
   private String cityName;
 
-  private Point location;
+  private NullablePoint location;
 
   private String contentName;
 
@@ -169,11 +168,11 @@ public class DbContent extends PersistableObject<DbContent, ContentTemplate> imp
   }
 
   @Override
-  public Point getLocation() {
+  public NullablePoint getLocation() {
     return location;
   }
 
-  public void setLocation(Point location) {
+  public void setLocation(NullablePoint location) {
     this.location = location;
   }
 

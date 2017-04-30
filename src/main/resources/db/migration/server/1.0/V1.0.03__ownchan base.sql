@@ -41,7 +41,7 @@ CREATE TABLE `ocn_content` (
   `caption` VARCHAR(128) NULL,
   `country_code` VARCHAR(2) NULL,
   `city_name` VARCHAR(128) NULL,
-  `location` POINT NOT NULL COMMENT 'Unfortunately, spatially indexed columns in Mysql cannot be NULL, else this column would be nullable.\nAs a workaround, when we actually want to store NULL, we will store a pre-defined point with an unusual dummy-location like POINT(90, 0) (lat/lon - WGS84)  instead.',
+  `location` POINT NOT NULL COMMENT 'Unfortunately, spatially indexed columns in Mysql cannot be NULL, else this column would be nullable.\nAs a workaround, when we actually want to store NULL, we will store a pre-defined point with an unusual dummy-location from a WKT like \"POINT (0 90)\"  (lon/lat - WGS84)  instead.',
   `content_name` VARCHAR(255) NOT NULL COMMENT 'in case of image files this will be the filename, while for example in case of youtube videos it will be the youtube id (or the video title, if available)',
   `content_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `content_year` SMALLINT(4) UNSIGNED NOT NULL,

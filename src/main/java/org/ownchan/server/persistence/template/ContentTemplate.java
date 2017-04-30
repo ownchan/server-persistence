@@ -20,9 +20,8 @@ package org.ownchan.server.persistence.template;
 
 import java.util.Date;
 
+import org.ownchan.server.persistence.geom.NullablePoint;
 import org.ownchan.server.persistence.model.DbContentStatus;
-
-import com.vividsolutions.jts.geom.Point;
 
 public interface ContentTemplate extends EntityTemplate<ContentTemplate> {
 
@@ -42,7 +41,7 @@ public interface ContentTemplate extends EntityTemplate<ContentTemplate> {
 
   String getCityName();
 
-  Point getLocation();
+  NullablePoint getLocation();
 
   String getContentName();
 

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Affero General Public License, version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *******************************************************************************/
-package org.ownchan.server.persistence.typehandler.auto;
+package org.ownchan.server.persistence.typehandler;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
@@ -42,36 +42,33 @@ import com.vividsolutions.jts.geom.PrecisionModel;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKBReader;
 
-@MappedTypes({
-    Point.class,
-    LineString.class,
-    Polygon.class,
-    MultiPoint.class,
-    MultiLineString.class,
-    MultiPolygon.class,
-    GeometryCollection.class,
-    Geometry.class
-})
-@MappedJdbcTypes(JdbcType.OTHER)
-public class GeometryTypeHandler extends BaseTypeHandler<Geometry> {
+public abstract class BaseGeometryTypeHandler<T extends Geometry> extends BaseTypeHandler<T> {
+
+  public static final int DEFAULT_SRID = 4326;
+
+  private Class<T> targetClass;
+
+  public BaseGeometryTypeHandler(Class<T> targetClass) {
+    this.targetClass = targetClass;
+  }
 
   @Override
-  public void setNonNullParameter(PreparedStatement ps, int i, Geometry parameter, JdbcType jdbcType) throws SQLException {
+  public void setNonNullParameter(PreparedStatement ps, int i, T parameter, JdbcType jdbcType) throws SQLException {
     ps.setString(i, parameter.toText());
   }
 
   @Override
-  public Geometry getNullableResult(ResultSet rs, String columnName) throws SQLException {
+  public T getNullableResult(ResultSet rs, String columnName) throws SQLException {
     return toGeometry(rs.getBytes(columnName));
   }
 
   @Override
-  public Geometry getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
+  public T getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
     return toGeometry(cs.getBytes(columnIndex));
   }
 
   @Override
-  public Geometry getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
+  public T getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
     return toGeometry(rs.getBytes(columnIndex));
   }
 
@@ -79,7 +76,8 @@ public class GeometryTypeHandler extends BaseTypeHandler<Geometry> {
    * the main logic for parsing the binary mysql spatial data has been found on
    * and taken from http://www.dev-garden.org/2011/11/27/loading-mysql-spatial-data-with-jdbc-and-jts-wkbreader/
    */
-  private Geometry toGeometry(byte[] binaryGeometry) {
+  @SuppressWarnings("unchecked")
+  protected T toGeometry(byte[] binaryGeometry) {
     Geometry result = null;
 
     if (ArrayUtils.isNotEmpty(binaryGeometry)) {
@@ -90,7 +88,7 @@ public class GeometryTypeHandler extends BaseTypeHandler<Geometry> {
       /**
        * First four bytes of the geometry are the SRID, followed by the actual WKB.
        *
-       * Example for a POINT (lat, lon):
+       * Example for a "POINT (lon lat)":
        *    The value length is 25 bytes, made up of these components (as can be seen from the hexadecimal value):
        *        - 4 bytes for integer SRID (0)
        *        - 1 byte for integer byte order (1 = little-endian)
@@ -127,7 +125,11 @@ public class GeometryTypeHandler extends BaseTypeHandler<Geometry> {
       }
     }
 
-    return result;
+    if (result != null && !targetClass.isInstance(result)) {
+      throw new ClassCastException(String.format("parsed Geometry is of type %s, but the result is expected to be assignable to type %s", result.getClass().getSimpleName(), targetClass.getSimpleName()));
+    }
+
+    return (T) result;
   }
 
 }
