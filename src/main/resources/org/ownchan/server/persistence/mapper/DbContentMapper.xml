@@ -111,7 +111,7 @@
       #{cityName},
       <choose>
         <when test="location != null">
-          GeomFromText(#{location},${location.SRID}),
+          ST_PointFromText(#{location},${location.SRID}),
         </when>
         <otherwise>
           NULL,
@@ -141,7 +141,7 @@
       city_name = #{cityName},
       <choose>
         <when test="location != null">
-          location = GeomFromText(#{location},${location.SRID}),
+          location = ST_PointFromText(#{location},${location.SRID}),
         </when>
         <otherwise>
           location = NULL,
