@@ -19,6 +19,7 @@
 package org.ownchan.server.persistence.model;
 
 import java.util.Date;
+import java.util.List;
 
 import org.ownchan.server.persistence.mapper.DbRoleMapper;
 import org.ownchan.server.persistence.template.RoleTemplate;
@@ -40,6 +41,8 @@ public class DbRole extends PersistableObject<DbRole, RoleTemplate, RoleLinkTemp
   private Date createTime;
 
   private Date updateTime;
+
+  private volatile List<DbPrivilege> linkedPrivileges;
 
   public DbRole() {
     super();
@@ -102,6 +105,11 @@ public class DbRole extends PersistableObject<DbRole, RoleTemplate, RoleLinkTemp
 
   public void setUpdateTime(Date updateTime) {
     this.updateTime = updateTime;
+  }
+
+  @Override
+  public List<DbPrivilege> getLinkedPrivileges() {
+    return linkedPrivileges;
   }
 
   @Override

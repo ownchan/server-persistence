@@ -19,6 +19,7 @@
 package org.ownchan.server.persistence.model;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.ownchan.server.persistence.mapper.DbUserMapper;
@@ -55,6 +56,8 @@ public class DbUser extends PersistableObject<DbUser, UserTemplate, UserLinkTemp
   private Long avatarContentId;
 
   private Date lastPasswordChangeTime;
+
+  private volatile List<DbRole> linkedRoles;
 
   public DbUser() {
     super();
@@ -196,6 +199,11 @@ public class DbUser extends PersistableObject<DbUser, UserTemplate, UserLinkTemp
 
   public void setLastPasswordChangeTime(Date lastPasswordChangeTime) {
     this.lastPasswordChangeTime = lastPasswordChangeTime;
+  }
+
+  @Override
+  public List<DbRole> getLinkedRoles() {
+    return linkedRoles;
   }
 
   @Override
