@@ -34,6 +34,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserDao extends PersistableObjectDao<DbUser, DbUserMapper, UserDao> implements DbUserMapper {
 
+  private static final String PERM_QUERY_MANAGE_ROLES = "hasPermission(#contextUser, '" + Privilege.PRIV_MANAGE_ROLES + "')";
+
   @Autowired
   private DbUserMapper mapper;
 
@@ -51,7 +53,7 @@ public class UserDao extends PersistableObjectDao<DbUser, DbUserMapper, UserDao>
     return mapper.removeAllRoles(user.getId());
   }
 
-  @PreAuthorize("hasPermission(#contextUser, '" + Privilege.PRIV_MANAGE_ROLES + "')")
+  @PreAuthorize(PERM_QUERY_MANAGE_ROLES)
   public long removeAllRoles(ContextUser contextUser, UserTemplate user) {
     return mapper.removeAllRoles(user.getId());
   }
@@ -65,7 +67,7 @@ public class UserDao extends PersistableObjectDao<DbUser, DbUserMapper, UserDao>
     return mapper.assignRole(user.getId(), role.getId());
   }
 
-  @PreAuthorize("hasPermission(#contextUser, '" + Privilege.PRIV_MANAGE_ROLES + "')")
+  @PreAuthorize(PERM_QUERY_MANAGE_ROLES)
   public int assignRole(ContextUser contextUser, UserTemplate user, RoleTemplate role) {
     return mapper.assignRole(user.getId(), role.getId());
   }
@@ -88,7 +90,7 @@ public class UserDao extends PersistableObjectDao<DbUser, DbUserMapper, UserDao>
     return mapper.removeRole(user.getId(), role.getId());
   }
 
-  @PreAuthorize("hasPermission(#contextUser, '" + Privilege.PRIV_MANAGE_ROLES + "')")
+  @PreAuthorize(PERM_QUERY_MANAGE_ROLES)
   public int removeRole(ContextUser contextUser, UserTemplate user, RoleTemplate role) {
     return mapper.removeRole(user.getId(), role.getId());
   }

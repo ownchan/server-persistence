@@ -76,6 +76,8 @@ public class DbContent extends PersistableObject<DbContent, ContentTemplate, Con
 
   private Long minusCount;
 
+  private volatile List<DbLabel> linkedCreatorLabels;
+
   public DbContent() {
     super();
   }
@@ -285,6 +287,16 @@ public class DbContent extends PersistableObject<DbContent, ContentTemplate, Con
     return getDao().fetchAllPrivateLabels(contextUser, this, contextUser);
   }
 
+  @Override
+  public List<DbLabel> getLinkedCreatorLabels() {
+    return linkedCreatorLabels;
+  }
+
+  public List<DbLabel> refreshLinkedCreatorLabels() {
+    linkedCreatorLabels = getDao().fetchAllCreatorLabels(this);
+    return linkedCreatorLabels;
+  }
+
   public void addPrivateLabel(ContextUser contextUser, PrivateLabelTemplate privateLabel) {
     getDao().assignPrivateLabel(contextUser, this, privateLabel);
   }
@@ -308,8 +320,6 @@ public class DbContent extends PersistableObject<DbContent, ContentTemplate, Con
   public void removeAllCreatorLabels(ContextUser contextUser) {
     getDao().removeAllCreatorLabels(contextUser, this);
   }
-
-  // TODO getLinkedCreatorLabels -> mybatis lazy
 
   @Override
   protected ContentDao getDao() {

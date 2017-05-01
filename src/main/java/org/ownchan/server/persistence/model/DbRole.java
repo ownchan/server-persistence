@@ -21,8 +21,10 @@ package org.ownchan.server.persistence.model;
 import java.util.Date;
 import java.util.List;
 
+import org.ownchan.server.joint.persistence.template.PrivilegeTemplate;
 import org.ownchan.server.joint.persistence.template.RoleTemplate;
 import org.ownchan.server.joint.persistence.template.link.RoleLinkTemplate;
+import org.ownchan.server.joint.security.ContextUser;
 import org.ownchan.server.persistence.dao.RoleDao;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
@@ -112,20 +114,21 @@ public class DbRole extends PersistableObject<DbRole, RoleTemplate, RoleLinkTemp
     return linkedPrivileges;
   }
 
-  /**
-   * Save (or replace) the privileges for an already persisted Role.
-   */
-  public void savePrivileges(List<DbPrivilege> privileges) {
-    getDao().setPrivileges(this, privileges);
-    /*
-     *  this is debatable ...
-     *  If the field has already been lazily loaded, it will be updated -
-     *  if not, it will be updated upon lazy loading anyway.
-     *  However, we could just omit this line and force to user to reload
-     *  the object from database, if he needs a current version of the object
-     *  that reflects all the changes the user performed.
-     */
-    this.linkedPrivileges = privileges;
+  public List<DbPrivilege> refreshLinkedPrivileges() {
+    linkedPrivileges = getDao().fetchAllPrivileges(this);
+    return linkedPrivileges;
+  }
+
+  public void grantPrivilege(ContextUser contextUser, PrivilegeTemplate privilege) {
+    getDao().grantPrivilege(contextUser, this, privilege);
+  }
+
+  public void removePrivilege(ContextUser contextUser, PrivilegeTemplate privilege) {
+    getDao().removePrivilege(contextUser, this, privilege);
+  }
+
+  public void removeAllPrivileges(ContextUser contextUser) {
+    getDao().removeAllPrivileges(contextUser, this);
   }
 
   @Override

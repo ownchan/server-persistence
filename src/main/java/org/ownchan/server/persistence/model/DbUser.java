@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.ownchan.server.joint.persistence.template.RoleTemplate;
 import org.ownchan.server.joint.persistence.template.UserTemplate;
 import org.ownchan.server.joint.persistence.template.link.UserLinkTemplate;
 import org.ownchan.server.joint.persistence.valuetype.UserStatus;
@@ -208,11 +209,16 @@ public class DbUser extends PersistableObject<DbUser, UserTemplate, UserLinkTemp
     return linkedRoles;
   }
 
-  public void assignRole(ContextUser contextUser, DbRole role) {
+  public List<DbRole> refreshLinkedRoles() {
+    linkedRoles = getDao().fetchAllRoles(this);
+    return linkedRoles;
+  }
+
+  public void assignRole(ContextUser contextUser, RoleTemplate role) {
     getDao().assignRole(contextUser, this, role);
   }
 
-  public void removeRole(ContextUser contextUser, DbRole role) {
+  public void removeRole(ContextUser contextUser, RoleTemplate role) {
     getDao().removeRole(contextUser, this, role);
   }
 

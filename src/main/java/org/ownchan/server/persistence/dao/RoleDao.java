@@ -20,17 +20,21 @@ package org.ownchan.server.persistence.dao;
 
 import java.util.List;
 
-import org.apache.commons.collections4.CollectionUtils;
+import org.ownchan.server.joint.persistence.template.PrivilegeTemplate;
+import org.ownchan.server.joint.persistence.template.RoleTemplate;
+import org.ownchan.server.joint.security.ContextUser;
+import org.ownchan.server.joint.security.Privilege;
 import org.ownchan.server.persistence.mapper.DbRoleMapper;
 import org.ownchan.server.persistence.model.DbPrivilege;
 import org.ownchan.server.persistence.model.DbRole;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RoleDao extends PersistableObjectDao<DbRole, DbRoleMapper, RoleDao> implements DbRoleMapper {
+
+  private static final String PERM_QUERY_MANAGE_PRIVILEGES = "hasPermission(#contextUser, '" + Privilege.PRIV_MANAGE_PRIVILEGES + "')";
 
   @Autowired
   private DbRoleMapper mapper;
@@ -40,33 +44,17 @@ public class RoleDao extends PersistableObjectDao<DbRole, DbRoleMapper, RoleDao>
     return mapper;
   }
 
-  @Transactional(propagation = Propagation.NESTED)
-  public void setPrivileges(DbRole role, List<DbPrivilege> privileges) {
-    if (CollectionUtils.isNotEmpty(privileges)) {
-      List<DbPrivilege> currentPrivileges = fetchAllPrivileges(role);
-      privileges.stream().forEach(privilege -> {
-        boolean alreadyGranted = currentPrivileges.remove(privilege);
-        if (!alreadyGranted) {
-          grantPrivilege(role, privilege);
-        }
-      });
-      // what's left over in currentPrivileges are in fact the privileges that need to be removed
-      if (CollectionUtils.isNotEmpty(currentPrivileges)) {
-        currentPrivileges.stream().forEach(privilege -> removePrivilege(role, privilege));
-      }
-    } else {
-      // we could first check, if the role even has any privileges, but that would need a query as well
-      removeAllPrivileges(role);
-    }
-    flushStatements();
-  }
-
   @Override
   public long removeAllPrivileges(long roleId) {
     return mapper.removeAllPrivileges(roleId);
   }
 
-  public long removeAllPrivileges(DbRole role) {
+  public long removeAllPrivileges(RoleTemplate role) {
+    return removeAllPrivileges(role.getId());
+  }
+
+  @PreAuthorize(PERM_QUERY_MANAGE_PRIVILEGES)
+  public long removeAllPrivileges(ContextUser contextUser, RoleTemplate role) {
     return removeAllPrivileges(role.getId());
   }
 
@@ -75,7 +63,12 @@ public class RoleDao extends PersistableObjectDao<DbRole, DbRoleMapper, RoleDao>
     return mapper.grantPrivilege(roleId, privilegeId);
   }
 
-  public int grantPrivilege(DbRole role, DbPrivilege privilege) {
+  public int grantPrivilege(RoleTemplate role, PrivilegeTemplate privilege) {
+    return grantPrivilege(role.getId(), privilege.getId());
+  }
+
+  @PreAuthorize(PERM_QUERY_MANAGE_PRIVILEGES)
+  public int grantPrivilege(ContextUser contextUser, RoleTemplate role, PrivilegeTemplate privilege) {
     return grantPrivilege(role.getId(), privilege.getId());
   }
 
@@ -84,7 +77,7 @@ public class RoleDao extends PersistableObjectDao<DbRole, DbRoleMapper, RoleDao>
     return mapper.fetchAllPrivileges(roleId);
   }
 
-  public List<DbPrivilege> fetchAllPrivileges(DbRole role) {
+  public List<DbPrivilege> fetchAllPrivileges(RoleTemplate role) {
     return fetchAllPrivileges(role.getId());
   }
 
@@ -93,7 +86,12 @@ public class RoleDao extends PersistableObjectDao<DbRole, DbRoleMapper, RoleDao>
     return mapper.removePrivilege(roleId, privilegeId);
   }
 
-  public int removePrivilege(DbRole role, DbPrivilege privilege) {
+  public int removePrivilege(RoleTemplate role, PrivilegeTemplate privilege) {
+    return removePrivilege(role.getId(), privilege.getId());
+  }
+
+  @PreAuthorize(PERM_QUERY_MANAGE_PRIVILEGES)
+  public int removePrivilege(ContextUser contextUser, RoleTemplate role, PrivilegeTemplate privilege) {
     return removePrivilege(role.getId(), privilege.getId());
   }
 
