@@ -19,6 +19,7 @@
 package org.ownchan.server.persistence.model;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.ownchan.server.persistence.dao.ContentDao;
@@ -274,6 +275,14 @@ public class DbContent extends PersistableObject<DbContent, ContentTemplate, Con
 
   public void setMinusCount(Long minusCount) {
     this.minusCount = minusCount;
+  }
+
+  public void savePrivateLabels(DbUser user, List<DbPrivateLabel> privateLabels) {
+    getDao().setPrivateLabels(this, user, privateLabels);
+  }
+
+  public List<DbPrivateLabel> getLinkedPrivateLabels(DbUser user) {
+    return getDao().fetchAllPrivateLabels(this, user);
   }
 
   @Override

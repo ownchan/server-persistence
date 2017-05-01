@@ -18,10 +18,22 @@
  *******************************************************************************/
 package org.ownchan.server.persistence.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.ownchan.server.persistence.model.DbContent;
+import org.ownchan.server.persistence.model.DbPrivateLabel;
 
 @Mapper
 public interface DbContentMapper extends PersistableObjectMapper<DbContent> {
+
+  List<DbPrivateLabel> fetchAllPrivateLabels(@Param("contentId") long contentId, @Param("userId") long userId);
+
+  long removeAllPrivateLabels(@Param("contentId") long contentId, @Param("userId") long userId);
+
+  int assignPrivateLabel(@Param("contentId") long contentId, @Param("privateLabelId") long privateLabelId);
+
+  int removePrivateLabel(@Param("contentId") long contentId, @Param("privateLabelId") long privateLabelId);
 
 }
