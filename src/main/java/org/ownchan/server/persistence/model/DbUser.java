@@ -22,14 +22,14 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.ownchan.server.persistence.mapper.DbUserMapper;
+import org.ownchan.server.persistence.dao.UserDao;
 import org.ownchan.server.persistence.template.UserTemplate;
 import org.ownchan.server.persistence.template.link.UserLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbUser extends PersistableObject<DbUser, UserTemplate, UserLinkTemplate> implements DbStatusAwareContent<DbUserStatus>, UserTemplate, UserLinkTemplate {
+public class DbUser extends PersistableObject<DbUser, UserTemplate, UserLinkTemplate, UserDao> implements DbStatusAwareContent<DbUserStatus>, UserTemplate, UserLinkTemplate {
 
-  private static DbUserMapper mapper;
+  private static UserDao dao;
 
   private long id;
 
@@ -206,13 +206,29 @@ public class DbUser extends PersistableObject<DbUser, UserTemplate, UserLinkTemp
     return linkedRoles;
   }
 
+  /**
+   * Save (or replace) the roles for an already persisted user.
+   */
+  public void saveRoles(List<DbRole> roles) {
+    getDao().setRoles(this, roles);
+    /*
+     *  this is debatable ...
+     *  If the field has already been lazily loaded, it will be updated -
+     *  if not, it will be updated upon lazy loading anyway.
+     *  However, we could just omit this line and force to user to reload
+     *  the object from database, if he needs a current version of the object
+     *  that reflects all the changes the user performed.
+     */
+    this.linkedRoles = roles;
+  }
+
   @Override
-  protected DbUserMapper getMapper() {
-    if (mapper == null) {
-      mapper = StaticContextAccessor.getBean(DbUserMapper.class);
+  protected UserDao getDao() {
+    if (dao == null) {
+      dao = StaticContextAccessor.getBean(UserDao.class);
     }
 
-    return mapper;
+    return dao;
   }
 
 }

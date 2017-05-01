@@ -20,14 +20,14 @@ package org.ownchan.server.persistence.model;
 
 import java.util.Date;
 
-import org.ownchan.server.persistence.mapper.DbUserBanMapper;
+import org.ownchan.server.persistence.dao.UserBanDao;
 import org.ownchan.server.persistence.template.UserBanTemplate;
 import org.ownchan.server.persistence.template.link.UserBanLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbUserBan extends PersistableObject<DbUserBan, UserBanTemplate, UserBanLinkTemplate> implements UserBanTemplate, UserBanLinkTemplate {
+public class DbUserBan extends PersistableObject<DbUserBan, UserBanTemplate, UserBanLinkTemplate, UserBanDao> implements UserBanTemplate, UserBanLinkTemplate {
 
-  private static DbUserBanMapper mapper;
+  private static UserBanDao dao;
 
   private long id;
 
@@ -127,12 +127,12 @@ public class DbUserBan extends PersistableObject<DbUserBan, UserBanTemplate, Use
   }
 
   @Override
-  protected DbUserBanMapper getMapper() {
-    if (mapper == null) {
-      mapper = StaticContextAccessor.getBean(DbUserBanMapper.class);
+  protected UserBanDao getDao() {
+    if (dao == null) {
+      dao = StaticContextAccessor.getBean(UserBanDao.class);
     }
 
-    return mapper;
+    return dao;
   }
 
 }

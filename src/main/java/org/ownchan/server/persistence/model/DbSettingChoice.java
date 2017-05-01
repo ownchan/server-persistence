@@ -18,14 +18,14 @@
  *******************************************************************************/
 package org.ownchan.server.persistence.model;
 
-import org.ownchan.server.persistence.mapper.DbSettingChoiceMapper;
+import org.ownchan.server.persistence.dao.SettingChoiceDao;
 import org.ownchan.server.persistence.template.SettingChoiceTemplate;
 import org.ownchan.server.persistence.template.link.SettingChoiceLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbSettingChoice extends PersistableObject<DbSettingChoice, SettingChoiceTemplate, SettingChoiceLinkTemplate> implements SettingChoiceTemplate, SettingChoiceLinkTemplate {
+public class DbSettingChoice extends PersistableObject<DbSettingChoice, SettingChoiceTemplate, SettingChoiceLinkTemplate, SettingChoiceDao> implements SettingChoiceTemplate, SettingChoiceLinkTemplate {
 
-  private static DbSettingChoiceMapper mapper;
+  private static SettingChoiceDao dao;
 
   private long id;
 
@@ -92,12 +92,12 @@ public class DbSettingChoice extends PersistableObject<DbSettingChoice, SettingC
   }
 
   @Override
-  protected DbSettingChoiceMapper getMapper() {
-    if (mapper == null) {
-      mapper = StaticContextAccessor.getBean(DbSettingChoiceMapper.class);
+  protected SettingChoiceDao getDao() {
+    if (dao == null) {
+      dao = StaticContextAccessor.getBean(SettingChoiceDao.class);
     }
 
-    return mapper;
+    return dao;
   }
 
 }

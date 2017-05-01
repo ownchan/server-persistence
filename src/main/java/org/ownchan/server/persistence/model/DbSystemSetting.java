@@ -20,14 +20,14 @@ package org.ownchan.server.persistence.model;
 
 import java.util.Date;
 
-import org.ownchan.server.persistence.mapper.DbSystemSettingMapper;
+import org.ownchan.server.persistence.dao.SystemSettingDao;
 import org.ownchan.server.persistence.template.SystemSettingTemplate;
 import org.ownchan.server.persistence.template.link.SystemSettingLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbSystemSetting extends PersistableObject<DbSystemSetting, SystemSettingTemplate, SystemSettingLinkTemplate> implements SystemSettingTemplate, SystemSettingLinkTemplate {
+public class DbSystemSetting extends PersistableObject<DbSystemSetting, SystemSettingTemplate, SystemSettingLinkTemplate, SystemSettingDao> implements SystemSettingTemplate, SystemSettingLinkTemplate {
 
-  private static DbSystemSettingMapper mapper;
+  private static SystemSettingDao dao;
 
   private long id;
 
@@ -116,12 +116,12 @@ public class DbSystemSetting extends PersistableObject<DbSystemSetting, SystemSe
   }
 
   @Override
-  protected DbSystemSettingMapper getMapper() {
-    if (mapper == null) {
-      mapper = StaticContextAccessor.getBean(DbSystemSettingMapper.class);
+  protected SystemSettingDao getDao() {
+    if (dao == null) {
+      dao = StaticContextAccessor.getBean(SystemSettingDao.class);
     }
 
-    return mapper;
+    return dao;
   }
 
 }

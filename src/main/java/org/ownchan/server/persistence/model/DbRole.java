@@ -21,14 +21,14 @@ package org.ownchan.server.persistence.model;
 import java.util.Date;
 import java.util.List;
 
-import org.ownchan.server.persistence.mapper.DbRoleMapper;
+import org.ownchan.server.persistence.dao.RoleDao;
 import org.ownchan.server.persistence.template.RoleTemplate;
 import org.ownchan.server.persistence.template.link.RoleLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbRole extends PersistableObject<DbRole, RoleTemplate, RoleLinkTemplate> implements RoleTemplate, RoleLinkTemplate {
+public class DbRole extends PersistableObject<DbRole, RoleTemplate, RoleLinkTemplate, RoleDao> implements RoleTemplate, RoleLinkTemplate {
 
-  private static DbRoleMapper mapper;
+  private static RoleDao dao;
 
   private long id;
 
@@ -112,13 +112,29 @@ public class DbRole extends PersistableObject<DbRole, RoleTemplate, RoleLinkTemp
     return linkedPrivileges;
   }
 
+  /**
+   * Save (or replace) the privileges for an already persisted Role.
+   */
+  public void savePrivileges(List<DbPrivilege> privileges) {
+    getDao().setPrivileges(this, privileges);
+    /*
+     *  this is debatable ...
+     *  If the field has already been lazily loaded, it will be updated -
+     *  if not, it will be updated upon lazy loading anyway.
+     *  However, we could just omit this line and force to user to reload
+     *  the object from database, if he needs a current version of the object
+     *  that reflects all the changes the user performed.
+     */
+    this.linkedPrivileges = privileges;
+  }
+
   @Override
-  protected DbRoleMapper getMapper() {
-    if (mapper == null) {
-      mapper = StaticContextAccessor.getBean(DbRoleMapper.class);
+  protected RoleDao getDao() {
+    if (dao == null) {
+      dao = StaticContextAccessor.getBean(RoleDao.class);
     }
 
-    return mapper;
+    return dao;
   }
 
 }

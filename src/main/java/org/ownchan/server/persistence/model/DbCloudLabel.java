@@ -21,14 +21,14 @@ package org.ownchan.server.persistence.model;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
-import org.ownchan.server.persistence.mapper.DbCloudLabelMapper;
+import org.ownchan.server.persistence.dao.CloudLabelDao;
 import org.ownchan.server.persistence.template.CloudLabelTemplate;
 import org.ownchan.server.persistence.template.link.CloudLabelLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbCloudLabel extends PersistableObject<DbCloudLabel, CloudLabelTemplate, CloudLabelLinkTemplate> implements DbStatusAwareContent<DbCloudLabelStatus>, CloudLabelTemplate, CloudLabelLinkTemplate {
+public class DbCloudLabel extends PersistableObject<DbCloudLabel, CloudLabelTemplate, CloudLabelLinkTemplate, CloudLabelDao> implements DbStatusAwareContent<DbCloudLabelStatus>, CloudLabelTemplate, CloudLabelLinkTemplate {
 
-  private static DbCloudLabelMapper mapper;
+  private static CloudLabelDao dao;
 
   private long id;
 
@@ -166,12 +166,12 @@ public class DbCloudLabel extends PersistableObject<DbCloudLabel, CloudLabelTemp
   }
 
   @Override
-  protected DbCloudLabelMapper getMapper() {
-    if (mapper == null) {
-      mapper = StaticContextAccessor.getBean(DbCloudLabelMapper.class);
+  protected CloudLabelDao getDao() {
+    if (dao == null) {
+      dao = StaticContextAccessor.getBean(CloudLabelDao.class);
     }
 
-    return mapper;
+    return dao;
   }
 
 }

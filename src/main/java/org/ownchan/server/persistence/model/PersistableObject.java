@@ -18,12 +18,12 @@
  *******************************************************************************/
 package org.ownchan.server.persistence.model;
 
-import org.ownchan.server.persistence.mapper.PersistableObjectMapper;
+import org.ownchan.server.persistence.dao.PersistableObjectDao;
 import org.ownchan.server.persistence.template.EntityTemplate;
 import org.ownchan.server.persistence.template.link.EntityLinkTemplate;
 import org.springframework.beans.BeanUtils;
 
-public abstract class PersistableObject<T extends PersistableObject<T, U, V> & EntityTemplate<U> & EntityLinkTemplate<V>, U extends EntityTemplate<U>, V extends EntityLinkTemplate<V>> {
+public abstract class PersistableObject<T extends PersistableObject<T, U, V, W> & EntityTemplate<U> & EntityLinkTemplate<V>, U extends EntityTemplate<U>, V extends EntityLinkTemplate<V>, W extends PersistableObjectDao<T, ?, W>> {
 
   public PersistableObject() {
 
@@ -59,9 +59,9 @@ public abstract class PersistableObject<T extends PersistableObject<T, U, V> & E
   @SuppressWarnings("unchecked")
   public T save() {
     if (getId() > 0) {
-      getMapper().update((T) this);
+      getDao().update((T) this);
     } else {
-      getMapper().insert((T) this);
+      getDao().insert((T) this);
     }
 
     return (T) this;
@@ -74,7 +74,7 @@ public abstract class PersistableObject<T extends PersistableObject<T, U, V> & E
    * @return true if the number of affected rows in the database was > 0
    */
   public boolean delete() {
-    if (getMapper().delete(getId()) > 0) {
+    if (getDao().delete(getId()) > 0) {
       setId(0);
     }
 
@@ -87,10 +87,10 @@ public abstract class PersistableObject<T extends PersistableObject<T, U, V> & E
    * (may return null, if the object has been deleted after the current instance has been fetched last).
    */
   public T getLatestVersion() {
-    return getMapper().get(getId());
+    return getDao().get(getId());
   }
 
-  protected abstract PersistableObjectMapper<T> getMapper();
+  protected abstract W getDao();
 
   @Override
   public boolean equals(Object obj) {

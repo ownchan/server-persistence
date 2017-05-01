@@ -19,9 +19,14 @@
 package org.ownchan.server.persistence.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.ownchan.server.persistence.model.DbRole;
 
 @Mapper
 public interface DbRoleMapper extends PersistableObjectMapper<DbRole> {
+
+  long removeAllPrivileges(long roleId);
+
+  int grantPrivilege(@Param("roleId") long roleId, @Param("privilegeId") long privilegeId);
 
 }

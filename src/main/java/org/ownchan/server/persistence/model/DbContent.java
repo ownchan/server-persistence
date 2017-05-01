@@ -21,15 +21,15 @@ package org.ownchan.server.persistence.model;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
+import org.ownchan.server.persistence.dao.ContentDao;
 import org.ownchan.server.persistence.geom.NullablePoint;
-import org.ownchan.server.persistence.mapper.DbContentMapper;
 import org.ownchan.server.persistence.template.ContentTemplate;
 import org.ownchan.server.persistence.template.link.ContentLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbContent extends PersistableObject<DbContent, ContentTemplate, ContentLinkTemplate> implements DbStatusAwareContent<DbContentStatus>, ContentTemplate, ContentLinkTemplate {
+public class DbContent extends PersistableObject<DbContent, ContentTemplate, ContentLinkTemplate, ContentDao> implements DbStatusAwareContent<DbContentStatus>, ContentTemplate, ContentLinkTemplate {
 
-  private static DbContentMapper mapper;
+  private static ContentDao dao;
 
   private long id;
 
@@ -277,12 +277,12 @@ public class DbContent extends PersistableObject<DbContent, ContentTemplate, Con
   }
 
   @Override
-  protected DbContentMapper getMapper() {
-    if (mapper == null) {
-      mapper = StaticContextAccessor.getBean(DbContentMapper.class);
+  protected ContentDao getDao() {
+    if (dao == null) {
+      dao = StaticContextAccessor.getBean(ContentDao.class);
     }
 
-    return mapper;
+    return dao;
   }
 
 }

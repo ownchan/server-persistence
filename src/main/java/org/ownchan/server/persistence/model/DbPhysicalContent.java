@@ -22,14 +22,14 @@ import java.util.Date;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
-import org.ownchan.server.persistence.mapper.DbPhysicalContentMapper;
+import org.ownchan.server.persistence.dao.PhysicalContentDao;
 import org.ownchan.server.persistence.template.PhysicalContentTemplate;
 import org.ownchan.server.persistence.template.link.PhysicalContentLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbPhysicalContent extends PersistableObject<DbPhysicalContent, PhysicalContentTemplate, PhysicalContentLinkTemplate> implements DbStatusAwareContent<DbPhysicalContentStatus>, PhysicalContentTemplate, PhysicalContentLinkTemplate {
+public class DbPhysicalContent extends PersistableObject<DbPhysicalContent, PhysicalContentTemplate, PhysicalContentLinkTemplate, PhysicalContentDao> implements DbStatusAwareContent<DbPhysicalContentStatus>, PhysicalContentTemplate, PhysicalContentLinkTemplate {
 
-  private static DbPhysicalContentMapper mapper;
+  private static PhysicalContentDao dao;
 
   private long id;
 
@@ -211,12 +211,12 @@ public class DbPhysicalContent extends PersistableObject<DbPhysicalContent, Phys
   }
 
   @Override
-  protected DbPhysicalContentMapper getMapper() {
-    if (mapper == null) {
-      mapper = StaticContextAccessor.getBean(DbPhysicalContentMapper.class);
+  protected PhysicalContentDao getDao() {
+    if (dao == null) {
+      dao = StaticContextAccessor.getBean(PhysicalContentDao.class);
     }
 
-    return mapper;
+    return dao;
   }
 
 }

@@ -20,14 +20,14 @@ package org.ownchan.server.persistence.model;
 
 import java.util.Date;
 
-import org.ownchan.server.persistence.mapper.DbMessageMapper;
+import org.ownchan.server.persistence.dao.MessageDao;
 import org.ownchan.server.persistence.template.MessageTemplate;
 import org.ownchan.server.persistence.template.link.MessageLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbMessage extends PersistableObject<DbMessage, MessageTemplate, MessageLinkTemplate> implements MessageTemplate, MessageLinkTemplate {
+public class DbMessage extends PersistableObject<DbMessage, MessageTemplate, MessageLinkTemplate, MessageDao> implements MessageTemplate, MessageLinkTemplate {
 
-  private static DbMessageMapper mapper;
+  private static MessageDao dao;
 
   private long id;
 
@@ -127,12 +127,12 @@ public class DbMessage extends PersistableObject<DbMessage, MessageTemplate, Mes
   }
 
   @Override
-  protected DbMessageMapper getMapper() {
-    if (mapper == null) {
-      mapper = StaticContextAccessor.getBean(DbMessageMapper.class);
+  protected MessageDao getDao() {
+    if (dao == null) {
+      dao = StaticContextAccessor.getBean(MessageDao.class);
     }
 
-    return mapper;
+    return dao;
   }
 
 }

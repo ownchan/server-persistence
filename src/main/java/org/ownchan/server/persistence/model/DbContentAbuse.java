@@ -21,14 +21,14 @@ package org.ownchan.server.persistence.model;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
-import org.ownchan.server.persistence.mapper.DbContentAbuseMapper;
+import org.ownchan.server.persistence.dao.ContentAbuseDao;
 import org.ownchan.server.persistence.template.ContentAbuseTemplate;
 import org.ownchan.server.persistence.template.link.ContentAbuseLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbContentAbuse extends PersistableObject<DbContentAbuse, ContentAbuseTemplate, ContentAbuseLinkTemplate> implements DbStatusAwareContent<DbContentAbuseStatus>, ContentAbuseTemplate, ContentAbuseLinkTemplate {
+public class DbContentAbuse extends PersistableObject<DbContentAbuse, ContentAbuseTemplate, ContentAbuseLinkTemplate, ContentAbuseDao> implements DbStatusAwareContent<DbContentAbuseStatus>, ContentAbuseTemplate, ContentAbuseLinkTemplate {
 
-  private static DbContentAbuseMapper mapper;
+  private static ContentAbuseDao dao;
 
   private long id;
 
@@ -199,12 +199,12 @@ public class DbContentAbuse extends PersistableObject<DbContentAbuse, ContentAbu
   }
 
   @Override
-  protected DbContentAbuseMapper getMapper() {
-    if (mapper == null) {
-      mapper = StaticContextAccessor.getBean(DbContentAbuseMapper.class);
+  protected ContentAbuseDao getDao() {
+    if (dao == null) {
+      dao = StaticContextAccessor.getBean(ContentAbuseDao.class);
     }
 
-    return mapper;
+    return dao;
   }
 
 }

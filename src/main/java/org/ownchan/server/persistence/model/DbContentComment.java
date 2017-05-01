@@ -20,14 +20,14 @@ package org.ownchan.server.persistence.model;
 
 import java.util.Date;
 
-import org.ownchan.server.persistence.mapper.DbContentCommentMapper;
+import org.ownchan.server.persistence.dao.ContentCommentDao;
 import org.ownchan.server.persistence.template.ContentCommentTemplate;
 import org.ownchan.server.persistence.template.link.ContentCommentLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbContentComment extends PersistableObject<DbContentComment, ContentCommentTemplate, ContentCommentLinkTemplate> implements ContentCommentTemplate, ContentCommentLinkTemplate {
+public class DbContentComment extends PersistableObject<DbContentComment, ContentCommentTemplate, ContentCommentLinkTemplate, ContentCommentDao> implements ContentCommentTemplate, ContentCommentLinkTemplate {
 
-  private static DbContentCommentMapper mapper;
+  private static ContentCommentDao dao;
 
   private long id;
 
@@ -127,12 +127,12 @@ public class DbContentComment extends PersistableObject<DbContentComment, Conten
   }
 
   @Override
-  protected DbContentCommentMapper getMapper() {
-    if (mapper == null) {
-      mapper = StaticContextAccessor.getBean(DbContentCommentMapper.class);
+  protected ContentCommentDao getDao() {
+    if (dao == null) {
+      dao = StaticContextAccessor.getBean(ContentCommentDao.class);
     }
 
-    return mapper;
+    return dao;
   }
 
 }

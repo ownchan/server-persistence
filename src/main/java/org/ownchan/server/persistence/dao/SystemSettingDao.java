@@ -16,20 +16,22 @@
  * You should have received a copy of the GNU Affero General Public License, version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *******************************************************************************/
-package org.ownchan.server.persistence.typehandler;
+package org.ownchan.server.persistence.dao;
 
-import org.apache.ibatis.type.JdbcType;
-import org.apache.ibatis.type.MappedJdbcTypes;
-import org.apache.ibatis.type.MappedTypes;
+import org.ownchan.server.persistence.mapper.DbSystemSettingMapper;
+import org.ownchan.server.persistence.model.DbSystemSetting;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import com.vividsolutions.jts.geom.MultiPoint;
+@Service
+public class SystemSettingDao extends PersistableObjectDao<DbSystemSetting, DbSystemSettingMapper, SystemSettingDao> implements DbSystemSettingMapper {
 
-@MappedTypes(MultiPoint.class)
-@MappedJdbcTypes(JdbcType.OTHER)
-public class MultiPointTypeHandler extends BaseGeometryTypeHandler<MultiPoint> {
+  @Autowired
+  private DbSystemSettingMapper mapper;
 
-  public MultiPointTypeHandler() {
-    super(MultiPoint.class);
+  @Override
+  protected DbSystemSettingMapper getMapper() {
+    return mapper;
   }
 
 }

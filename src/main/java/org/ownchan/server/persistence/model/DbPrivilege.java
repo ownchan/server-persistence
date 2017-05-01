@@ -20,14 +20,14 @@ package org.ownchan.server.persistence.model;
 
 import java.util.Date;
 
-import org.ownchan.server.persistence.mapper.DbPrivilegeMapper;
+import org.ownchan.server.persistence.dao.PrivilegeDao;
 import org.ownchan.server.persistence.template.PrivilegeTemplate;
 import org.ownchan.server.persistence.template.link.PrivilegeLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbPrivilege extends PersistableObject<DbPrivilege, PrivilegeTemplate, PrivilegeLinkTemplate> implements PrivilegeTemplate, PrivilegeLinkTemplate {
+public class DbPrivilege extends PersistableObject<DbPrivilege, PrivilegeTemplate, PrivilegeLinkTemplate, PrivilegeDao> implements PrivilegeTemplate, PrivilegeLinkTemplate {
 
-  private static DbPrivilegeMapper mapper;
+  private static PrivilegeDao dao;
 
   private long id;
 
@@ -105,12 +105,12 @@ public class DbPrivilege extends PersistableObject<DbPrivilege, PrivilegeTemplat
   }
 
   @Override
-  protected DbPrivilegeMapper getMapper() {
-    if (mapper == null) {
-      mapper = StaticContextAccessor.getBean(DbPrivilegeMapper.class);
+  protected PrivilegeDao getDao() {
+    if (dao == null) {
+      dao = StaticContextAccessor.getBean(PrivilegeDao.class);
     }
 
-    return mapper;
+    return dao;
   }
 
 }

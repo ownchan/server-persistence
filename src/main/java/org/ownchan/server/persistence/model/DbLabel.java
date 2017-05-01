@@ -20,14 +20,14 @@ package org.ownchan.server.persistence.model;
 
 import java.util.Date;
 
-import org.ownchan.server.persistence.mapper.DbLabelMapper;
+import org.ownchan.server.persistence.dao.LabelDao;
 import org.ownchan.server.persistence.template.LabelTemplate;
 import org.ownchan.server.persistence.template.link.LabelLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbLabel extends PersistableObject<DbLabel, LabelTemplate, LabelLinkTemplate> implements LabelTemplate, LabelLinkTemplate {
+public class DbLabel extends PersistableObject<DbLabel, LabelTemplate, LabelLinkTemplate, LabelDao> implements LabelTemplate, LabelLinkTemplate {
 
-  private static DbLabelMapper mapper;
+  private static LabelDao dao;
 
   private long id;
 
@@ -83,12 +83,12 @@ public class DbLabel extends PersistableObject<DbLabel, LabelTemplate, LabelLink
   }
 
   @Override
-  protected DbLabelMapper getMapper() {
-    if (mapper == null) {
-      mapper = StaticContextAccessor.getBean(DbLabelMapper.class);
+  protected LabelDao getDao() {
+    if (dao == null) {
+      dao = StaticContextAccessor.getBean(LabelDao.class);
     }
 
-    return mapper;
+    return dao;
   }
 
 }

@@ -33,7 +33,7 @@ import org.ownchan.server.persistence.model.PersistableObject;
 import org.ownchan.server.persistence.template.EntityTemplate;
 import org.ownchan.server.persistence.template.link.EntityLinkTemplate;
 
-public interface PersistableObjectMapper<T extends PersistableObject<T, ?, ?> & EntityTemplate<?> & EntityLinkTemplate<?>> {
+public interface PersistableObjectMapper<T extends PersistableObject<T, ?, ?, ?> & EntityTemplate<?> & EntityLinkTemplate<?>> {
 
   int insert(T persistableObject);
 
