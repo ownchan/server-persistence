@@ -42,9 +42,21 @@ public class RoleDao extends PersistableObjectDao<DbRole, DbRoleMapper, RoleDao>
 
   @Transactional(propagation = Propagation.NESTED)
   public void setPrivileges(DbRole role, List<DbPrivilege> privileges) {
-    removeAllPrivileges(role);
     if (CollectionUtils.isNotEmpty(privileges)) {
-      privileges.stream().forEach(privilege -> grantPrivilege(role, privilege));
+      List<DbPrivilege> currentPrivileges = fetchAllPrivileges(role);
+      privileges.stream().forEach(privilege -> {
+        boolean alreadyGranted = currentPrivileges.remove(privilege);
+        if (!alreadyGranted) {
+          grantPrivilege(role, privilege);
+        }
+      });
+      // what's left over in currentPrivileges are in fact the privileges that need to be removed
+      if (CollectionUtils.isNotEmpty(currentPrivileges)) {
+        currentPrivileges.stream().forEach(privilege -> removePrivilege(role, privilege));
+      }
+    } else {
+      // we could first check, if the role even has any privileges, but that would need a query as well
+      removeAllPrivileges(role);
     }
     flushStatements();
   }
@@ -65,6 +77,24 @@ public class RoleDao extends PersistableObjectDao<DbRole, DbRoleMapper, RoleDao>
 
   public int grantPrivilege(DbRole role, DbPrivilege privilege) {
     return grantPrivilege(role.getId(), privilege.getId());
+  }
+
+  @Override
+  public List<DbPrivilege> fetchAllPrivileges(long roleId) {
+    return mapper.fetchAllPrivileges(roleId);
+  }
+
+  public List<DbPrivilege> fetchAllPrivileges(DbRole role) {
+    return fetchAllPrivileges(role.getId());
+  }
+
+  @Override
+  public int removePrivilege(long roleId, long privilegeId) {
+    return mapper.removePrivilege(roleId, privilegeId);
+  }
+
+  public int removePrivilege(DbRole role, DbPrivilege privilege) {
+    return removePrivilege(role.getId(), privilege.getId());
   }
 
 }

@@ -18,15 +18,22 @@
  *******************************************************************************/
 package org.ownchan.server.persistence.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.ownchan.server.persistence.model.DbRole;
 import org.ownchan.server.persistence.model.DbUser;
 
 @Mapper
 public interface DbUserMapper extends PersistableObjectMapper<DbUser> {
 
+  List<DbRole> fetchAllRoles(long userId);
+
   long removeAllRoles(long userId);
 
   int assignRole(@Param("userId") long userId, @Param("roleId") long roleId);
+
+  int removeRole(@Param("userId") long userId, @Param("roleId") long roleId);
 
 }

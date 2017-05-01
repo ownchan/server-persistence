@@ -42,9 +42,21 @@ public class UserDao extends PersistableObjectDao<DbUser, DbUserMapper, UserDao>
 
   @Transactional(propagation = Propagation.NESTED)
   public void setRoles(DbUser user, List<DbRole> roles) {
-    removeAllRoles(user);
     if (CollectionUtils.isNotEmpty(roles)) {
-      roles.stream().forEach(role -> assignRole(user, role));
+      List<DbRole> currentRoles = fetchAllRoles(user);
+      roles.stream().forEach(role -> {
+        boolean alreadyAssigned = currentRoles.remove(role);
+        if (!alreadyAssigned) {
+          assignRole(user, role);
+        }
+      });
+      // what's left over in currentRoles are in fact the roles that need to be removed
+      if (CollectionUtils.isNotEmpty(currentRoles)) {
+        currentRoles.stream().forEach(role -> removeRole(user, role));
+      }
+    } else {
+      // we could first check, if the user even has any roles, but that would need a query as well
+      removeAllRoles(user);
     }
     flushStatements();
   }
@@ -65,6 +77,24 @@ public class UserDao extends PersistableObjectDao<DbUser, DbUserMapper, UserDao>
 
   public int assignRole(DbUser user, DbRole role) {
     return assignRole(user.getId(), role.getId());
+  }
+
+  @Override
+  public List<DbRole> fetchAllRoles(long userId) {
+    return mapper.fetchAllRoles(userId);
+  }
+
+  public List<DbRole> fetchAllRoles(DbUser user) {
+    return fetchAllRoles(user.getId());
+  }
+
+  @Override
+  public int removeRole(long userId, long roleId) {
+    return mapper.removeRole(userId, roleId);
+  }
+
+  public int removeRole(DbUser user, DbRole role) {
+    return removeRole(user.getId(), role.getId());
   }
 
 }
