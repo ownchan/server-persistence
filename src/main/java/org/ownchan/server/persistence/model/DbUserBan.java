@@ -20,9 +20,9 @@ package org.ownchan.server.persistence.model;
 
 import java.util.Date;
 
+import org.ownchan.server.joint.persistence.template.UserBanTemplate;
+import org.ownchan.server.joint.persistence.template.link.UserBanLinkTemplate;
 import org.ownchan.server.persistence.dao.UserBanDao;
-import org.ownchan.server.persistence.template.UserBanTemplate;
-import org.ownchan.server.persistence.template.link.UserBanLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
 public class DbUserBan extends PersistableObject<DbUserBan, UserBanTemplate, UserBanLinkTemplate, UserBanDao> implements UserBanTemplate, UserBanLinkTemplate {

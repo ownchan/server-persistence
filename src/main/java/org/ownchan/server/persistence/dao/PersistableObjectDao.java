@@ -23,14 +23,14 @@ import java.util.Map;
 
 import org.apache.ibatis.executor.BatchResult;
 import org.apache.ibatis.session.ResultHandler;
+import org.ownchan.server.joint.persistence.template.EntityTemplate;
+import org.ownchan.server.joint.persistence.template.link.EntityLinkTemplate;
 import org.ownchan.server.persistence.mapper.PersistableObjectMapper;
 import org.ownchan.server.persistence.mapper.generic.ColumnValue;
 import org.ownchan.server.persistence.mapper.generic.FilterParam;
 import org.ownchan.server.persistence.mapper.generic.LimitParam;
 import org.ownchan.server.persistence.mapper.generic.SortingParam;
 import org.ownchan.server.persistence.model.PersistableObject;
-import org.ownchan.server.persistence.template.EntityTemplate;
-import org.ownchan.server.persistence.template.link.EntityLinkTemplate;
 
 public abstract class PersistableObjectDao<T extends PersistableObject<T, ?, ?, V> & EntityTemplate<?> & EntityLinkTemplate<?>, U extends PersistableObjectMapper<T>, V extends PersistableObjectDao<T, U, V>> implements PersistableObjectMapper<T> {
 

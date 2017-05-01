@@ -21,12 +21,14 @@ package org.ownchan.server.persistence.model;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
+import org.ownchan.server.joint.persistence.template.CloudLabelTemplate;
+import org.ownchan.server.joint.persistence.template.link.CloudLabelLinkTemplate;
+import org.ownchan.server.joint.persistence.valuetype.CloudLabelProvider;
+import org.ownchan.server.joint.persistence.valuetype.CloudLabelStatus;
 import org.ownchan.server.persistence.dao.CloudLabelDao;
-import org.ownchan.server.persistence.template.CloudLabelTemplate;
-import org.ownchan.server.persistence.template.link.CloudLabelLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbCloudLabel extends PersistableObject<DbCloudLabel, CloudLabelTemplate, CloudLabelLinkTemplate, CloudLabelDao> implements DbStatusAwareContent<DbCloudLabelStatus>, CloudLabelTemplate, CloudLabelLinkTemplate {
+public class DbCloudLabel extends PersistableObject<DbCloudLabel, CloudLabelTemplate, CloudLabelLinkTemplate, CloudLabelDao> implements DbStatusAwareContent<CloudLabelStatus>, CloudLabelTemplate, CloudLabelLinkTemplate {
 
   private static CloudLabelDao dao;
 
@@ -34,13 +36,13 @@ public class DbCloudLabel extends PersistableObject<DbCloudLabel, CloudLabelTemp
 
   private String text;
 
-  private DbCloudLabelStatus status;
+  private CloudLabelStatus status;
 
   private String statusReason;
 
   private String initialText;
 
-  private DbCloudLabelProvider cloudProvider;
+  private CloudLabelProvider cloudProvider;
 
   private String cloudProviderLabelId;
 
@@ -78,16 +80,16 @@ public class DbCloudLabel extends PersistableObject<DbCloudLabel, CloudLabelTemp
   }
 
   @Override
-  public DbCloudLabelStatus getStatus() {
+  public CloudLabelStatus getStatus() {
     return status;
   }
 
   /**
-   * @deprecated Preferably, set both status and reason at once by using {@link #setStatus(DbCloudLabelStatus, String)}.
+   * @deprecated Preferably, set both status and reason at once by using {@link #setStatus(CloudLabelStatus, String)}.
    */
   @Deprecated
   @Override
-  public void setStatus(DbCloudLabelStatus status) {
+  public void setStatus(CloudLabelStatus status) {
     this.status = status;
   }
 
@@ -97,7 +99,7 @@ public class DbCloudLabel extends PersistableObject<DbCloudLabel, CloudLabelTemp
   }
 
   /**
-   * @deprecated Preferably, set both status and reason at once by using {@link #setStatus(DbCloudLabelStatus, String)}.
+   * @deprecated Preferably, set both status and reason at once by using {@link #setStatus(CloudLabelStatus, String)}.
    */
   @Deprecated
   @Override
@@ -106,7 +108,7 @@ public class DbCloudLabel extends PersistableObject<DbCloudLabel, CloudLabelTemp
   }
 
   @Override
-  public void setStatus(DbCloudLabelStatus status, String statusReason) {
+  public void setStatus(CloudLabelStatus status, String statusReason) {
     this.status = status;
     this.statusReason = StringUtils.abbreviate(statusReason, MAX_LENGTH_STATUS_REASON);
   }
@@ -121,11 +123,11 @@ public class DbCloudLabel extends PersistableObject<DbCloudLabel, CloudLabelTemp
   }
 
   @Override
-  public DbCloudLabelProvider getCloudProvider() {
+  public CloudLabelProvider getCloudProvider() {
     return cloudProvider;
   }
 
-  public void setCloudProvider(DbCloudLabelProvider cloudProvider) {
+  public void setCloudProvider(CloudLabelProvider cloudProvider) {
     this.cloudProvider = cloudProvider;
   }
 

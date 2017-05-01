@@ -20,9 +20,10 @@ package org.ownchan.server.persistence.model;
 
 import java.util.Date;
 
+import org.ownchan.server.joint.persistence.template.MessageTemplate;
+import org.ownchan.server.joint.persistence.template.link.MessageLinkTemplate;
+import org.ownchan.server.joint.persistence.valuetype.MessageType;
 import org.ownchan.server.persistence.dao.MessageDao;
-import org.ownchan.server.persistence.template.MessageTemplate;
-import org.ownchan.server.persistence.template.link.MessageLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
 public class DbMessage extends PersistableObject<DbMessage, MessageTemplate, MessageLinkTemplate, MessageDao> implements MessageTemplate, MessageLinkTemplate {
@@ -31,9 +32,9 @@ public class DbMessage extends PersistableObject<DbMessage, MessageTemplate, Mes
 
   private long id;
 
-  private String name;
+  private String code;
 
-  private DbMessageType type;
+  private MessageType type;
 
   private boolean showHtmlEditor;
 
@@ -64,20 +65,20 @@ public class DbMessage extends PersistableObject<DbMessage, MessageTemplate, Mes
   }
 
   @Override
-  public String getName() {
-    return name;
+  public String getCode() {
+    return code;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setCode(String code) {
+    this.code = code;
   }
 
   @Override
-  public DbMessageType getType() {
+  public MessageType getType() {
     return type;
   }
 
-  public void setType(DbMessageType type) {
+  public void setType(MessageType type) {
     this.type = type;
   }
 

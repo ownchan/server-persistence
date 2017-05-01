@@ -16,8 +16,16 @@
  * You should have received a copy of the GNU Affero General Public License, version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *******************************************************************************/
-package org.ownchan.server.persistence.template.link;
+package org.ownchan.server.persistence.typehandler.auto;
 
-public interface ContentLinkTemplate extends EntityLinkTemplate<ContentLinkTemplate> {
+import org.apache.ibatis.type.MappedTypes;
+import org.ownchan.server.joint.persistence.valuetype.ContentAbuseStatus;
+
+@MappedTypes(ContentAbuseStatus.class)
+public class ContentAbuseStatusTypeHandler extends PersistableEnumTypeHandler<ContentAbuseStatus> {
+
+  public ContentAbuseStatusTypeHandler() {
+    super();
+  }
 
 }

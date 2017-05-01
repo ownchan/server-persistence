@@ -16,53 +16,16 @@
  * You should have received a copy of the GNU Affero General Public License, version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *******************************************************************************/
-package org.ownchan.server.persistence.template;
+package org.ownchan.server.persistence.typehandler.auto;
 
-import java.util.Date;
+import org.apache.ibatis.type.MappedTypes;
+import org.ownchan.server.joint.persistence.valuetype.PhysicalContentStatus;
 
-import org.ownchan.server.persistence.geom.NullablePoint;
-import org.ownchan.server.persistence.model.DbContentStatus;
+@MappedTypes(PhysicalContentStatus.class)
+public class PhysicalContentStatusTypeHandler extends PersistableEnumTypeHandler<PhysicalContentStatus> {
 
-public interface ContentTemplate extends EntityTemplate<ContentTemplate> {
-
-  long getId();
-
-  DbContentStatus getStatus();
-
-  String getStatusReason();
-
-  Long getParentId();
-
-  Long getUserId();
-
-  String getCaption();
-
-  String getCountryCode();
-
-  String getCityName();
-
-  NullablePoint getLocation();
-
-  String getContentName();
-
-  Date getContentTime();
-
-  Short getContentYear();
-
-  Byte getContentMonth();
-
-  Byte getContentDay();
-
-  Date getCreateTime();
-
-  Date getUpdateTime();
-
-  Long getPhysicalContentId();
-
-  Long getUserClicks();
-
-  Long getPlusCount();
-
-  Long getMinusCount();
+  public PhysicalContentStatusTypeHandler() {
+    super();
+  }
 
 }

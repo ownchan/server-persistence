@@ -19,12 +19,12 @@
 package org.ownchan.server.persistence.typehandler.auto;
 
 import org.apache.ibatis.type.MappedTypes;
-import org.ownchan.server.persistence.model.DbSettingType;
+import org.ownchan.server.joint.persistence.valuetype.UserStatus;
 
-@MappedTypes(DbSettingType.class)
-public class DbSettingTypeTypeHandler extends DbEnumTypeTypeHandler<DbSettingType> {
+@MappedTypes(UserStatus.class)
+public class UserStatusTypeHandler extends PersistableEnumTypeHandler<UserStatus> {
 
-  public DbSettingTypeTypeHandler() {
+  public UserStatusTypeHandler() {
     super();
   }
 

@@ -123,7 +123,7 @@ CREATE INDEX `avatar_content_FOREIGN_idx` ON `ocn_user` (`avatar_content_id` ASC
 -- -----------------------------------------------------
 CREATE TABLE `ocn_msg` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(128) NOT NULL,
+  `code` VARCHAR(128) NOT NULL,
   `type` SMALLINT(5) UNSIGNED NOT NULL COMMENT 'can be used to differentiate between SYSTEM messages and CUSTOM messages',
   `show_html_editor` TINYINT(1) UNSIGNED NOT NULL,
   `create_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -137,7 +137,7 @@ COLLATE = utf8mb4_unicode_ci;
 
 CREATE INDEX `type_INDEX` ON `ocn_msg` (`type` ASC);
 
-CREATE UNIQUE INDEX `name_UNIQUE` ON `ocn_msg` (`name` ASC);
+CREATE UNIQUE INDEX `code_UNIQUE` ON `ocn_msg` (`code` ASC);
 
 
 -- -----------------------------------------------------

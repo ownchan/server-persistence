@@ -23,6 +23,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.ownchan.server.persistence.model.DbContent;
+import org.ownchan.server.persistence.model.DbLabel;
 import org.ownchan.server.persistence.model.DbPrivateLabel;
 
 @Mapper
@@ -35,5 +36,13 @@ public interface DbContentMapper extends PersistableObjectMapper<DbContent> {
   int assignPrivateLabel(@Param("contentId") long contentId, @Param("privateLabelId") long privateLabelId);
 
   int removePrivateLabel(@Param("contentId") long contentId, @Param("privateLabelId") long privateLabelId);
+
+  List<DbLabel> fetchAllCreatorLabels(long contentId);
+
+  long removeAllCreatorLabels(long contentId);
+
+  int assignCreatorLabel(@Param("contentId") long contentId, @Param("labelId") long labelId);
+
+  int removeCreatorLabel(@Param("contentId") long contentId, @Param("labelId") long labelId);
 
 }

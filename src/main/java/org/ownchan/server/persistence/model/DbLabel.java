@@ -20,9 +20,9 @@ package org.ownchan.server.persistence.model;
 
 import java.util.Date;
 
+import org.ownchan.server.joint.persistence.template.LabelTemplate;
+import org.ownchan.server.joint.persistence.template.link.LabelLinkTemplate;
 import org.ownchan.server.persistence.dao.LabelDao;
-import org.ownchan.server.persistence.template.LabelTemplate;
-import org.ownchan.server.persistence.template.link.LabelLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
 public class DbLabel extends PersistableObject<DbLabel, LabelTemplate, LabelLinkTemplate, LabelDao> implements LabelTemplate, LabelLinkTemplate {

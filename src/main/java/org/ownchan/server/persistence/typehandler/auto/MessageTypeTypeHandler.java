@@ -16,21 +16,16 @@
  * You should have received a copy of the GNU Affero General Public License, version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *******************************************************************************/
-package org.ownchan.server.persistence.model;
+package org.ownchan.server.persistence.typehandler.auto;
 
-public enum DbPhysicalContentType implements DbEnum<DbPhysicalContentType> {
-  UPLOAD_IMAGE((short) 1),
-  LINK_YOUTUBE((short) 2);
+import org.apache.ibatis.type.MappedTypes;
+import org.ownchan.server.joint.persistence.valuetype.MessageType;
 
-  private short id;
+@MappedTypes(MessageType.class)
+public class MessageTypeTypeHandler extends PersistableEnumTypeHandler<MessageType> {
 
-  private DbPhysicalContentType(short id) {
-    this.id = id;
-  }
-
-  @Override
-  public short getId() {
-    return id;
+  public MessageTypeTypeHandler() {
+    super();
   }
 
 }

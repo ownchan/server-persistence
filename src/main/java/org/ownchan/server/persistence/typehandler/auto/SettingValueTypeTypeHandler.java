@@ -16,34 +16,16 @@
  * You should have received a copy of the GNU Affero General Public License, version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *******************************************************************************/
-package org.ownchan.server.persistence.model;
+package org.ownchan.server.persistence.typehandler.auto;
 
-import java.util.Arrays;
+import org.apache.ibatis.type.MappedTypes;
+import org.ownchan.server.joint.persistence.valuetype.SettingValueType;
 
-import org.apache.commons.lang3.ArrayUtils;
+@MappedTypes(SettingValueType.class)
+public class SettingValueTypeTypeHandler extends PersistableEnumTypeHandler<SettingValueType> {
 
-public interface DbEnum<T> {
-
-  short getId();
-
-  /**
-   * @throws IllegalArgumentException - if the enum type has no constant with the specified id
-   * @throws NullPointerException - if id is null
-   */
-  public static <T extends DbEnum<T>> T valueOf(Short id, Class<T> clazz) {
-    IllegalArgumentException argEx = new IllegalArgumentException(
-        String.format("no matching constant found for id %s", id));
-
-    T[] availableValues = clazz.getEnumConstants();
-
-    if (ArrayUtils.isEmpty(availableValues)) {
-      throw argEx;
-    }
-
-    return Arrays.stream(availableValues)
-        .filter(id::equals)
-        .findAny()
-        .orElseThrow(() -> argEx);
+  public SettingValueTypeTypeHandler() {
+    super();
   }
 
 }

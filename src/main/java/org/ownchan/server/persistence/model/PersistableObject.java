@@ -18,9 +18,9 @@
  *******************************************************************************/
 package org.ownchan.server.persistence.model;
 
+import org.ownchan.server.joint.persistence.template.EntityTemplate;
+import org.ownchan.server.joint.persistence.template.link.EntityLinkTemplate;
 import org.ownchan.server.persistence.dao.PersistableObjectDao;
-import org.ownchan.server.persistence.template.EntityTemplate;
-import org.ownchan.server.persistence.template.link.EntityLinkTemplate;
 import org.springframework.beans.BeanUtils;
 
 public abstract class PersistableObject<T extends PersistableObject<T, U, V, W> & EntityTemplate<U> & EntityLinkTemplate<V>, U extends EntityTemplate<U>, V extends EntityLinkTemplate<V>, W extends PersistableObjectDao<T, ?, W>> {

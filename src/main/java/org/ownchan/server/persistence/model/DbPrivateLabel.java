@@ -20,9 +20,9 @@ package org.ownchan.server.persistence.model;
 
 import java.util.Date;
 
+import org.ownchan.server.joint.persistence.template.PrivateLabelTemplate;
+import org.ownchan.server.joint.persistence.template.link.PrivateLabelLinkTemplate;
 import org.ownchan.server.persistence.dao.PrivateLabelDao;
-import org.ownchan.server.persistence.template.PrivateLabelTemplate;
-import org.ownchan.server.persistence.template.link.PrivateLabelLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
 public class DbPrivateLabel extends PersistableObject<DbPrivateLabel, PrivateLabelTemplate, PrivateLabelLinkTemplate, PrivateLabelDao> implements PrivateLabelTemplate, PrivateLabelLinkTemplate {

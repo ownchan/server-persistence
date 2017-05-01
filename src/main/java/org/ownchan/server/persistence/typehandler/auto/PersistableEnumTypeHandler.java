@@ -26,14 +26,14 @@ import java.sql.SQLException;
 
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
-import org.ownchan.server.persistence.model.DbEnum;
+import org.ownchan.server.joint.persistence.valuetype.PersistableEnum;
 
-public abstract class DbEnumTypeTypeHandler<T extends DbEnum<T>> extends BaseTypeHandler<T> {
+public abstract class PersistableEnumTypeHandler<T extends PersistableEnum<T>> extends BaseTypeHandler<T> {
 
   protected Class<T> targetClass;
 
   @SuppressWarnings("unchecked")
-  protected DbEnumTypeTypeHandler() {
+  protected PersistableEnumTypeHandler() {
     this.targetClass = (Class<T>) ((ParameterizedType) getClass()
         .getGenericSuperclass()).getActualTypeArguments()[0];
   }
@@ -63,7 +63,7 @@ public abstract class DbEnumTypeTypeHandler<T extends DbEnum<T>> extends BaseTyp
 
   protected T getResultOrNull(Short constantId) {
     if (constantId != null) {
-      return DbEnum.valueOf(constantId, targetClass);
+      return PersistableEnum.valueOf(constantId, targetClass);
     }
 
     return null;

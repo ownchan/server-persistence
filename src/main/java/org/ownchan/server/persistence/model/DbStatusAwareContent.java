@@ -18,7 +18,10 @@
  *******************************************************************************/
 package org.ownchan.server.persistence.model;
 
-public interface DbStatusAwareContent<T extends DbEnum<T> & DbStatusEnum<T>> {
+import org.ownchan.server.joint.persistence.valuetype.PersistableEnum;
+import org.ownchan.server.joint.persistence.valuetype.StatusEnum;
+
+public interface DbStatusAwareContent<T extends PersistableEnum<T> & StatusEnum<T>> {
 
   short MAX_LENGTH_STATUS_REASON = 255;
 
@@ -36,13 +39,13 @@ public interface DbStatusAwareContent<T extends DbEnum<T> & DbStatusEnum<T>> {
   String getStatusReason();
 
   /**
-   * @deprecated Preferably, set both status and reason at once by using {@link #setStatus(DbEnum, String)}.
+   * @deprecated Preferably, set both status and reason at once by using {@link #setStatus(PersistableEnum, String)}.
    */
   @Deprecated
   void setStatus(T status);
 
   /**
-   * @deprecated Preferably, set both status and reason at once by using {@link #setStatus(DbEnum, String)}.
+   * @deprecated Preferably, set both status and reason at once by using {@link #setStatus(PersistableEnum, String)}.
    */
   @Deprecated
   void setStatusReason(String statusReason);

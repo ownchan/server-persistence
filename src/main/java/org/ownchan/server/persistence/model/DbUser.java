@@ -22,18 +22,20 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.ownchan.server.joint.persistence.template.UserTemplate;
+import org.ownchan.server.joint.persistence.template.link.UserLinkTemplate;
+import org.ownchan.server.joint.persistence.valuetype.UserStatus;
+import org.ownchan.server.joint.security.ContextUser;
 import org.ownchan.server.persistence.dao.UserDao;
-import org.ownchan.server.persistence.template.UserTemplate;
-import org.ownchan.server.persistence.template.link.UserLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbUser extends PersistableObject<DbUser, UserTemplate, UserLinkTemplate, UserDao> implements DbStatusAwareContent<DbUserStatus>, UserTemplate, UserLinkTemplate {
+public class DbUser extends PersistableObject<DbUser, UserTemplate, UserLinkTemplate, UserDao> implements DbStatusAwareContent<UserStatus>, UserTemplate, UserLinkTemplate {
 
   private static UserDao dao;
 
   private long id;
 
-  private DbUserStatus status;
+  private UserStatus status;
 
   private String statusReason;
 
@@ -78,16 +80,16 @@ public class DbUser extends PersistableObject<DbUser, UserTemplate, UserLinkTemp
   }
 
   @Override
-  public DbUserStatus getStatus() {
+  public UserStatus getStatus() {
     return status;
   }
 
   /**
-   * @deprecated Preferably, set both status and reason at once by using {@link #setStatus(DbUserStatus, String)}.
+   * @deprecated Preferably, set both status and reason at once by using {@link #setStatus(UserStatus, String)}.
    */
   @Deprecated
   @Override
-  public void setStatus(DbUserStatus status) {
+  public void setStatus(UserStatus status) {
     this.status = status;
   }
 
@@ -97,7 +99,7 @@ public class DbUser extends PersistableObject<DbUser, UserTemplate, UserLinkTemp
   }
 
   /**
-   * @deprecated Preferably, set both status and reason at once by using {@link #setStatus(DbUserStatus, String)}.
+   * @deprecated Preferably, set both status and reason at once by using {@link #setStatus(UserStatus, String)}.
    */
   @Deprecated
   @Override
@@ -106,7 +108,7 @@ public class DbUser extends PersistableObject<DbUser, UserTemplate, UserLinkTemp
   }
 
   @Override
-  public void setStatus(DbUserStatus status, String statusReason) {
+  public void setStatus(UserStatus status, String statusReason) {
     this.status = status;
     this.statusReason = StringUtils.abbreviate(statusReason, MAX_LENGTH_STATUS_REASON);
   }
@@ -206,20 +208,16 @@ public class DbUser extends PersistableObject<DbUser, UserTemplate, UserLinkTemp
     return linkedRoles;
   }
 
-  /**
-   * Save (or replace) the roles for an already persisted user.
-   */
-  public void saveRoles(List<DbRole> roles) {
-    getDao().setRoles(this, roles);
-    /*
-     *  this is debatable ...
-     *  If the field has already been lazily loaded, it will be updated -
-     *  if not, it will be updated upon lazy loading anyway.
-     *  However, we could just omit this line and force to user to reload
-     *  the object from database, if he needs a current version of the object
-     *  that reflects all the changes the user performed.
-     */
-    this.linkedRoles = roles;
+  public void assignRole(ContextUser contextUser, DbRole role) {
+    getDao().assignRole(contextUser, this, role);
+  }
+
+  public void removeRole(ContextUser contextUser, DbRole role) {
+    getDao().removeRole(contextUser, this, role);
+  }
+
+  public void removeAllRoles(ContextUser contextUser) {
+    getDao().removeAllRoles(contextUser, this);
   }
 
   @Override

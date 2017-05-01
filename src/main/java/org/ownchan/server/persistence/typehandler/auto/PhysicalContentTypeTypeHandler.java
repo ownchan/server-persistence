@@ -16,23 +16,16 @@
  * You should have received a copy of the GNU Affero General Public License, version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *******************************************************************************/
-package org.ownchan.server.persistence.model;
+package org.ownchan.server.persistence.typehandler.auto;
 
-public enum DbPhysicalContentStatus implements DbEnum<DbPhysicalContentStatus>, DbStatusEnum<DbPhysicalContentStatus> {
-  PENDING_CHECKSUM((short) 1),
-  PENDING_PROCESS((short) 2),
-  ERROR((short) 3),
-  OK((short) 4);
+import org.apache.ibatis.type.MappedTypes;
+import org.ownchan.server.joint.persistence.valuetype.PhysicalContentType;
 
-  private short id;
+@MappedTypes(PhysicalContentType.class)
+public class PhysicalContentTypeTypeHandler extends PersistableEnumTypeHandler<PhysicalContentType> {
 
-  private DbPhysicalContentStatus(short id) {
-    this.id = id;
-  }
-
-  @Override
-  public short getId() {
-    return id;
+  public PhysicalContentTypeTypeHandler() {
+    super();
   }
 
 }

@@ -21,12 +21,14 @@ package org.ownchan.server.persistence.model;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
+import org.ownchan.server.joint.persistence.template.ContentAbuseTemplate;
+import org.ownchan.server.joint.persistence.template.link.ContentAbuseLinkTemplate;
+import org.ownchan.server.joint.persistence.valuetype.ContentAbuseStatus;
+import org.ownchan.server.joint.persistence.valuetype.ContentAbuseViolationType;
 import org.ownchan.server.persistence.dao.ContentAbuseDao;
-import org.ownchan.server.persistence.template.ContentAbuseTemplate;
-import org.ownchan.server.persistence.template.link.ContentAbuseLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbContentAbuse extends PersistableObject<DbContentAbuse, ContentAbuseTemplate, ContentAbuseLinkTemplate, ContentAbuseDao> implements DbStatusAwareContent<DbContentAbuseStatus>, ContentAbuseTemplate, ContentAbuseLinkTemplate {
+public class DbContentAbuse extends PersistableObject<DbContentAbuse, ContentAbuseTemplate, ContentAbuseLinkTemplate, ContentAbuseDao> implements DbStatusAwareContent<ContentAbuseStatus>, ContentAbuseTemplate, ContentAbuseLinkTemplate {
 
   private static ContentAbuseDao dao;
 
@@ -34,7 +36,7 @@ public class DbContentAbuse extends PersistableObject<DbContentAbuse, ContentAbu
 
   private Long contentId;
 
-  private DbContentAbuseViolationType violationType;
+  private ContentAbuseViolationType violationType;
 
   private String explanation;
 
@@ -44,7 +46,7 @@ public class DbContentAbuse extends PersistableObject<DbContentAbuse, ContentAbu
 
   private Long complainingEntityUserId;
 
-  private DbContentAbuseStatus status;
+  private ContentAbuseStatus status;
 
   private String statusReason;
 
@@ -84,11 +86,11 @@ public class DbContentAbuse extends PersistableObject<DbContentAbuse, ContentAbu
   }
 
   @Override
-  public DbContentAbuseViolationType getViolationType() {
+  public ContentAbuseViolationType getViolationType() {
     return violationType;
   }
 
-  public void setViolationType(DbContentAbuseViolationType violationType) {
+  public void setViolationType(ContentAbuseViolationType violationType) {
     this.violationType = violationType;
   }
 
@@ -129,16 +131,16 @@ public class DbContentAbuse extends PersistableObject<DbContentAbuse, ContentAbu
   }
 
   @Override
-  public DbContentAbuseStatus getStatus() {
+  public ContentAbuseStatus getStatus() {
     return status;
   }
 
   /**
-   * @deprecated Preferably, set both status and reason at once by using {@link #setStatus(DbContentAbuseStatus, String)}.
+   * @deprecated Preferably, set both status and reason at once by using {@link #setStatus(ContentAbuseStatus, String)}.
    */
   @Deprecated
   @Override
-  public void setStatus(DbContentAbuseStatus status) {
+  public void setStatus(ContentAbuseStatus status) {
     this.status = status;
   }
 
@@ -148,7 +150,7 @@ public class DbContentAbuse extends PersistableObject<DbContentAbuse, ContentAbu
   }
 
   /**
-   * @deprecated Preferably, set both status and reason at once by using {@link #setStatus(DbContentAbuseStatus, String)}.
+   * @deprecated Preferably, set both status and reason at once by using {@link #setStatus(ContentAbuseStatus, String)}.
    */
   @Deprecated
   @Override
@@ -157,7 +159,7 @@ public class DbContentAbuse extends PersistableObject<DbContentAbuse, ContentAbu
   }
 
   @Override
-  public void setStatus(DbContentAbuseStatus status, String statusReason) {
+  public void setStatus(ContentAbuseStatus status, String statusReason) {
     this.status = status;
     this.statusReason = StringUtils.abbreviate(statusReason, MAX_LENGTH_STATUS_REASON);
   }

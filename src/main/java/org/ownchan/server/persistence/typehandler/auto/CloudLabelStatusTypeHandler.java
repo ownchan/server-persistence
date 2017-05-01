@@ -16,21 +16,16 @@
  * You should have received a copy of the GNU Affero General Public License, version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *******************************************************************************/
-package org.ownchan.server.persistence.model;
+package org.ownchan.server.persistence.typehandler.auto;
 
-public enum DbMessageType implements DbEnum<DbMessageType> {
-  // TODO
-  ;
+import org.apache.ibatis.type.MappedTypes;
+import org.ownchan.server.joint.persistence.valuetype.CloudLabelStatus;
 
-  private short id;
+@MappedTypes(CloudLabelStatus.class)
+public class CloudLabelStatusTypeHandler extends PersistableEnumTypeHandler<CloudLabelStatus> {
 
-  private DbMessageType(short id) {
-    this.id = id;
-  }
-
-  @Override
-  public short getId() {
-    return id;
+  public CloudLabelStatusTypeHandler() {
+    super();
   }
 
 }

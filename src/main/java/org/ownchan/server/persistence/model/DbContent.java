@@ -22,19 +22,23 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.ownchan.server.joint.persistence.template.ContentTemplate;
+import org.ownchan.server.joint.persistence.template.LabelTemplate;
+import org.ownchan.server.joint.persistence.template.PrivateLabelTemplate;
+import org.ownchan.server.joint.persistence.template.link.ContentLinkTemplate;
+import org.ownchan.server.joint.persistence.valuetype.ContentStatus;
+import org.ownchan.server.joint.persistence.valuetype.geom.NullablePoint;
+import org.ownchan.server.joint.security.ContextUser;
 import org.ownchan.server.persistence.dao.ContentDao;
-import org.ownchan.server.persistence.geom.NullablePoint;
-import org.ownchan.server.persistence.template.ContentTemplate;
-import org.ownchan.server.persistence.template.link.ContentLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbContent extends PersistableObject<DbContent, ContentTemplate, ContentLinkTemplate, ContentDao> implements DbStatusAwareContent<DbContentStatus>, ContentTemplate, ContentLinkTemplate {
+public class DbContent extends PersistableObject<DbContent, ContentTemplate, ContentLinkTemplate, ContentDao> implements DbStatusAwareContent<ContentStatus>, ContentTemplate, ContentLinkTemplate {
 
   private static ContentDao dao;
 
   private long id;
 
-  private DbContentStatus status;
+  private ContentStatus status;
 
   private String statusReason;
 
@@ -91,16 +95,16 @@ public class DbContent extends PersistableObject<DbContent, ContentTemplate, Con
   }
 
   @Override
-  public DbContentStatus getStatus() {
+  public ContentStatus getStatus() {
     return status;
   }
 
   /**
-   * @deprecated Preferably, set both status and reason at once by using {@link #setStatus(DbContentStatus, String)}.
+   * @deprecated Preferably, set both status and reason at once by using {@link #setStatus(ContentStatus, String)}.
    */
   @Deprecated
   @Override
-  public void setStatus(DbContentStatus status) {
+  public void setStatus(ContentStatus status) {
     this.status = status;
   }
 
@@ -110,7 +114,7 @@ public class DbContent extends PersistableObject<DbContent, ContentTemplate, Con
   }
 
   /**
-   * @deprecated Preferably, set both status and reason at once by using {@link #setStatus(DbContentStatus, String)}.
+   * @deprecated Preferably, set both status and reason at once by using {@link #setStatus(ContentStatus, String)}.
    */
   @Deprecated
   @Override
@@ -119,7 +123,7 @@ public class DbContent extends PersistableObject<DbContent, ContentTemplate, Con
   }
 
   @Override
-  public void setStatus(DbContentStatus status, String statusReason) {
+  public void setStatus(ContentStatus status, String statusReason) {
     this.status = status;
     this.statusReason = StringUtils.abbreviate(statusReason, MAX_LENGTH_STATUS_REASON);
   }
@@ -277,13 +281,35 @@ public class DbContent extends PersistableObject<DbContent, ContentTemplate, Con
     this.minusCount = minusCount;
   }
 
-  public void savePrivateLabels(DbUser user, List<DbPrivateLabel> privateLabels) {
-    getDao().setPrivateLabels(this, user, privateLabels);
+  public List<DbPrivateLabel> getLinkedPrivateLabels(ContextUser contextUser) {
+    return getDao().fetchAllPrivateLabels(contextUser, this, contextUser);
   }
 
-  public List<DbPrivateLabel> getLinkedPrivateLabels(DbUser user) {
-    return getDao().fetchAllPrivateLabels(this, user);
+  public void addPrivateLabel(ContextUser contextUser, PrivateLabelTemplate privateLabel) {
+    getDao().assignPrivateLabel(contextUser, this, privateLabel);
   }
+
+  public void removePrivateLabel(ContextUser contextUser, PrivateLabelTemplate privateLabel) {
+    getDao().removePrivateLabel(contextUser, this, privateLabel);
+  }
+
+  public void addCreatorLabel(ContextUser contextUser, LabelTemplate label) {
+    getDao().assignCreatorLabel(contextUser, this, label);
+  }
+
+  public void removeCreatoLabel(ContextUser contextUser, LabelTemplate label) {
+    getDao().removeCreatorLabel(contextUser, this, label);
+  }
+
+  public void removeAllPrivateLabels(ContextUser contextUser) {
+    getDao().removeAllPrivateLabels(contextUser, this, contextUser);
+  }
+
+  public void removeAllCreatorLabels(ContextUser contextUser) {
+    getDao().removeAllCreatorLabels(contextUser, this);
+  }
+
+  // TODO getLinkedCreatorLabels -> mybatis lazy
 
   @Override
   protected ContentDao getDao() {

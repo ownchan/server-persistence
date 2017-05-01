@@ -20,9 +20,9 @@ package org.ownchan.server.persistence.model;
 
 import java.util.Date;
 
+import org.ownchan.server.joint.persistence.template.ContentCommentTemplate;
+import org.ownchan.server.joint.persistence.template.link.ContentCommentLinkTemplate;
 import org.ownchan.server.persistence.dao.ContentCommentDao;
-import org.ownchan.server.persistence.template.ContentCommentTemplate;
-import org.ownchan.server.persistence.template.link.ContentCommentLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
 public class DbContentComment extends PersistableObject<DbContentComment, ContentCommentTemplate, ContentCommentLinkTemplate, ContentCommentDao> implements ContentCommentTemplate, ContentCommentLinkTemplate {

@@ -18,9 +18,9 @@
  *******************************************************************************/
 package org.ownchan.server.persistence.model;
 
+import org.ownchan.server.joint.persistence.template.SettingChoiceTemplate;
+import org.ownchan.server.joint.persistence.template.link.SettingChoiceLinkTemplate;
 import org.ownchan.server.persistence.dao.SettingChoiceDao;
-import org.ownchan.server.persistence.template.SettingChoiceTemplate;
-import org.ownchan.server.persistence.template.link.SettingChoiceLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
 public class DbSettingChoice extends PersistableObject<DbSettingChoice, SettingChoiceTemplate, SettingChoiceLinkTemplate, SettingChoiceDao> implements SettingChoiceTemplate, SettingChoiceLinkTemplate {

@@ -20,9 +20,11 @@ package org.ownchan.server.persistence.model;
 
 import java.util.Date;
 
+import org.ownchan.server.joint.persistence.template.SettingTemplate;
+import org.ownchan.server.joint.persistence.template.link.SettingLinkTemplate;
+import org.ownchan.server.joint.persistence.valuetype.SettingType;
+import org.ownchan.server.joint.persistence.valuetype.SettingValueType;
 import org.ownchan.server.persistence.dao.SettingDao;
-import org.ownchan.server.persistence.template.SettingTemplate;
-import org.ownchan.server.persistence.template.link.SettingLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
 public class DbSetting extends PersistableObject<DbSetting, SettingTemplate, SettingLinkTemplate, SettingDao> implements SettingTemplate, SettingLinkTemplate {
@@ -33,7 +35,7 @@ public class DbSetting extends PersistableObject<DbSetting, SettingTemplate, Set
 
   private String name;
 
-  private DbSettingType type;
+  private SettingType type;
 
   private Long msgIdName;
 
@@ -41,7 +43,7 @@ public class DbSetting extends PersistableObject<DbSetting, SettingTemplate, Set
 
   private boolean constrained;
 
-  private DbSettingValueType valueType;
+  private SettingValueType valueType;
 
   private String defaultValue;
 
@@ -81,11 +83,11 @@ public class DbSetting extends PersistableObject<DbSetting, SettingTemplate, Set
   }
 
   @Override
-  public DbSettingType getType() {
+  public SettingType getType() {
     return type;
   }
 
-  public void setType(DbSettingType type) {
+  public void setType(SettingType type) {
     this.type = type;
   }
 
@@ -117,11 +119,11 @@ public class DbSetting extends PersistableObject<DbSetting, SettingTemplate, Set
   }
 
   @Override
-  public DbSettingValueType getValueType() {
+  public SettingValueType getValueType() {
     return valueType;
   }
 
-  public void setValueType(DbSettingValueType valueType) {
+  public void setValueType(SettingValueType valueType) {
     this.valueType = valueType;
   }
 

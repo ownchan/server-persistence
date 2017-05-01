@@ -20,9 +20,9 @@ package org.ownchan.server.persistence.model;
 
 import java.util.Date;
 
+import org.ownchan.server.joint.persistence.template.PrivilegeTemplate;
+import org.ownchan.server.joint.persistence.template.link.PrivilegeLinkTemplate;
 import org.ownchan.server.persistence.dao.PrivilegeDao;
-import org.ownchan.server.persistence.template.PrivilegeTemplate;
-import org.ownchan.server.persistence.template.link.PrivilegeLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
 public class DbPrivilege extends PersistableObject<DbPrivilege, PrivilegeTemplate, PrivilegeLinkTemplate, PrivilegeDao> implements PrivilegeTemplate, PrivilegeLinkTemplate {

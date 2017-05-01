@@ -22,20 +22,23 @@ import java.util.Date;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
+import org.ownchan.server.joint.persistence.template.PhysicalContentTemplate;
+import org.ownchan.server.joint.persistence.template.link.PhysicalContentLinkTemplate;
+import org.ownchan.server.joint.persistence.valuetype.PersistableJsonData;
+import org.ownchan.server.joint.persistence.valuetype.PhysicalContentStatus;
+import org.ownchan.server.joint.persistence.valuetype.PhysicalContentType;
 import org.ownchan.server.persistence.dao.PhysicalContentDao;
-import org.ownchan.server.persistence.template.PhysicalContentTemplate;
-import org.ownchan.server.persistence.template.link.PhysicalContentLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbPhysicalContent extends PersistableObject<DbPhysicalContent, PhysicalContentTemplate, PhysicalContentLinkTemplate, PhysicalContentDao> implements DbStatusAwareContent<DbPhysicalContentStatus>, PhysicalContentTemplate, PhysicalContentLinkTemplate {
+public class DbPhysicalContent extends PersistableObject<DbPhysicalContent, PhysicalContentTemplate, PhysicalContentLinkTemplate, PhysicalContentDao> implements DbStatusAwareContent<PhysicalContentStatus>, PhysicalContentTemplate, PhysicalContentLinkTemplate {
 
   private static PhysicalContentDao dao;
 
   private long id;
 
-  private DbPhysicalContentType type;
+  private PhysicalContentType type;
 
-  private DbPhysicalContentStatus status;
+  private PhysicalContentStatus status;
 
   private String statusReason;
 
@@ -57,7 +60,7 @@ public class DbPhysicalContent extends PersistableObject<DbPhysicalContent, Phys
 
   private String externalContentLink;
 
-  private DbJsonData additionalMetadata;
+  private PersistableJsonData additionalMetadata;
 
   public DbPhysicalContent() {
     super();
@@ -78,25 +81,25 @@ public class DbPhysicalContent extends PersistableObject<DbPhysicalContent, Phys
   }
 
   @Override
-  public DbPhysicalContentType getType() {
+  public PhysicalContentType getType() {
     return type;
   }
 
-  public void setType(DbPhysicalContentType type) {
+  public void setType(PhysicalContentType type) {
     this.type = type;
   }
 
   @Override
-  public DbPhysicalContentStatus getStatus() {
+  public PhysicalContentStatus getStatus() {
     return status;
   }
 
   /**
-   * @deprecated Preferably, set both status and reason at once by using {@link #setStatus(DbPhysicalContentStatus, String)}.
+   * @deprecated Preferably, set both status and reason at once by using {@link #setStatus(PhysicalContentStatus, String)}.
    */
   @Deprecated
   @Override
-  public void setStatus(DbPhysicalContentStatus status) {
+  public void setStatus(PhysicalContentStatus status) {
     this.status = status;
   }
 
@@ -106,7 +109,7 @@ public class DbPhysicalContent extends PersistableObject<DbPhysicalContent, Phys
   }
 
   /**
-   * @deprecated Preferably, set both status and reason at once by using {@link #setStatus(DbPhysicalContentStatus, String)}.
+   * @deprecated Preferably, set both status and reason at once by using {@link #setStatus(PhysicalContentStatus, String)}.
    */
   @Deprecated
   @Override
@@ -115,7 +118,7 @@ public class DbPhysicalContent extends PersistableObject<DbPhysicalContent, Phys
   }
 
   @Override
-  public void setStatus(DbPhysicalContentStatus status, String statusReason) {
+  public void setStatus(PhysicalContentStatus status, String statusReason) {
     this.status = status;
     this.statusReason = StringUtils.abbreviate(statusReason, MAX_LENGTH_STATUS_REASON);
   }
@@ -202,11 +205,11 @@ public class DbPhysicalContent extends PersistableObject<DbPhysicalContent, Phys
   }
 
   @Override
-  public DbJsonData getAdditionalMetadata() {
+  public PersistableJsonData getAdditionalMetadata() {
     return additionalMetadata;
   }
 
-  public void setAdditionalMetadata(DbJsonData additionalMetadata) {
+  public void setAdditionalMetadata(PersistableJsonData additionalMetadata) {
     this.additionalMetadata = additionalMetadata;
   }
 

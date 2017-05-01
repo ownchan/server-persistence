@@ -16,24 +16,16 @@
  * You should have received a copy of the GNU Affero General Public License, version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *******************************************************************************/
-package org.ownchan.server.persistence.template;
+package org.ownchan.server.persistence.typehandler.auto;
 
-import java.util.Date;
+import org.apache.ibatis.type.MappedTypes;
+import org.ownchan.server.joint.persistence.valuetype.CloudLabelProvider;
 
-public interface SystemSettingTemplate extends EntityTemplate<SystemSettingTemplate> {
+@MappedTypes(CloudLabelProvider.class)
+public class CloudLabelProviderTypeHandler extends PersistableEnumTypeHandler<CloudLabelProvider> {
 
-  long getId();
-
-  Long getSettingId();
-
-  Long getChoiceId();
-
-  String getCustomValue();
-
-  Date getCreateTime();
-
-  Date getUpdateTime();
-
-  Long getUpdateUserId();
+  public CloudLabelProviderTypeHandler() {
+    super();
+  }
 
 }

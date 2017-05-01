@@ -16,39 +16,16 @@
  * You should have received a copy of the GNU Affero General Public License, version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *******************************************************************************/
-package org.ownchan.server.persistence.template;
+package org.ownchan.server.persistence.typehandler.auto;
 
-import java.util.Date;
+import org.apache.ibatis.type.MappedTypes;
+import org.ownchan.server.joint.persistence.valuetype.ContentStatus;
 
-import org.ownchan.server.persistence.model.DbContentAbuseStatus;
-import org.ownchan.server.persistence.model.DbContentAbuseViolationType;
+@MappedTypes(ContentStatus.class)
+public class ContentStatusTypeHandler extends PersistableEnumTypeHandler<ContentStatus> {
 
-public interface ContentAbuseTemplate extends EntityTemplate<ContentAbuseTemplate> {
-
-  long getId();
-
-  Long getContentId();
-
-  DbContentAbuseViolationType getViolationType();
-
-  String getExplanation();
-
-  String getComplainingEntityIp();
-
-  String getComplainingEntityContact();
-
-  Long getComplainingEntityUserId();
-
-  DbContentAbuseStatus getStatus();
-
-  String getStatusReason();
-
-  Long getAssigneeId();
-
-  String getTeamNotes();
-
-  Date getCreateTime();
-
-  Date getUpdateTime();
+  public ContentStatusTypeHandler() {
+    super();
+  }
 
 }

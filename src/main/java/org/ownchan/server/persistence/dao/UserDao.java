@@ -20,14 +20,16 @@ package org.ownchan.server.persistence.dao;
 
 import java.util.List;
 
-import org.apache.commons.collections4.CollectionUtils;
+import org.ownchan.server.joint.persistence.template.RoleTemplate;
+import org.ownchan.server.joint.persistence.template.UserTemplate;
+import org.ownchan.server.joint.security.ContextUser;
+import org.ownchan.server.joint.security.Privilege;
 import org.ownchan.server.persistence.mapper.DbUserMapper;
 import org.ownchan.server.persistence.model.DbRole;
 import org.ownchan.server.persistence.model.DbUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserDao extends PersistableObjectDao<DbUser, DbUserMapper, UserDao> implements DbUserMapper {
@@ -40,34 +42,18 @@ public class UserDao extends PersistableObjectDao<DbUser, DbUserMapper, UserDao>
     return mapper;
   }
 
-  @Transactional(propagation = Propagation.NESTED)
-  public void setRoles(DbUser user, List<DbRole> roles) {
-    if (CollectionUtils.isNotEmpty(roles)) {
-      List<DbRole> currentRoles = fetchAllRoles(user);
-      roles.stream().forEach(role -> {
-        boolean alreadyAssigned = currentRoles.remove(role);
-        if (!alreadyAssigned) {
-          assignRole(user, role);
-        }
-      });
-      // what's left over in currentRoles are in fact the roles that need to be removed
-      if (CollectionUtils.isNotEmpty(currentRoles)) {
-        currentRoles.stream().forEach(role -> removeRole(user, role));
-      }
-    } else {
-      // we could first check, if the user even has any roles, but that would need a query as well
-      removeAllRoles(user);
-    }
-    flushStatements();
-  }
-
   @Override
   public long removeAllRoles(long userId) {
     return mapper.removeAllRoles(userId);
   }
 
-  public long removeAllRoles(DbUser user) {
-    return removeAllRoles(user.getId());
+  public long removeAllRoles(UserTemplate user) {
+    return mapper.removeAllRoles(user.getId());
+  }
+
+  @PreAuthorize("hasPermission(#contextUser, '" + Privilege.PRIV_MANAGE_ROLES + "')")
+  public long removeAllRoles(ContextUser contextUser, UserTemplate user) {
+    return mapper.removeAllRoles(user.getId());
   }
 
   @Override
@@ -75,8 +61,13 @@ public class UserDao extends PersistableObjectDao<DbUser, DbUserMapper, UserDao>
     return mapper.assignRole(userId, roleId);
   }
 
-  public int assignRole(DbUser user, DbRole role) {
-    return assignRole(user.getId(), role.getId());
+  public int assignRole(UserTemplate user, RoleTemplate role) {
+    return mapper.assignRole(user.getId(), role.getId());
+  }
+
+  @PreAuthorize("hasPermission(#contextUser, '" + Privilege.PRIV_MANAGE_ROLES + "')")
+  public int assignRole(ContextUser contextUser, UserTemplate user, RoleTemplate role) {
+    return mapper.assignRole(user.getId(), role.getId());
   }
 
   @Override
@@ -84,8 +75,8 @@ public class UserDao extends PersistableObjectDao<DbUser, DbUserMapper, UserDao>
     return mapper.fetchAllRoles(userId);
   }
 
-  public List<DbRole> fetchAllRoles(DbUser user) {
-    return fetchAllRoles(user.getId());
+  public List<DbRole> fetchAllRoles(UserTemplate user) {
+    return mapper.fetchAllRoles(user.getId());
   }
 
   @Override
@@ -93,8 +84,13 @@ public class UserDao extends PersistableObjectDao<DbUser, DbUserMapper, UserDao>
     return mapper.removeRole(userId, roleId);
   }
 
-  public int removeRole(DbUser user, DbRole role) {
-    return removeRole(user.getId(), role.getId());
+  public int removeRole(UserTemplate user, RoleTemplate role) {
+    return mapper.removeRole(user.getId(), role.getId());
+  }
+
+  @PreAuthorize("hasPermission(#contextUser, '" + Privilege.PRIV_MANAGE_ROLES + "')")
+  public int removeRole(ContextUser contextUser, UserTemplate user, RoleTemplate role) {
+    return mapper.removeRole(user.getId(), role.getId());
   }
 
 }

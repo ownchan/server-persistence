@@ -21,9 +21,9 @@ package org.ownchan.server.persistence.model;
 import java.util.Date;
 import java.util.List;
 
+import org.ownchan.server.joint.persistence.template.RoleTemplate;
+import org.ownchan.server.joint.persistence.template.link.RoleLinkTemplate;
 import org.ownchan.server.persistence.dao.RoleDao;
-import org.ownchan.server.persistence.template.RoleTemplate;
-import org.ownchan.server.persistence.template.link.RoleLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
 public class DbRole extends PersistableObject<DbRole, RoleTemplate, RoleLinkTemplate, RoleDao> implements RoleTemplate, RoleLinkTemplate {

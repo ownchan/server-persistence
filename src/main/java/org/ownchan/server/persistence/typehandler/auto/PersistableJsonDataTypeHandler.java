@@ -28,9 +28,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedTypes;
-import org.ownchan.server.persistence.model.DbJsonData;
-import org.ownchan.server.persistence.model.DbPhysicalContentMetadataLinkYoutube;
-import org.ownchan.server.persistence.model.DbPhysicalContentMetadataUploadImage;
+import org.ownchan.server.joint.persistence.valuetype.PersistableJsonData;
+import org.ownchan.server.joint.persistence.valuetype.PhysicalContentMetadataLinkYoutube;
+import org.ownchan.server.joint.persistence.valuetype.PhysicalContentMetadataUploadImage;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,24 +38,24 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 @MappedTypes({
-    DbPhysicalContentMetadataLinkYoutube.class,
-    DbPhysicalContentMetadataUploadImage.class,
-    DbJsonData.class
+    PhysicalContentMetadataLinkYoutube.class,
+    PhysicalContentMetadataUploadImage.class,
+    PersistableJsonData.class
 })
-public class DbJsonDataTypeHandler extends BaseTypeHandler<DbJsonData> {
+public class PersistableJsonDataTypeHandler extends BaseTypeHandler<PersistableJsonData> {
 
   private ObjectReader reader;
 
   private ObjectWriter writer;
 
-  public DbJsonDataTypeHandler() {
+  public PersistableJsonDataTypeHandler() {
     ObjectMapper objectMapper = new ObjectMapper();
     this.reader = objectMapper.reader();
     this.writer = objectMapper.writer();
   }
 
   @Override
-  public void setNonNullParameter(PreparedStatement ps, int i, DbJsonData parameter, JdbcType jdbcType) throws SQLException {
+  public void setNonNullParameter(PreparedStatement ps, int i, PersistableJsonData parameter, JdbcType jdbcType) throws SQLException {
     try {
       ps.setString(i, writer.writeValueAsString(parameter));
     } catch (JsonProcessingException e) {
@@ -64,21 +64,21 @@ public class DbJsonDataTypeHandler extends BaseTypeHandler<DbJsonData> {
   }
 
   @Override
-  public DbJsonData getNullableResult(ResultSet rs, String columnName) throws SQLException {
+  public PersistableJsonData getNullableResult(ResultSet rs, String columnName) throws SQLException {
     return createDbJsonDataFromString(rs.getString(columnName));
   }
 
   @Override
-  public DbJsonData getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
+  public PersistableJsonData getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
     return createDbJsonDataFromString(rs.getString(columnIndex));
   }
 
   @Override
-  public DbJsonData getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
+  public PersistableJsonData getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
     return createDbJsonDataFromString(cs.getString(columnIndex));
   }
 
-  private DbJsonData createDbJsonDataFromString(String jsonString) {
+  private PersistableJsonData createDbJsonDataFromString(String jsonString) {
     if (StringUtils.isNotBlank(jsonString)) {
       try {
         return reader.readValue(jsonString);

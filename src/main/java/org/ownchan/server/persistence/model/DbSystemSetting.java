@@ -20,9 +20,9 @@ package org.ownchan.server.persistence.model;
 
 import java.util.Date;
 
+import org.ownchan.server.joint.persistence.template.SystemSettingTemplate;
+import org.ownchan.server.joint.persistence.template.link.SystemSettingLinkTemplate;
 import org.ownchan.server.persistence.dao.SystemSettingDao;
-import org.ownchan.server.persistence.template.SystemSettingTemplate;
-import org.ownchan.server.persistence.template.link.SystemSettingLinkTemplate;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
 public class DbSystemSetting extends PersistableObject<DbSystemSetting, SystemSettingTemplate, SystemSettingLinkTemplate, SystemSettingDao> implements SystemSettingTemplate, SystemSettingLinkTemplate {

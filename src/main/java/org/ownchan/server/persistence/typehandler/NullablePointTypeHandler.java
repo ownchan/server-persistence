@@ -24,7 +24,7 @@ import java.sql.SQLException;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedJdbcTypes;
 import org.apache.ibatis.type.MappedTypes;
-import org.ownchan.server.persistence.geom.NullablePoint;
+import org.ownchan.server.joint.persistence.valuetype.geom.NullablePoint;
 
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
