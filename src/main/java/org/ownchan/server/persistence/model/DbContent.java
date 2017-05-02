@@ -78,6 +78,21 @@ public class DbContent extends PersistableObject<DbContent, ContentTemplate, Con
 
   private volatile List<DbLabel> linkedCreatorLabels;
 
+  // there is no use for linking (all) comments here, as they will be loaded using pagination
+  //private volatile List<DbContentComment> linkedComments;
+
+  private volatile DbContent linkedParent;
+
+  private volatile DbUser linkedUser;
+
+  private volatile DbPhysicalContent linkedPhysicalContent;
+
+  /*
+   * As there will be a dedicated abuse-grid that will be able to group pending abuses by content-id,
+   * there is no need to link all abuses for a content here.
+   */
+  //private volatile List<DbContentAbuse> linkedAbuses;
+
   public DbContent() {
     super();
   }
@@ -290,6 +305,21 @@ public class DbContent extends PersistableObject<DbContent, ContentTemplate, Con
   @Override
   public List<DbLabel> getLinkedCreatorLabels() {
     return linkedCreatorLabels;
+  }
+
+  @Override
+  public DbContent getLinkedParent() {
+    return linkedParent;
+  }
+
+  @Override
+  public DbUser getLinkedUser() {
+    return linkedUser;
+  }
+
+  @Override
+  public DbPhysicalContent getLinkedPhysicalContent() {
+    return linkedPhysicalContent;
   }
 
   public List<DbLabel> refreshLinkedCreatorLabels() {
