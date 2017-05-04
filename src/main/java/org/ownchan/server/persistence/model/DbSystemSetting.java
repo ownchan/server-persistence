@@ -25,7 +25,12 @@ import org.ownchan.server.joint.persistence.template.link.SystemSettingLinkTempl
 import org.ownchan.server.persistence.dao.SystemSettingDao;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbSystemSetting extends PersistableObject<DbSystemSetting, SystemSettingTemplate, SystemSettingLinkTemplate, SystemSettingDao> implements SystemSettingTemplate, SystemSettingLinkTemplate {
+public class DbSystemSetting
+    extends
+      PersistableObject<DbSystemSetting, SystemSettingTemplate, SystemSettingLinkTemplate, SystemSettingDao>
+    implements
+      SystemSettingTemplate,
+      SystemSettingLinkTemplate {
 
   private static SystemSettingDao dao;
 

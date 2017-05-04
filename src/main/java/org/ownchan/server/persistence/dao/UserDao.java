@@ -18,13 +18,16 @@
  *******************************************************************************/
 package org.ownchan.server.persistence.dao;
 
+import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.ownchan.server.joint.persistence.template.RoleTemplate;
 import org.ownchan.server.joint.persistence.template.UserTemplate;
 import org.ownchan.server.joint.security.ContextUser;
 import org.ownchan.server.joint.security.Privilege;
 import org.ownchan.server.persistence.mapper.DbUserMapper;
+import org.ownchan.server.persistence.mapper.generic.FilterParam;
 import org.ownchan.server.persistence.model.DbRole;
 import org.ownchan.server.persistence.model.DbUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +45,16 @@ public class UserDao extends PersistableObjectDao<DbUser, DbUserMapper, UserDao>
   @Override
   protected DbUserMapper getMapper() {
     return mapper;
+  }
+
+  public DbUser getByAlias(String alias) {
+    FilterParam filterParam = new FilterParam(DbUser.DB_FIELD_ALIAS, "=", alias);
+    List<DbUser> matches = mapper.fetch(Arrays.asList(Arrays.asList(filterParam)), null, null);
+    if (CollectionUtils.isNotEmpty(matches)) {
+      return matches.get(0);
+    }
+
+    return null;
   }
 
   @Override

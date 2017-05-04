@@ -26,7 +26,12 @@ import org.ownchan.server.joint.persistence.valuetype.MessageType;
 import org.ownchan.server.persistence.dao.MessageDao;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbMessage extends PersistableObject<DbMessage, MessageTemplate, MessageLinkTemplate, MessageDao> implements MessageTemplate, MessageLinkTemplate {
+public class DbMessage
+    extends
+      PersistableObject<DbMessage, MessageTemplate, MessageLinkTemplate, MessageDao>
+    implements
+      MessageTemplate,
+      MessageLinkTemplate {
 
   private static MessageDao dao;
 

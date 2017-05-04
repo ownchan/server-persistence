@@ -25,7 +25,12 @@ import org.ownchan.server.joint.persistence.template.link.PrivilegeLinkTemplate;
 import org.ownchan.server.persistence.dao.PrivilegeDao;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbPrivilege extends PersistableObject<DbPrivilege, PrivilegeTemplate, PrivilegeLinkTemplate, PrivilegeDao> implements PrivilegeTemplate, PrivilegeLinkTemplate {
+public class DbPrivilege
+    extends
+      PersistableObject<DbPrivilege, PrivilegeTemplate, PrivilegeLinkTemplate, PrivilegeDao>
+    implements
+      PrivilegeTemplate,
+      PrivilegeLinkTemplate {
 
   private static PrivilegeDao dao;
 

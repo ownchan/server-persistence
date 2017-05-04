@@ -28,7 +28,13 @@ import org.ownchan.server.joint.persistence.valuetype.ContentAbuseViolationType;
 import org.ownchan.server.persistence.dao.ContentAbuseDao;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbContentAbuse extends PersistableObject<DbContentAbuse, ContentAbuseTemplate, ContentAbuseLinkTemplate, ContentAbuseDao> implements DbStatusAwareContent<ContentAbuseStatus>, ContentAbuseTemplate, ContentAbuseLinkTemplate {
+public class DbContentAbuse
+    extends
+      PersistableObject<DbContentAbuse, ContentAbuseTemplate, ContentAbuseLinkTemplate, ContentAbuseDao>
+    implements
+      DbStatusAwareContent<ContentAbuseStatus>,
+      ContentAbuseTemplate,
+      ContentAbuseLinkTemplate {
 
   private static ContentAbuseDao dao;
 

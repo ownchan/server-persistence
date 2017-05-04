@@ -27,7 +27,12 @@ import org.ownchan.server.joint.persistence.valuetype.SettingValueType;
 import org.ownchan.server.persistence.dao.SettingDao;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbSetting extends PersistableObject<DbSetting, SettingTemplate, SettingLinkTemplate, SettingDao> implements SettingTemplate, SettingLinkTemplate {
+public class DbSetting
+    extends
+      PersistableObject<DbSetting, SettingTemplate, SettingLinkTemplate, SettingDao>
+    implements
+      SettingTemplate,
+      SettingLinkTemplate {
 
   private SettingDao dao;
 

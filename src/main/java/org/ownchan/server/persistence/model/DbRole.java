@@ -28,7 +28,12 @@ import org.ownchan.server.joint.security.ContextUser;
 import org.ownchan.server.persistence.dao.RoleDao;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbRole extends PersistableObject<DbRole, RoleTemplate, RoleLinkTemplate, RoleDao> implements RoleTemplate, RoleLinkTemplate {
+public class DbRole
+    extends
+      PersistableObject<DbRole, RoleTemplate, RoleLinkTemplate, RoleDao>
+    implements
+      RoleTemplate,
+      RoleLinkTemplate {
 
   private static RoleDao dao;
 

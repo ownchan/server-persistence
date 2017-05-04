@@ -25,7 +25,12 @@ import org.ownchan.server.joint.persistence.template.link.UserBanLinkTemplate;
 import org.ownchan.server.persistence.dao.UserBanDao;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbUserBan extends PersistableObject<DbUserBan, UserBanTemplate, UserBanLinkTemplate, UserBanDao> implements UserBanTemplate, UserBanLinkTemplate {
+public class DbUserBan
+    extends
+      PersistableObject<DbUserBan, UserBanTemplate, UserBanLinkTemplate, UserBanDao>
+    implements
+      UserBanTemplate,
+      UserBanLinkTemplate {
 
   private static UserBanDao dao;
 

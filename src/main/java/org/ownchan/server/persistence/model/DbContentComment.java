@@ -25,7 +25,12 @@ import org.ownchan.server.joint.persistence.template.link.ContentCommentLinkTemp
 import org.ownchan.server.persistence.dao.ContentCommentDao;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbContentComment extends PersistableObject<DbContentComment, ContentCommentTemplate, ContentCommentLinkTemplate, ContentCommentDao> implements ContentCommentTemplate, ContentCommentLinkTemplate {
+public class DbContentComment
+    extends
+      PersistableObject<DbContentComment, ContentCommentTemplate, ContentCommentLinkTemplate, ContentCommentDao>
+    implements
+      ContentCommentTemplate,
+      ContentCommentLinkTemplate {
 
   private static ContentCommentDao dao;
 

@@ -25,7 +25,12 @@ import org.ownchan.server.joint.persistence.template.link.PrivateLabelLinkTempla
 import org.ownchan.server.persistence.dao.PrivateLabelDao;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbPrivateLabel extends PersistableObject<DbPrivateLabel, PrivateLabelTemplate, PrivateLabelLinkTemplate, PrivateLabelDao> implements PrivateLabelTemplate, PrivateLabelLinkTemplate {
+public class DbPrivateLabel
+    extends
+      PersistableObject<DbPrivateLabel, PrivateLabelTemplate, PrivateLabelLinkTemplate, PrivateLabelDao>
+    implements
+      PrivateLabelTemplate,
+      PrivateLabelLinkTemplate {
 
   private static PrivateLabelDao dao;
 

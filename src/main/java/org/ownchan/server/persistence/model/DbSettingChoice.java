@@ -23,7 +23,12 @@ import org.ownchan.server.joint.persistence.template.link.SettingChoiceLinkTempl
 import org.ownchan.server.persistence.dao.SettingChoiceDao;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbSettingChoice extends PersistableObject<DbSettingChoice, SettingChoiceTemplate, SettingChoiceLinkTemplate, SettingChoiceDao> implements SettingChoiceTemplate, SettingChoiceLinkTemplate {
+public class DbSettingChoice
+    extends
+      PersistableObject<DbSettingChoice, SettingChoiceTemplate, SettingChoiceLinkTemplate, SettingChoiceDao>
+    implements
+      SettingChoiceTemplate,
+      SettingChoiceLinkTemplate {
 
   private static SettingChoiceDao dao;
 

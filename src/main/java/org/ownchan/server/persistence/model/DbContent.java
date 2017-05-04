@@ -32,7 +32,13 @@ import org.ownchan.server.joint.security.ContextUser;
 import org.ownchan.server.persistence.dao.ContentDao;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbContent extends PersistableObject<DbContent, ContentTemplate, ContentLinkTemplate, ContentDao> implements DbStatusAwareContent<ContentStatus>, ContentTemplate, ContentLinkTemplate {
+public class DbContent
+    extends
+      PersistableObject<DbContent, ContentTemplate, ContentLinkTemplate, ContentDao>
+    implements
+      DbStatusAwareContent<ContentStatus>,
+      ContentTemplate,
+      ContentLinkTemplate {
 
   private static ContentDao dao;
 

@@ -30,7 +30,13 @@ import org.ownchan.server.joint.persistence.valuetype.PhysicalContentType;
 import org.ownchan.server.persistence.dao.PhysicalContentDao;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbPhysicalContent extends PersistableObject<DbPhysicalContent, PhysicalContentTemplate, PhysicalContentLinkTemplate, PhysicalContentDao> implements DbStatusAwareContent<PhysicalContentStatus>, PhysicalContentTemplate, PhysicalContentLinkTemplate {
+public class DbPhysicalContent
+    extends
+      PersistableObject<DbPhysicalContent, PhysicalContentTemplate, PhysicalContentLinkTemplate, PhysicalContentDao>
+    implements
+      DbStatusAwareContent<PhysicalContentStatus>,
+      PhysicalContentTemplate,
+      PhysicalContentLinkTemplate {
 
   private static PhysicalContentDao dao;
 

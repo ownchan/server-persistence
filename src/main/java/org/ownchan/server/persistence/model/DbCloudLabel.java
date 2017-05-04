@@ -28,7 +28,13 @@ import org.ownchan.server.joint.persistence.valuetype.CloudLabelStatus;
 import org.ownchan.server.persistence.dao.CloudLabelDao;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbCloudLabel extends PersistableObject<DbCloudLabel, CloudLabelTemplate, CloudLabelLinkTemplate, CloudLabelDao> implements DbStatusAwareContent<CloudLabelStatus>, CloudLabelTemplate, CloudLabelLinkTemplate {
+public class DbCloudLabel
+    extends
+      PersistableObject<DbCloudLabel, CloudLabelTemplate, CloudLabelLinkTemplate, CloudLabelDao>
+    implements
+      DbStatusAwareContent<CloudLabelStatus>,
+      CloudLabelTemplate,
+      CloudLabelLinkTemplate {
 
   private static CloudLabelDao dao;
 

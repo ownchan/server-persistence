@@ -32,6 +32,8 @@ import org.ownchan.server.persistence.util.StaticContextAccessor;
 
 public class DbUser extends PersistableObject<DbUser, UserTemplate, UserLinkTemplate, UserDao> implements DbStatusAwareContent<UserStatus>, UserTemplate, UserLinkTemplate {
 
+  public static final String DB_FIELD_ALIAS = "alias";
+
   private static UserDao dao;
 
   private long id;
