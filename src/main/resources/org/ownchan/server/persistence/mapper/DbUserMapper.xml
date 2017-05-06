@@ -16,6 +16,7 @@
     <result column="external_link" property="externalLink" />
     <result column="avatar_content_id" property="avatarContentId" />
     <result column="last_password_change_time" property="lastPasswordChangeTime" />
+    <result column="beacon_time" property="beaconTime" />
   </resultMap>
 
   <select id="fetch" resultMap="defaultResultMap">

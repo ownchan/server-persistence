@@ -30,9 +30,17 @@ import org.ownchan.server.joint.security.ContextUser;
 import org.ownchan.server.persistence.dao.UserDao;
 import org.ownchan.server.persistence.util.StaticContextAccessor;
 
-public class DbUser extends PersistableObject<DbUser, UserTemplate, UserLinkTemplate, UserDao> implements DbStatusAwareContent<UserStatus>, UserTemplate, UserLinkTemplate {
+public class DbUser
+    extends
+      PersistableObject<DbUser, UserTemplate, UserLinkTemplate, UserDao>
+    implements
+      DbStatusAwareContent<UserStatus>,
+      UserTemplate,
+      UserLinkTemplate {
 
   public static final String DB_FIELD_ALIAS = "alias";
+
+  public static final String DB_FIELD_BEACON_TIME = "beacon_time";
 
   private static UserDao dao;
 
@@ -61,6 +69,8 @@ public class DbUser extends PersistableObject<DbUser, UserTemplate, UserLinkTemp
   private Long avatarContentId;
 
   private Date lastPasswordChangeTime;
+
+  private Date beaconTime;
 
   private volatile List<DbRole> linkedRoles;
 
@@ -204,6 +214,15 @@ public class DbUser extends PersistableObject<DbUser, UserTemplate, UserLinkTemp
 
   public void setLastPasswordChangeTime(Date lastPasswordChangeTime) {
     this.lastPasswordChangeTime = lastPasswordChangeTime;
+  }
+
+  @Override
+  public Date getBeaconTime() {
+    return beaconTime;
+  }
+
+  public void setBeaconTime(Date beaconTime) {
+    this.beaconTime = beaconTime;
   }
 
   @Override

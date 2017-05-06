@@ -23,7 +23,17 @@ import org.ownchan.server.joint.persistence.template.link.EntityLinkTemplate;
 import org.ownchan.server.persistence.dao.PersistableObjectDao;
 import org.springframework.beans.BeanUtils;
 
-public abstract class PersistableObject<T extends PersistableObject<T, U, V, W> & EntityTemplate<U> & EntityLinkTemplate<V>, U extends EntityTemplate<U>, V extends EntityLinkTemplate<V>, W extends PersistableObjectDao<T, ?, W>> {
+public abstract class PersistableObject<
+    T extends PersistableObject<T, U, V, W> & EntityTemplate<U> & EntityLinkTemplate<V>,
+    U extends EntityTemplate<U>,
+    V extends EntityLinkTemplate<V>,
+    W extends PersistableObjectDao<T, ?, W>> {
+
+  public static final String DB_FIELD_ID = "id";
+
+  public static final String DB_VALUE_CURRENT_TIMESTAMP = "current_timestamp";
+
+  public static final String DB_OPERATOR_EQUALS = "=";
 
   public PersistableObject() {
 

@@ -101,6 +101,7 @@ CREATE TABLE `ocn_user` (
   `external_link` VARCHAR(255) NULL,
   `avatar_content_id` BIGINT(20) UNSIGNED NULL,
   `last_password_change_time` TIMESTAMP(2) NULL DEFAULT NULL,
+  `beacon_time` TIMESTAMP(2) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_user_avatar_content`
     FOREIGN KEY (`avatar_content_id`)
@@ -208,8 +209,10 @@ CREATE INDEX `msg_description_INDEX` ON `ocn_role` (`msg_id_description` ASC);
 -- Table `ocn_user_to_role`
 -- -----------------------------------------------------
 CREATE TABLE `ocn_user_to_role` (
+  `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` BIGINT(20) UNSIGNED NOT NULL,
   `role_id` BIGINT(20) UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
   CONSTRAINT `fk_user_to_role_user`
     FOREIGN KEY (`user_id`)
     REFERENCES `ocn_user` (`id`)
@@ -271,8 +274,10 @@ CREATE INDEX `active_and_expiration_INDEX` ON `ocn_user_ban` (`active` ASC, `ban
 -- Table `ocn_role_to_privilege`
 -- -----------------------------------------------------
 CREATE TABLE `ocn_role_to_privilege` (
+  `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `role_id` BIGINT(20) UNSIGNED NOT NULL,
   `privilege_id` BIGINT(20) UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
   CONSTRAINT `fk_role_to_privilege_role`
     FOREIGN KEY (`role_id`)
     REFERENCES `ocn_role` (`id`)
@@ -420,12 +425,14 @@ CREATE INDEX `embedded_content_FOREIGN_idx` ON `ocn_content_comment` (`embedded_
 -- Table `ocn_user_to_setting`
 -- -----------------------------------------------------
 CREATE TABLE `ocn_user_to_setting` (
+  `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` BIGINT(20) UNSIGNED NOT NULL,
   `setting_id` BIGINT(20) UNSIGNED NOT NULL,
   `choice_id` BIGINT(20) UNSIGNED NULL,
   `custom_value` VARCHAR(255) NULL,
   `create_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP(2) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
   CONSTRAINT `fk_user_to_setting_user`
     FOREIGN KEY (`user_id`)
     REFERENCES `ocn_user` (`id`)
@@ -494,8 +501,10 @@ CREATE UNIQUE INDEX `setting_UNIQUE` ON `ocn_system_setting` (`setting_id` ASC);
 -- Table `ocn_role_to_allowed_setting`
 -- -----------------------------------------------------
 CREATE TABLE `ocn_role_to_allowed_setting` (
+  `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `role_id` BIGINT(20) UNSIGNED NOT NULL,
   `setting_id` BIGINT(20) UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
   CONSTRAINT `fk_role_to_allowed_setting_role`
     FOREIGN KEY (`role_id`)
     REFERENCES `ocn_role` (`id`)
@@ -542,9 +551,11 @@ CREATE INDEX `user_FOREIGN_idx` ON `ocn_private_label` (`user_id` ASC);
 -- Table `ocn_content_to_private_label`
 -- -----------------------------------------------------
 CREATE TABLE `ocn_content_to_private_label` (
+  `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `content_id` BIGINT(20) UNSIGNED NOT NULL,
   `private_label_id` BIGINT(20) UNSIGNED NOT NULL,
   `create_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
   CONSTRAINT `fk_content_to_private_label_content`
     FOREIGN KEY (`content_id`)
     REFERENCES `ocn_content` (`id`)
@@ -591,9 +602,11 @@ CREATE INDEX `creator_FOREIGN_idx` ON `ocn_label` (`creator_id` ASC);
 -- Table `ocn_content_to_creator_label`
 -- -----------------------------------------------------
 CREATE TABLE `ocn_content_to_creator_label` (
+  `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `content_id` BIGINT(20) UNSIGNED NOT NULL,
   `label_id` BIGINT(20) UNSIGNED NOT NULL,
   `create_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
   CONSTRAINT `fk_content_to_creator_label_content`
     FOREIGN KEY (`content_id`)
     REFERENCES `ocn_content` (`id`)
@@ -650,10 +663,12 @@ CREATE INDEX `update_user_FOREIGN_idx` ON `ocn_cloud_label` (`update_user_id` AS
 -- Table `ocn_physical_content_to_community_label`
 -- -----------------------------------------------------
 CREATE TABLE `ocn_physical_content_to_community_label` (
+  `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `physical_content_id` BIGINT(20) UNSIGNED NOT NULL,
   `label_id` BIGINT(20) UNSIGNED NOT NULL,
   `user_id` BIGINT(20) UNSIGNED NOT NULL,
   `create_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
   CONSTRAINT `fk_phyco_to_cola_physical_content`
     FOREIGN KEY (`physical_content_id`)
     REFERENCES `ocn_physical_content` (`id`)
@@ -686,9 +701,11 @@ CREATE UNIQUE INDEX `physical_content_user_UNIQUE` ON `ocn_physical_content_to_c
 -- Table `ocn_physical_content_to_cloud_label`
 -- -----------------------------------------------------
 CREATE TABLE `ocn_physical_content_to_cloud_label` (
+  `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `physical_content_id` BIGINT(20) UNSIGNED NOT NULL,
   `cloud_label_id` BIGINT(20) UNSIGNED NOT NULL,
   `create_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
   CONSTRAINT `fk_phyco_to_cloud_label_physical_content`
     FOREIGN KEY (`physical_content_id`)
     REFERENCES `ocn_physical_content` (`id`)
@@ -712,9 +729,11 @@ CREATE INDEX `cloud_label_FOREIGN_idx` ON `ocn_physical_content_to_cloud_label` 
 -- Table `ocn_user_to_follower`
 -- -----------------------------------------------------
 CREATE TABLE `ocn_user_to_follower` (
+  `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` BIGINT(20) UNSIGNED NOT NULL,
   `follower_id` BIGINT(20) UNSIGNED NOT NULL,
   `following_start_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
   CONSTRAINT `fk_user_to_follower_follower`
     FOREIGN KEY (`follower_id`)
     REFERENCES `ocn_user` (`id`)
@@ -738,9 +757,11 @@ CREATE INDEX `follower_FOREIGN_idx` ON `ocn_user_to_follower` (`follower_id` ASC
 -- Table `ocn_user_to_favorite_content`
 -- -----------------------------------------------------
 CREATE TABLE `ocn_user_to_favorite_content` (
+  `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` BIGINT(20) UNSIGNED NOT NULL,
   `content_id` BIGINT(20) UNSIGNED NOT NULL,
   `fav_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
   CONSTRAINT `fk_user_to_favco_user`
     FOREIGN KEY (`user_id`)
     REFERENCES `ocn_user` (`id`)
@@ -810,9 +831,11 @@ CREATE INDEX `status_and_create_time_INDEX` ON `ocn_content_abuse` (`status` ASC
 -- Table `ocn_user_to_content_voting_cache`
 -- -----------------------------------------------------
 CREATE TABLE `ocn_user_to_content_voting_cache` (
+  `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` BIGINT(20) UNSIGNED NOT NULL,
   `content_id` BIGINT(20) UNSIGNED NOT NULL,
-  `voting_time` TIMESTAMP(2) NOT NULL,
+  `voting_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
   CONSTRAINT `fk_us_co_voting_cache_user`
     FOREIGN KEY (`user_id`)
     REFERENCES `ocn_user` (`id`)
@@ -837,9 +860,11 @@ CREATE INDEX `voting_time_INDEX` ON `ocn_user_to_content_voting_cache` (`voting_
 -- Table `ocn_user_to_content_click_cache`
 -- -----------------------------------------------------
 CREATE TABLE `ocn_user_to_content_click_cache` (
+  `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` BIGINT(20) UNSIGNED NOT NULL,
   `content_id` BIGINT(20) UNSIGNED NOT NULL,
   `click_time` TIMESTAMP(2) NOT NULL,
+  PRIMARY KEY (`id`),
   CONSTRAINT `fk_us_co_click_cache_user`
     FOREIGN KEY (`user_id`)
     REFERENCES `ocn_user` (`id`)
@@ -858,3 +883,34 @@ CREATE UNIQUE INDEX `user_content_UNIQUE` ON `ocn_user_to_content_click_cache` (
 CREATE INDEX `click_time_INDEX` ON `ocn_user_to_content_click_cache` (`click_time` ASC);
 
 CREATE INDEX `fk_us_co_click_cache_content_idx` ON `ocn_user_to_content_click_cache` (`content_id` ASC);
+
+
+-- -----------------------------------------------------
+-- Table `ocn_rtc_conversation`
+-- -----------------------------------------------------
+CREATE TABLE `ocn_rtc_conversation` (
+  `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_a_id` BIGINT(20) UNSIGNED NOT NULL,
+  `user_b_id` BIGINT(20) UNSIGNED NOT NULL,
+  `user_a_beacon_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `user_b_beacon_time` TIMESTAMP(2) NULL DEFAULT NULL,
+  `user_a_offer` VARCHAR(1024) NOT NULL,
+  `user_b_answer` VARCHAR(1024) NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_rtc_conversation_user_a`
+    FOREIGN KEY (`user_a_id`)
+    REFERENCES `ocn_user` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_rtc_conversation_user_b`
+    FOREIGN KEY (`user_b_id`)
+    REFERENCES `ocn_user` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+CREATE INDEX `users_and_beacon_times_INDEX` ON `ocn_rtc_conversation` (`user_a_id` ASC, `user_b_id` ASC, `user_a_beacon_time` ASC, `user_b_beacon_time` ASC);
+
+CREATE UNIQUE INDEX `users_UNIQUE` ON `ocn_rtc_conversation` (`user_a_id` ASC, `user_b_id` ASC);
+
+CREATE INDEX `fk_rtc_conversation_user_b_idx` ON `ocn_rtc_conversation` (`user_b_id` ASC);

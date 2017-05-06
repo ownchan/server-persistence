@@ -19,7 +19,9 @@
 package org.ownchan.server.persistence.dao;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.ownchan.server.joint.persistence.template.RoleTemplate;
@@ -27,7 +29,10 @@ import org.ownchan.server.joint.persistence.template.UserTemplate;
 import org.ownchan.server.joint.security.ContextUser;
 import org.ownchan.server.joint.security.Privilege;
 import org.ownchan.server.persistence.mapper.DbUserMapper;
+import org.ownchan.server.persistence.mapper.generic.ColumnValue;
 import org.ownchan.server.persistence.mapper.generic.FilterParam;
+import org.ownchan.server.persistence.mapper.generic.LimitParam;
+import org.ownchan.server.persistence.mapper.generic.ValuePlaceholderType;
 import org.ownchan.server.persistence.model.DbRole;
 import org.ownchan.server.persistence.model.DbUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,6 +111,14 @@ public class UserDao extends PersistableObjectDao<DbUser, DbUserMapper, UserDao>
   @PreAuthorize(PERM_QUERY_MANAGE_ROLES)
   public int removeRole(ContextUser contextUser, UserTemplate user, RoleTemplate role) {
     return mapper.removeRole(user.getId(), role.getId());
+  }
+
+  public long updateBeaconTime(ContextUser contextUser) {
+    FilterParam filterParam = new FilterParam(DbUser.DB_FIELD_ID, DbUser.DB_OPERATOR_EQUALS, contextUser.getId());
+    Map<String, ColumnValue> columnToValueMap = new HashMap<>();
+    columnToValueMap.put(DbUser.DB_FIELD_BEACON_TIME, new ColumnValue(DbUser.DB_VALUE_CURRENT_TIMESTAMP, ValuePlaceholderType.RAW_SQL));
+
+    return mapper.set(columnToValueMap, Arrays.asList(Arrays.asList(filterParam)), null, new LimitParam(1L));
   }
 
 }
