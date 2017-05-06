@@ -847,6 +847,8 @@ CREATE TABLE `ocn_user_to_content_voting_cache` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci
 COMMENT = 'This table can be used to remember, for only a couple of hours, which contents have voted for by which users.\nIt is not intended for permanent storage of voting data, but rather as a means to  improve the accuracy of a content\'s voting count.\nA cronjob needs to delete all stored voting-data after X hours, which means after X hours a user\'s repeated voting for a content will be counted again.';
 
 CREATE UNIQUE INDEX `user_content_UNIQUE` ON `ocn_user_to_content_voting_cache` (`user_id` ASC, `content_id` ASC);
@@ -876,6 +878,8 @@ CREATE TABLE `ocn_user_to_content_click_cache` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci
 COMMENT = 'This table can be used to remember, for only a couple of hours, which contents have been click by which users.\nIt is not intended for permanent storage of click data, but rather as a means to  improve the accuracy of a content\'s click count.\nA cronjob needs to delete all stored click-data after X hours, which means after X hours a user\'s repeated click on a content will be counted again.';
 
 CREATE UNIQUE INDEX `user_content_UNIQUE` ON `ocn_user_to_content_click_cache` (`user_id` ASC, `content_id` ASC);
@@ -907,7 +911,9 @@ CREATE TABLE `ocn_rtc_conversation` (
     REFERENCES `ocn_user` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE INDEX `users_and_beacon_times_INDEX` ON `ocn_rtc_conversation` (`user_a_id` ASC, `user_b_id` ASC, `user_a_beacon_time` ASC, `user_b_beacon_time` ASC);
 
