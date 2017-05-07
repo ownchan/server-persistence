@@ -41,6 +41,12 @@
     </include>
   </update>
 
+  <update id="setAll">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.setAll">
+      <property name="targetTable" value="ocn_role"/>
+    </include>
+  </update>
+
   <delete id="purge">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.purge">
       <property name="targetTable" value="ocn_role"/>
@@ -67,26 +73,53 @@
     where id = #{id}
   </delete>
 
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+  <select id="count" resultType="long">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.count">
+      <property name="targetTable" value="ocn_role"/>
+    </include>
+  </select>
+
+  <select id="countAll" resultType="long">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.countAll">
+      <property name="targetTable" value="ocn_role"/>
+    </include>
+  </select>
+
+  <insert id="insert">
+    <selectKey keyProperty="obj.id" order="AFTER" resultType="long">
+      select last_insert_id()
+    </selectKey>
     insert into ocn_role (
       name,
       msg_id_name,
       msg_id_description
     )
     values (
-      #{name},
-      #{msgIdName},
-      #{msgIdDescription}
+      #{obj.name},
+      #{obj.msgIdName},
+      #{obj.msgIdDescription}
     )
+    <if test="ignoreDuplicateKey">
+      on duplicate key update
+        id = last_insert_id(id)
+        <if test="updateOnDuplicateKey">
+          ,
+          <include refid="assignUpdateValues"/>
+        </if>
+    </if>
   </insert>
 
   <update id="update">
     update ocn_role
     set
-      name = #{name},
-      msg_id_name = #{msgIdName},
-      msg_id_description = #{msgIdDescription}
-    where id = #{id}
+      <include refid="assignUpdateValues"/>
+    where id = #{obj.id}
   </update>
+
+  <sql id="assignUpdateValues">
+      name = #{obj.name},
+      msg_id_name = #{obj.msgIdName},
+      msg_id_description = #{obj.msgIdDescription}
+  </sql>
 
 </mapper>

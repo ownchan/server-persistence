@@ -49,6 +49,12 @@
     </include>
   </update>
 
+  <update id="setAll">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.setAll">
+      <property name="targetTable" value="ocn_user"/>
+    </include>
+  </update>
+
   <delete id="purge">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.purge">
       <property name="targetTable" value="ocn_user"/>
@@ -60,6 +66,18 @@
       <property name="targetTable" value="ocn_user"/>
     </include>
   </delete>
+
+  <select id="count" resultType="long">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.count">
+      <property name="targetTable" value="ocn_user"/>
+    </include>
+  </select>
+
+  <select id="countAll" resultType="long">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.countAll">
+      <property name="targetTable" value="ocn_user"/>
+    </include>
+  </select>
 
   <select id="get" resultMap="defaultResultMap">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStreamAll">
@@ -75,7 +93,10 @@
     where id = #{id}
   </delete>
 
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+  <insert id="insert">
+    <selectKey keyProperty="obj.id" order="AFTER" resultType="long">
+      select last_insert_id()
+    </selectKey>
     insert into ocn_user (
       alias,
       display_name,
@@ -89,33 +110,45 @@
       last_password_change_time
     )
     values (
-      #{alias},
-      #{displayName},
-      #{passwordHash},
-      #{status},
-      #{statusReason},
-      #{email},
-      #{motto},
-      #{externalLink},
-      #{avatarContentId},
-      #{lastPasswordChangeTime}
+      #{obj.alias},
+      #{obj.displayName},
+      #{obj.passwordHash},
+      #{obj.status},
+      #{obj.statusReason},
+      #{obj.email},
+      #{obj.motto},
+      #{obj.externalLink},
+      #{obj.avatarContentId},
+      #{obj.lastPasswordChangeTime}
     )
+    <if test="ignoreDuplicateKey">
+      on duplicate key update
+        id = last_insert_id(id)
+        <if test="updateOnDuplicateKey">
+          ,
+          <include refid="assignUpdateValues"/>
+        </if>
+    </if>
   </insert>
 
   <update id="update">
     update ocn_user
     set
-      alias = #{alias},
-      display_name = #{displayName},
-      password_hash = #{passwordHash},
-      status = #{status},
-      status_reason = #{statusReason},
-      email = #{email},
-      motto = #{motto},
-      external_link = #{externalLink},
-      avatar_content_id = #{avatarContentId},
-      last_password_change_time = #{lastPasswordChangeTime}
-    where id = #{id}
+      <include refid="assignUpdateValues"/>
+    where id = #{obj.id}
   </update>
+
+  <sql id="assignUpdateValues">
+      alias = #{obj.alias},
+      display_name = #{obj.displayName},
+      password_hash = #{obj.passwordHash},
+      status = #{obj.status},
+      status_reason = #{obj.statusReason},
+      email = #{obj.email},
+      motto = #{obj.motto},
+      external_link = #{obj.externalLink},
+      avatar_content_id = #{obj.avatarContentId},
+      last_password_change_time = #{obj.lastPasswordChangeTime}
+  </sql>
 
 </mapper>

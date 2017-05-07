@@ -45,6 +45,12 @@
     </include>
   </update>
 
+  <update id="setAll">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.setAll">
+      <property name="targetTable" value="ocn_cloud_label"/>
+    </include>
+  </update>
+
   <delete id="purge">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.purge">
       <property name="targetTable" value="ocn_cloud_label"/>
@@ -56,6 +62,18 @@
       <property name="targetTable" value="ocn_cloud_label"/>
     </include>
   </delete>
+
+  <select id="count" resultType="long">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.count">
+      <property name="targetTable" value="ocn_cloud_label"/>
+    </include>
+  </select>
+
+  <select id="countAll" resultType="long">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.countAll">
+      <property name="targetTable" value="ocn_cloud_label"/>
+    </include>
+  </select>
 
   <select id="get" resultMap="defaultResultMap">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStreamAll">
@@ -71,7 +89,10 @@
     where id = #{id}
   </delete>
 
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+  <insert id="insert">
+    <selectKey keyProperty="obj.id" order="AFTER" resultType="long">
+      select last_insert_id()
+    </selectKey>
     insert into ocn_cloud_label (
       text,
       status,
@@ -82,27 +103,39 @@
       update_user_id
     )
     values (
-      #{text},
-      #{status},
-      #{statusReason},
-      #{initialText},
-      #{cloudProvider},
-      #{cloudProviderLabelId},
-      #{updateUserId}
+      #{obj.text},
+      #{obj.status},
+      #{obj.statusReason},
+      #{obj.initialText},
+      #{obj.cloudProvider},
+      #{obj.cloudProviderLabelId},
+      #{obj.updateUserId}
     )
+    <if test="ignoreDuplicateKey">
+      on duplicate key update
+        id = last_insert_id(id)
+        <if test="updateOnDuplicateKey">
+          ,
+          <include refid="assignUpdateValues"/>
+        </if>
+    </if>
   </insert>
 
   <update id="update">
     update ocn_cloud_label
     set
-      text = #{text},
-      status = #{status},
-      status_reason = #{statusReason},
-      initial_text = #{initialText},
-      cloud_provider = #{cloudProvider},
-      cloud_provider_label_id = #{cloudProviderLabelId},
-      update_user_id = #{updateUserId}
-    where id = #{id}
+      <include refid="assignUpdateValues"/>
+    where id = #{obj.id}
   </update>
+
+  <sql id="assignUpdateValues">
+      text = #{obj.text},
+      status = #{obj.status},
+      status_reason = #{obj.statusReason},
+      initial_text = #{obj.initialText},
+      cloud_provider = #{obj.cloudProvider},
+      cloud_provider_label_id = #{obj.cloudProviderLabelId},
+      update_user_id = #{obj.updateUserId}
+  </sql>
 
 </mapper>

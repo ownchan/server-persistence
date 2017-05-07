@@ -48,6 +48,12 @@
     </include>
   </update>
 
+  <update id="setAll">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.setAll">
+      <property name="targetTable" value="ocn_content_abuse"/>
+    </include>
+  </update>
+
   <delete id="purge">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.purge">
       <property name="targetTable" value="ocn_content_abuse"/>
@@ -59,6 +65,18 @@
       <property name="targetTable" value="ocn_content_abuse"/>
     </include>
   </delete>
+
+  <select id="count" resultType="long">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.count">
+      <property name="targetTable" value="ocn_content_abuse"/>
+    </include>
+  </select>
+
+  <select id="countAll" resultType="long">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.countAll">
+      <property name="targetTable" value="ocn_content_abuse"/>
+    </include>
+  </select>
 
   <select id="get" resultMap="defaultResultMap">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStreamAll">
@@ -74,7 +92,10 @@
     where id = #{id}
   </delete>
 
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+  <insert id="insert">
+    <selectKey keyProperty="obj.id" order="AFTER" resultType="long">
+      select last_insert_id()
+    </selectKey>
     insert into ocn_content_abuse (
       content_id,
       violation_type,
@@ -87,33 +108,45 @@
       team_notes
     )
     values (
-      #{contentId},
-      #{violationType},
-      #{explanation},
-      #{complainingEntityIp},
-      #{complainingEntityContact},
-      #{complainingEntityUserId},
-      #{status},
-      #{statusReason},
-      #{assigneeId},
-      #{teamNotes}
+      #{obj.contentId},
+      #{obj.violationType},
+      #{obj.explanation},
+      #{obj.complainingEntityIp},
+      #{obj.complainingEntityContact},
+      #{obj.complainingEntityUserId},
+      #{obj.status},
+      #{obj.statusReason},
+      #{obj.assigneeId},
+      #{obj.teamNotes}
     )
+    <if test="ignoreDuplicateKey">
+      on duplicate key update
+        id = last_insert_id(id)
+        <if test="updateOnDuplicateKey">
+          ,
+          <include refid="assignUpdateValues"/>
+        </if>
+    </if>
   </insert>
 
   <update id="update">
     update ocn_content_abuse
     set
-      content_id = #{contentId},
-      violation_type = #{violationType},
-      explanation = #{explanation},
-      complaining_entity_ip = #{complainingEntityIp},
-      complaining_entity_contact = #{complainingEntityContact},
-      complaining_entity_user_id = #{complainingEntityUserId},
-      status = #{status},
-      status_reason = #{statusReason},
-      assignee_id = #{assigneeId},
-      team_notes = #{teamNotes}
-    where id = #{id}
+      <include refid="assignUpdateValues"/>
+    where id = #{obj.id}
   </update>
+
+  <sql id="assignUpdateValues">
+      content_id = #{obj.contentId},
+      violation_type = #{obj.violationType},
+      explanation = #{obj.explanation},
+      complaining_entity_ip = #{obj.complainingEntityIp},
+      complaining_entity_contact = #{obj.complainingEntityContact},
+      complaining_entity_user_id = #{obj.complainingEntityUserId},
+      status = #{obj.status},
+      status_reason = #{obj.statusReason},
+      assignee_id = #{obj.assigneeId},
+      team_notes = #{obj.teamNotes}
+  </sql>
 
 </mapper>

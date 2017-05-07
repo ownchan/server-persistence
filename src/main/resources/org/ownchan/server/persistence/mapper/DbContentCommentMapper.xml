@@ -43,6 +43,12 @@
     </include>
   </update>
 
+  <update id="setAll">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.setAll">
+      <property name="targetTable" value="ocn_content_comment"/>
+    </include>
+  </update>
+
   <delete id="purge">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.purge">
       <property name="targetTable" value="ocn_content_comment"/>
@@ -54,6 +60,18 @@
       <property name="targetTable" value="ocn_content_comment"/>
     </include>
   </delete>
+
+  <select id="count" resultType="long">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.count">
+      <property name="targetTable" value="ocn_content_comment"/>
+    </include>
+  </select>
+
+  <select id="countAll" resultType="long">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.countAll">
+      <property name="targetTable" value="ocn_content_comment"/>
+    </include>
+  </select>
 
   <select id="get" resultMap="defaultResultMap">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStreamAll">
@@ -69,7 +87,10 @@
     where id = #{id}
   </delete>
 
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+  <insert id="insert">
+    <selectKey keyProperty="obj.id" order="AFTER" resultType="long">
+      select last_insert_id()
+    </selectKey>
     insert into ocn_content_comment (
       parent_id,
       text,
@@ -78,23 +99,35 @@
       embedded_content_id
     )
     values (
-      #{parentId},
-      #{text},
-      #{userId},
-      #{contentId},
-      #{embeddedContentId}
+      #{obj.parentId},
+      #{obj.text},
+      #{obj.userId},
+      #{obj.contentId},
+      #{obj.embeddedContentId}
     )
+    <if test="ignoreDuplicateKey">
+      on duplicate key update
+        id = last_insert_id(id)
+        <if test="updateOnDuplicateKey">
+          ,
+          <include refid="assignUpdateValues"/>
+        </if>
+    </if>
   </insert>
 
   <update id="update">
     update ocn_content_comment
     set
-      parent_id = #{parentId},
-      text = #{text},
-      user_id = #{userId},
-      content_id = #{contentId},
-      embedded_content_id = #{embeddedContentId}
-    where id = #{id}
+      <include refid="assignUpdateValues"/>
+    where id = #{obj.id}
   </update>
+
+  <sql id="assignUpdateValues">
+      parent_id = #{obj.parentId},
+      text = #{obj.text},
+      user_id = #{obj.userId},
+      content_id = #{obj.contentId},
+      embedded_content_id = #{obj.embeddedContentId}
+  </sql>
 
 </mapper>

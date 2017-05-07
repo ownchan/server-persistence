@@ -78,6 +78,22 @@ public abstract class PersistableObject<
   }
 
   /**
+   * Persist the object (insert or update it in the database).
+   * @param ignoreDuplicateKey if true, any duplicate key violations will be ignored and object's id should be replaced by the db's object that caused the duplicate key violation (be careful, in which scenarios to use this!)
+   * @param updateOnDuplicateKey if true, and param ignoreDuplicateKey is true as well, any duplicate key violations will be ignored and the existing object in the DB will be updated (be careful, in which scenarios to use this!)
+   * @return the current instance of the object, which will receive an id upon insertion or key duplication.
+   */
+  @SuppressWarnings("unchecked")
+  public T save(boolean ignoreDuplicateKey, boolean updateOnDuplicateKey) {
+    if (ignoreDuplicateKey) {
+      getDao().insert((T) this, true, updateOnDuplicateKey);
+      return (T) this;
+    }
+
+    return this.save();
+  }
+
+  /**
    * Delete the persisted object from the database.
    * After deletion, the id of the object will be set to 0.
    *

@@ -32,13 +32,27 @@ import org.ownchan.server.persistence.mapper.generic.LimitParam;
 import org.ownchan.server.persistence.mapper.generic.SortingParam;
 import org.ownchan.server.persistence.model.PersistableObject;
 
-public abstract class PersistableObjectDao<T extends PersistableObject<T, ?, ?, V> & EntityTemplate<?> & EntityLinkTemplate<?>, U extends PersistableObjectMapper<T>, V extends PersistableObjectDao<T, U, V>> implements PersistableObjectMapper<T> {
+public abstract class PersistableObjectDao<
+    T extends PersistableObject<T, ?, ?, V> & EntityTemplate<?> & EntityLinkTemplate<?>,
+    U extends PersistableObjectMapper<T>,
+    V extends PersistableObjectDao<T, U, V>> implements PersistableObjectMapper<T> {
 
   protected abstract U getMapper();
 
-  @Override
+  /**
+   * @return the number of affected rows (usually 1)
+   */
   public int insert(T persistableObject) {
-    return getMapper().insert(persistableObject);
+    return getMapper().insert(persistableObject, false, false);
+  }
+
+  /**
+   * @param updateOnDuplicateKey if true and param ignoreDuplicateKey is true as well, an update will be performed upon duplicate key
+   * @return the number of affected rows (usually 1)
+   */
+  @Override
+  public int insert(T persistableObject, boolean ignoreDuplicateKey, boolean updateOnDuplicateKey) {
+    return getMapper().insert(persistableObject, ignoreDuplicateKey, updateOnDuplicateKey);
   }
 
   @Override
@@ -46,16 +60,25 @@ public abstract class PersistableObjectDao<T extends PersistableObject<T, ?, ?, 
     return getMapper().get(id);
   }
 
+  /**
+   * @return the number of affected rows (usually 1)
+   */
   @Override
   public int update(T persistableObject) {
     return getMapper().update(persistableObject);
   }
 
+  /**
+   * @return the number of affected rows (usually 1)
+   */
   @Override
   public int delete(long id) {
     return getMapper().delete(id);
   }
 
+  /**
+   * @return the number of affected rows (usually 1)
+   */
   public int delete(T persistableObject) {
     return delete(persistableObject.getId());
   }
@@ -87,6 +110,9 @@ public abstract class PersistableObjectDao<T extends PersistableObject<T, ?, ?, 
     getMapper().stream(groupedFilterParams, sortingParams, limitParam, resultHandler);
   }
 
+  /**
+   * @return the number of affected rows
+   */
   @Override
   public long set(
       Map<String, ColumnValue> columnToValueMap,
@@ -96,6 +122,18 @@ public abstract class PersistableObjectDao<T extends PersistableObject<T, ?, ?, 
     return getMapper().set(columnToValueMap, groupedFilterParams, sortingParams, limitParam);
   }
 
+  /**
+   * @return the number of affected rows
+   */
+  @Override
+  public long setAll(
+      Map<String, ColumnValue> columnToValueMap) {
+    return getMapper().setAll(columnToValueMap);
+  }
+
+  /**
+   * @return the number of affected rows
+   */
   @Override
   public long purge(
       List<List<FilterParam>> groupedFilterParams,
@@ -104,9 +142,23 @@ public abstract class PersistableObjectDao<T extends PersistableObject<T, ?, ?, 
     return getMapper().purge(groupedFilterParams, sortingParams, limitParam);
   }
 
+  /**
+   * @return the number of affected rows
+   */
   @Override
   public long purgeAll() {
     return getMapper().purgeAll();
+  }
+
+  @Override
+  public long count(
+      List<List<FilterParam>> groupedFilterParams) {
+    return getMapper().count(groupedFilterParams);
+  }
+
+  @Override
+  public long countAll() {
+    return getMapper().countAll();
   }
 
   @Override

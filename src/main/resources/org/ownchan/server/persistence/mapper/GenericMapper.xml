@@ -105,6 +105,10 @@
     update ${targetTable}
   </sql>
 
+  <sql id="countAll">
+    select count(*) from ${targetTable}
+  </sql>
+
   <sql id="fetchOrStream">
     <include refid="fetchOrStreamAll"/>
     <include refid="applyGroupedFilterParams"/>
@@ -125,6 +129,11 @@
     <include refid="applyGroupedFilterParams"/>
     <include refid="applySortingParams"/>
     <include refid="applyLimitParam"/>
+  </sql>
+
+  <sql id="count">
+    <include refid="countAll"/>
+    <include refid="applyGroupedFilterParams"/>
   </sql>
 
 </mapper>

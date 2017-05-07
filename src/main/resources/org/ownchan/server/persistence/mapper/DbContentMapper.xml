@@ -55,6 +55,12 @@
     </include>
   </update>
 
+  <update id="setAll">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.setAll">
+      <property name="targetTable" value="ocn_content"/>
+    </include>
+  </update>
+
   <delete id="purge">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.purge">
       <property name="targetTable" value="ocn_content"/>
@@ -66,6 +72,18 @@
       <property name="targetTable" value="ocn_content"/>
     </include>
   </delete>
+
+  <select id="count" resultType="long">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.count">
+      <property name="targetTable" value="ocn_content"/>
+    </include>
+  </select>
+
+  <select id="countAll" resultType="long">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.countAll">
+      <property name="targetTable" value="ocn_content"/>
+    </include>
+  </select>
 
   <select id="get" resultMap="defaultResultMap">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStreamAll">
@@ -81,7 +99,10 @@
     where id = #{id}
   </delete>
 
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+  <insert id="insert">
+    <selectKey keyProperty="obj.id" order="AFTER" resultType="long">
+      select last_insert_id()
+    </selectKey>
     insert into ocn_content (
       status,
       status_reason,
@@ -102,61 +123,73 @@
       minus_count
     )
     values (
-      #{status},
-      #{statusReason},
-      #{parentId},
-      #{userId},
-      #{caption},
-      #{countryCode},
-      #{cityName},
+      #{obj.status},
+      #{obj.statusReason},
+      #{obj.parentId},
+      #{obj.userId},
+      #{obj.caption},
+      #{obj.countryCode},
+      #{obj.cityName},
       <choose>
         <when test="location != null">
-          ST_PointFromText(#{location},${location.SRID}),
+          ST_PointFromText(#{obj.location},${obj.location.SRID}),
         </when>
         <otherwise>
           NULL,
         </otherwise>
       </choose>
-      #{contentName},
-      #{contentTime},
-      #{contentYear},
-      #{contentMonth},
-      #{contentDay},
-      #{physicalContentId},
-      #{userClicks},
-      #{plusCount},
-      #{minusCount}
+      #{obj.contentName},
+      #{obj.contentTime},
+      #{obj.contentYear},
+      #{obj.contentMonth},
+      #{obj.contentDay},
+      #{obj.physicalContentId},
+      #{obj.userClicks},
+      #{obj.plusCount},
+      #{obj.minusCount}
     )
+    <if test="ignoreDuplicateKey">
+      on duplicate key update
+        id = last_insert_id(id)
+        <if test="updateOnDuplicateKey">
+          ,
+          <include refid="assignUpdateValues"/>
+        </if>
+    </if>
   </insert>
 
   <update id="update">
     update ocn_content
     set
-      status = #{status},
-      status_reason = #{statusReason},
-      parent_id = #{parentId},
-      user_id = #{userId},
-      caption = #{caption},
-      country_code = #{countryCode},
-      city_name = #{cityName},
+      <include refid="assignUpdateValues"/>
+    where id = #{obj.id}
+  </update>
+
+  <sql id="assignUpdateValues">
+      status = #{obj.status},
+      status_reason = #{obj.statusReason},
+      parent_id = #{obj.parentId},
+      user_id = #{obj.userId},
+      caption = #{obj.caption},
+      country_code = #{obj.countryCode},
+      city_name = #{obj.cityName},
       <choose>
         <when test="location != null">
-          location = ST_PointFromText(#{location},${location.SRID}),
+          location = ST_PointFromText(#{obj.location},${obj.location.SRID}),
         </when>
         <otherwise>
           location = NULL,
         </otherwise>
       </choose>
-      content_name = #{contentName},
-      content_time = #{contentTime},
-      content_year = #{contentYear},
-      content_month = #{contentMonth},
-      content_day = #{contentDay},
-      physical_content_id = #{physicalContentId},
-      user_clicks = #{userClicks},
-      plus_count = #{plusCount},
-      minus_count = #{minusCount}
-    where id = #{id}
-  </update>
+      content_name = #{obj.contentName},
+      content_time = #{obj.contentTime},
+      content_year = #{obj.contentYear},
+      content_month = #{obj.contentMonth},
+      content_day = #{obj.contentDay},
+      physical_content_id = #{obj.physicalContentId},
+      user_clicks = #{obj.userClicks},
+      plus_count = #{obj.plusCount},
+      minus_count = #{obj.minusCount}
+  </sql>
 
 </mapper>

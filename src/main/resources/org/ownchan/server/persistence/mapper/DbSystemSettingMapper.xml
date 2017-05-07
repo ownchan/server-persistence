@@ -42,6 +42,12 @@
     </include>
   </update>
 
+  <update id="setAll">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.setAll">
+      <property name="targetTable" value="ocn_system_setting"/>
+    </include>
+  </update>
+
   <delete id="purge">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.purge">
       <property name="targetTable" value="ocn_system_setting"/>
@@ -53,6 +59,18 @@
       <property name="targetTable" value="ocn_system_setting"/>
     </include>
   </delete>
+
+  <select id="count" resultType="long">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.count">
+      <property name="targetTable" value="ocn_system_setting"/>
+    </include>
+  </select>
+
+  <select id="countAll" resultType="long">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.countAll">
+      <property name="targetTable" value="ocn_system_setting"/>
+    </include>
+  </select>
 
   <select id="get" resultMap="defaultResultMap">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStreamAll">
@@ -68,7 +86,10 @@
     where id = #{id}
   </delete>
 
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+  <insert id="insert">
+    <selectKey keyProperty="obj.id" order="AFTER" resultType="long">
+      select last_insert_id()
+    </selectKey>
     insert into ocn_system_setting (
       setting_id,
       choice_id,
@@ -76,21 +97,33 @@
       update_user_id
     )
     values (
-      #{settingId},
-      #{choiceId},
-      #{customValue},
-      #{updateUserId}
+      #{obj.settingId},
+      #{obj.choiceId},
+      #{obj.customValue},
+      #{obj.updateUserId}
     )
+    <if test="ignoreDuplicateKey">
+      on duplicate key update
+        id = last_insert_id(id)
+        <if test="updateOnDuplicateKey">
+          ,
+          <include refid="assignUpdateValues"/>
+        </if>
+    </if>
   </insert>
 
   <update id="update">
     update ocn_system_setting
     set
-      setting_id = #{settingId},
-      choice_id = #{choiceId},
-      custom_value = #{customValue},
-      update_user_id = #{updateUserId}
-    where id = #{id}
+      <include refid="assignUpdateValues"/>
+    where id = #{obj.id}
   </update>
+
+  <sql id="assignUpdateValues">
+      setting_id = #{obj.settingId},
+      choice_id = #{obj.choiceId},
+      custom_value = #{obj.customValue},
+      update_user_id = #{obj.updateUserId}
+  </sql>
 
 </mapper>

@@ -894,20 +894,22 @@ CREATE INDEX `fk_us_co_click_cache_content_idx` ON `ocn_user_to_content_click_ca
 -- -----------------------------------------------------
 CREATE TABLE `ocn_rtc_conversation` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `user_a_id` BIGINT(20) UNSIGNED NOT NULL,
-  `user_b_id` BIGINT(20) UNSIGNED NOT NULL,
-  `user_a_beacon_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `user_b_beacon_time` TIMESTAMP(2) NULL DEFAULT NULL,
-  `user_a_offer` VARCHAR(1024) NOT NULL,
-  `user_b_answer` VARCHAR(1024) NULL,
+  `requester_user_id` BIGINT(20) UNSIGNED NOT NULL,
+  `responder_user_id` BIGINT(20) UNSIGNED NOT NULL,
+  `requester_beacon_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `responder_beacon_time` TIMESTAMP(2) NULL DEFAULT NULL,
+  `requester_offer` VARCHAR(1024) NOT NULL,
+  `responder_answer` VARCHAR(1024) NULL,
+  `create_time` TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` TIMESTAMP(2) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_rtc_conversation_user_a`
-    FOREIGN KEY (`user_a_id`)
+  CONSTRAINT `fk_rtc_conversation_requester_user`
+    FOREIGN KEY (`requester_user_id`)
     REFERENCES `ocn_user` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `fk_rtc_conversation_user_b`
-    FOREIGN KEY (`user_b_id`)
+  CONSTRAINT `fk_rtc_conversation_responder_user`
+    FOREIGN KEY (`responder_user_id`)
     REFERENCES `ocn_user` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
@@ -915,8 +917,8 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
-CREATE INDEX `users_and_beacon_times_INDEX` ON `ocn_rtc_conversation` (`user_a_id` ASC, `user_b_id` ASC, `user_a_beacon_time` ASC, `user_b_beacon_time` ASC);
+CREATE INDEX `users_and_beacon_times_INDEX` ON `ocn_rtc_conversation` (`requester_user_id` ASC, `responder_user_id` ASC, `requester_beacon_time` ASC, `responder_beacon_time` ASC);
 
-CREATE UNIQUE INDEX `users_UNIQUE` ON `ocn_rtc_conversation` (`user_a_id` ASC, `user_b_id` ASC);
+CREATE UNIQUE INDEX `users_UNIQUE` ON `ocn_rtc_conversation` (`requester_user_id` ASC, `responder_user_id` ASC);
 
-CREATE INDEX `fk_rtc_conversation_user_b_idx` ON `ocn_rtc_conversation` (`user_b_id` ASC);
+CREATE INDEX `fk_rtc_conversation_responder_idx` ON `ocn_rtc_conversation` (`responder_user_id` ASC);

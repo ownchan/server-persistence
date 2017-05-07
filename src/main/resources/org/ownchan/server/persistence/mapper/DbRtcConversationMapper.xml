@@ -1,84 +1,89 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.ownchan.server.persistence.mapper.DbLabelMapper">
+<mapper namespace="org.ownchan.server.persistence.mapper.DbRtcConversationMapper">
 
-  <resultMap id="defaultResultMap" type="DbLabel">
+  <resultMap id="defaultResultMap" type="DbRtcConversation">
     <id column="id" property="id"/>
-    <result column="text" property="text"/>
-    <result column="create_time" property="createTime"/>
-    <result column="creator_id" property="creatorId" />
+    <result column="requester_user_id" property="requesterUserId"/>
+    <result column="responder_user_id" property="responderUserId"/>
+    <result column="requester_beacon_time" property="requesterBeaconTime" />
+    <result column="responder_beacon_time" property="responderBeaconTime" />
+    <result column="requester_offer" property="requesterOffer" />
+    <result column="responder_answer" property="responderAnswer" />
+    <result column="create_time" property="createTime" />
+    <result column="update_time" property="updateTime" />
   </resultMap>
 
   <select id="fetch" resultMap="defaultResultMap">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStream">
-      <property name="targetTable" value="ocn_label"/>
+      <property name="targetTable" value="ocn_rtc_conversation"/>
     </include>
   </select>
 
   <select id="stream" resultMap="defaultResultMap">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStream">
-      <property name="targetTable" value="ocn_label"/>
+      <property name="targetTable" value="ocn_rtc_conversation"/>
     </include>
   </select>
 
   <select id="fetchAll" resultMap="defaultResultMap">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStreamAll">
-      <property name="targetTable" value="ocn_label"/>
+      <property name="targetTable" value="ocn_rtc_conversation"/>
     </include>
   </select>
 
   <select id="streamAll" resultMap="defaultResultMap">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStreamAll">
-      <property name="targetTable" value="ocn_label"/>
+      <property name="targetTable" value="ocn_rtc_conversation"/>
     </include>
   </select>
 
   <update id="set">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.set">
-      <property name="targetTable" value="ocn_label"/>
+      <property name="targetTable" value="ocn_rtc_conversation"/>
     </include>
   </update>
 
   <update id="setAll">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.setAll">
-      <property name="targetTable" value="ocn_label"/>
+      <property name="targetTable" value="ocn_rtc_conversation"/>
     </include>
   </update>
 
   <delete id="purge">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.purge">
-      <property name="targetTable" value="ocn_label"/>
+      <property name="targetTable" value="ocn_rtc_conversation"/>
     </include>
   </delete>
 
   <delete id="purgeAll">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.deleteAll">
-      <property name="targetTable" value="ocn_label"/>
+      <property name="targetTable" value="ocn_rtc_conversation"/>
     </include>
   </delete>
 
   <select id="count" resultType="long">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.count">
-      <property name="targetTable" value="ocn_label"/>
+      <property name="targetTable" value="ocn_rtc_conversation"/>
     </include>
   </select>
 
   <select id="countAll" resultType="long">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.countAll">
-      <property name="targetTable" value="ocn_label"/>
+      <property name="targetTable" value="ocn_rtc_conversation"/>
     </include>
   </select>
 
   <select id="get" resultMap="defaultResultMap">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStreamAll">
-      <property name="targetTable" value="ocn_label"/>
+      <property name="targetTable" value="ocn_rtc_conversation"/>
     </include>
     where id = #{id}
   </select>
 
   <delete id="delete">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.deleteAll">
-      <property name="targetTable" value="ocn_label"/>
+      <property name="targetTable" value="ocn_rtc_conversation"/>
     </include>
     where id = #{id}
   </delete>
@@ -87,13 +92,21 @@
     <selectKey keyProperty="obj.id" order="AFTER" resultType="long">
       select last_insert_id()
     </selectKey>
-    insert into ocn_label (
-      text,
-      creator_id
+    insert into ocn_rtc_conversation (
+      requester_user_id,
+      responder_user_id,
+      requester_beacon_time,
+      responder_beacon_time,
+      requester_offer,
+      responder_answer
     )
     values (
-      #{obj.text},
-      #{obj.creatorId}
+      #{obj.requesterUserId},
+      #{obj.responderUserId},
+      #{obj.requesterBeaconTime},
+      #{obj.responderBeaconTime},
+      #{obj.requesterOffer},
+      #{obj.responderAnswer}
     )
     <if test="ignoreDuplicateKey">
       on duplicate key update
@@ -106,15 +119,19 @@
   </insert>
 
   <update id="update">
-    update ocn_label
+    update ocn_rtc_conversation
     set
       <include refid="assignUpdateValues"/>
     where id = #{obj.id}
   </update>
 
   <sql id="assignUpdateValues">
-      text = #{obj.text},
-      creator_id = #{obj.creatorId}
+      requester_user_id = #{obj.requesterUserId},
+      responder_user_id = #{obj.responderUserId},
+      requester_beacon_time = #{obj.requesterBeaconTime},
+      responder_beacon_time = #{obj.responderBeaconTime},
+      requester_offer = #{obj.requesterOffer},
+      responder_answer = #{obj.responderAnswer}
   </sql>
 
 </mapper>

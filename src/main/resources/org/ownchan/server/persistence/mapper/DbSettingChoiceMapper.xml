@@ -40,6 +40,12 @@
     </include>
   </update>
 
+  <update id="setAll">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.setAll">
+      <property name="targetTable" value="ocn_setting_choice"/>
+    </include>
+  </update>
+
   <delete id="purge">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.purge">
       <property name="targetTable" value="ocn_setting_choice"/>
@@ -51,6 +57,18 @@
       <property name="targetTable" value="ocn_setting_choice"/>
     </include>
   </delete>
+
+  <select id="count" resultType="long">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.count">
+      <property name="targetTable" value="ocn_setting_choice"/>
+    </include>
+  </select>
+
+  <select id="countAll" resultType="long">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.countAll">
+      <property name="targetTable" value="ocn_setting_choice"/>
+    </include>
+  </select>
 
   <select id="get" resultMap="defaultResultMap">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStreamAll">
@@ -66,7 +84,10 @@
     where id = #{id}
   </delete>
 
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+  <insert id="insert">
+    <selectKey keyProperty="obj.id" order="AFTER" resultType="long">
+      select last_insert_id()
+    </selectKey>
     insert into ocn_setting_choice (
       setting_id,
       setting_value,
@@ -74,21 +95,33 @@
       msg_id_description
     )
     values (
-      #{settingId},
-      #{settingValue},
-      #{msgIdName},
-      #{msgIdDescription}
+      #{obj.settingId},
+      #{obj.settingValue},
+      #{obj.msgIdName},
+      #{obj.msgIdDescription}
     )
+    <if test="ignoreDuplicateKey">
+      on duplicate key update
+        id = last_insert_id(id)
+        <if test="updateOnDuplicateKey">
+          ,
+          <include refid="assignUpdateValues"/>
+        </if>
+    </if>
   </insert>
 
   <update id="update">
     update ocn_setting_choice
     set
-      setting_id = #{settingId},
-      setting_value = #{settingValue},
-      msg_id_name = #{msgIdName},
-      msg_id_description = #{msgIdDescription}
-    where id = #{id}
+      <include refid="assignUpdateValues"/>
+    where id = #{obj.id}
   </update>
+
+  <sql id="assignUpdateValues">
+      setting_id = #{obj.settingId},
+      setting_value = #{obj.settingValue},
+      msg_id_name = #{obj.msgIdName},
+      msg_id_description = #{obj.msgIdDescription}
+  </sql>
 
 </mapper>

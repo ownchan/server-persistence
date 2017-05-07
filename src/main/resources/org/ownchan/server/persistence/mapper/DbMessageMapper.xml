@@ -43,6 +43,12 @@
     </include>
   </update>
 
+  <update id="setAll">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.setAll">
+      <property name="targetTable" value="ocn_msg"/>
+    </include>
+  </update>
+
   <delete id="purge">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.purge">
       <property name="targetTable" value="ocn_msg"/>
@@ -54,6 +60,18 @@
       <property name="targetTable" value="ocn_msg"/>
     </include>
   </delete>
+
+  <select id="count" resultType="long">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.count">
+      <property name="targetTable" value="ocn_msg"/>
+    </include>
+  </select>
+
+  <select id="countAll" resultType="long">
+    <include refid="org.ownchan.server.persistence.mapper.GenericMapper.countAll">
+      <property name="targetTable" value="ocn_msg"/>
+    </include>
+  </select>
 
   <select id="get" resultMap="defaultResultMap">
     <include refid="org.ownchan.server.persistence.mapper.GenericMapper.fetchOrStreamAll">
@@ -69,7 +87,10 @@
     where id = #{id}
   </delete>
 
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+  <insert id="insert">
+    <selectKey keyProperty="obj.id" order="AFTER" resultType="long">
+      select last_insert_id()
+    </selectKey>
     insert into ocn_msg (
       name,
       type,
@@ -78,23 +99,35 @@
       msg_de
     )
     values (
-      #{name},
-      #{type},
-      #{showHtmlEditor},
-      #{msgEn},
-      #{msgDe}
+      #{obj.name},
+      #{obj.type},
+      #{obj.showHtmlEditor},
+      #{obj.msgEn},
+      #{obj.msgDe}
     )
+    <if test="ignoreDuplicateKey">
+      on duplicate key update
+        id = last_insert_id(id)
+        <if test="updateOnDuplicateKey">
+          ,
+          <include refid="assignUpdateValues"/>
+        </if>
+    </if>
   </insert>
 
   <update id="update">
     update ocn_msg
     set
-      name = #{name},
-      type = #{type},
-      show_html_editor = #{showHtmlEditor},
-      msg_en = #{msgEn},
-      msg_de = #{msgDe}
-    where id = #{id}
+      <include refid="assignUpdateValues"/>
+    where id = #{obj.id}
   </update>
+
+  <sql id="assignUpdateValues">
+      name = #{obj.name},
+      type = #{obj.type},
+      show_html_editor = #{obj.showHtmlEditor},
+      msg_en = #{obj.msgEn},
+      msg_de = #{obj.msgDe}
+  </sql>
 
 </mapper>
